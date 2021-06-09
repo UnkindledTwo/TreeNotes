@@ -10,19 +10,21 @@ TreeNotes::TreeNotes(QWidget *parent)
     this->setFocusPolicy(Qt::StrongFocus);
     this->setFocus();
 
+    //Make an app config
     struct app_config appConfig;
     appConfig.notetree_alternating_row_colors = true;
     appConfig.notetree_indentation_size = 20;
+    appConfig.opacity = 100;
+    appConfig.treeWidgetAnimated = true;
 
     noteTree = ui->treeWidget;
-    noteTree->setIndentation(appConfig.notetree_indentation_size);
-    noteTree->setAlternatingRowColors(appConfig.notetree_alternating_row_colors);
     noteTree->clear();
 
     InitIconVector();
     InitShortcuts();
     InitStatusLabels();
     readFromFile();
+    ReadAppConfig(appConfig);
 
     /*Init the splitter*/
     QSplitter *splitter = new QSplitter(this);
@@ -34,14 +36,23 @@ TreeNotes::TreeNotes(QWidget *parent)
     splitter->addWidget(wrapper);
     setCentralWidget(splitter);
 
+    //Auto timer for refreshing label(s)
     QTimer *timer = new QTimer(this);
     timer->setInterval(500);
     connect(timer, &QTimer::timeout, [&](){RefreshLabels();});
     timer->start();
 
+    //(Windows only) set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
+    QString styleSheetFocus = "border: 1px solid " + QtWin::colorizationColor().name() + ";";
+    ui->messageEdit->setStyleSheet(styleSheetFocus);
+    ui->treeWidget->setStyleSheet(styleSheetFocus);
+    ui->titleEdit->setStyleSheet(styleSheetFocus);
+
+    //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
     connect(ui->actionLoad_From_Disk, &QAction::triggered, this, &TreeNotes::readFromFile);
 
+    qDebug() << "Initilization of the main window is finished";
 }
 
 TreeNotes::~TreeNotes()
@@ -49,7 +60,17 @@ TreeNotes::~TreeNotes()
     delete ui;
 }
 
+void TreeNotes::ReadAppConfig(app_config appConfig){
+    noteTree->setIndentation(appConfig.notetree_indentation_size);
+    noteTree->setAlternatingRowColors(appConfig.notetree_alternating_row_colors);
+    this->setWindowOpacity(qreal(appConfig.opacity)/100);
+    noteTree->setAnimated(appConfig.treeWidgetAnimated);
+
+    qDebug() << "App config read finished";
+}
+
 void TreeNotes::closeEvent(QCloseEvent *e){
+    qDebug() << ((QSplitter*)ui->treeWidget->parent())->sizes();
     saveToFile();
 }
 

@@ -19,6 +19,8 @@
 #include <QTimer>
 #include <QSplitter>
 
+#include <QtWinExtras>
+
 #include "treewidgetitem.h"
 #include "iconselectordialog.h"
 
@@ -42,9 +44,13 @@ public:
     struct app_config{
         bool notetree_alternating_row_colors;
         int notetree_indentation_size;
+        int opacity; //100 for solid, 0 for transparent
+        bool treeWidgetAnimated;
     };
 
 private slots:
+    void ReadAppConfig(struct app_config appConfig);
+
     int NoteCount();
 
     void RefreshLabels();
