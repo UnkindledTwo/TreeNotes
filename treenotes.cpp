@@ -94,6 +94,8 @@ void TreeNotes::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *p
 
 void TreeNotes::readFromFile(){
     qDebug() << "Reading from file";
+    noteTree->clear();
+
     QString errMsg;
     int errLine;
     int errColumn;
@@ -111,19 +113,22 @@ void TreeNotes::readFromFile(){
     file.close();
     qDebug().noquote()<< document.toString(4);
 
+    QDomNodeList childElementList = document.childNodes();
+    for(int j = 0; j < childElementList.count(); j++){
+        QDomElement root = childElementList.at(j).toElement();
+        QDomNodeList itemList = root.elementsByTagName("NoteItem");
+        for(int i = 0; i < root.toElement().childNodes().count(); i++){
+            if(!itemList.at(i).toElement().hasAttribute("message")) continue;
+            if(itemList.at(i).toElement().attribute("title") == "") continue;
 
-    QDomElement root = document.firstChildElement();
-    QDomNodeList itemList = root.elementsByTagName("NoteItem");
-    for(int i = 0; i < root.toElement().childNodes().count(); i++){
-        if(!itemList.at(i).toElement().hasAttribute("message")) continue;
-        if(itemList.at(i).toElement().attribute("title") == "") continue;
-
-        TreeWidgetItem *newItem = new TreeWidgetItem();
-        newItem->setIcon(0 , iconVector.at(itemList.at(i).toElement().attribute("icon").toInt()));
-        newItem->iconVectorIndex = itemList.at(i).toElement().attribute("icon").toInt();
-        noteTree->addTopLevelItem(newItem);
-        ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
+            TreeWidgetItem *newItem = new TreeWidgetItem();
+            newItem->setIcon(0 , iconVector.at(root.toElement().childNodes().at(i).toElement().attribute("icon").toInt()));
+            newItem->iconVectorIndex = (root.toElement().childNodes().at(i).toElement().attribute("icon").toInt());
+            noteTree->addTopLevelItem(newItem);
+            ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
+        }
     }
+
     qDebug() << "Reading from file finished";
 }
 
@@ -162,29 +167,8 @@ void TreeNotes::saveToFile(){
             root.appendChild(elem);
         }
         it++;
-        /*
-        if((*it)->parent() == 0x0){
-            QTreeWidgetItem *current = *it;
-            QDomElement treeItemElement;
-            treeItemElement = document.createElement(current->text(0));
-            root.appendChild(treeItemElement);
-
-            if(current->childCount() > 0){
-                QTreeWidgetItemIterator it1(noteTree);
-                while (*it1){
-                    if((*it1)->parent() == current){
-                        treeItemElement.appendChild(document.createElement((*it)->text(0)));
-                    }
-                    it1++;
-                }
-            }
-
-
-            it++;
-        }
-        else it++;
-        */
     }
+
     QFile file("save.xml");
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
