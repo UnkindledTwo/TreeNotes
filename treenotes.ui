@@ -20,9 +20,48 @@
    <string>TreeNotes</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" columnstretch="1,5">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
+    <item row="0" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLineEdit" name="titleEdit">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="placeholderText">
+         <string>Ctrl + J</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="PlainTextEdit" name="messageEdit">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <pointsize>11</pointsize>
+         </font>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+        </property>
+        <property name="placeholderText">
+         <string>Ctrl + H</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="0" column="0">
      <widget class="QTreeWidget" name="treeWidget">
+      <property name="font">
+       <font>
+        <family>Segoe UI</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -32,8 +71,26 @@
       <property name="dragDropMode">
        <enum>QAbstractItemView::NoDragDrop</enum>
       </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectItems</enum>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
+      </property>
       <property name="indentation">
        <number>10</number>
+      </property>
+      <property name="uniformRowHeights">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
       </property>
       <attribute name="headerVisible">
        <bool>false</bool>
@@ -44,24 +101,6 @@
        </property>
       </column>
      </widget>
-    </item>
-    <item row="0" column="1">
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QLineEdit" name="titleEdit">
-        <property name="placeholderText">
-         <string>Ctrl + J</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPlainTextEdit" name="messageEdit">
-        <property name="placeholderText">
-         <string>Ctrl + H</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </item>
    </layout>
   </widget>
@@ -83,8 +122,10 @@
     <addaction name="actionDelete"/>
     <addaction name="actionSet_Icon"/>
     <addaction name="separator"/>
-    <addaction name="actionSave_To_Disk"/>
     <addaction name="actionLoad_From_Disk"/>
+    <addaction name="actionSave_To_Disk"/>
+    <addaction name="separator"/>
+    <addaction name="actionSet_Font_Text_Editors"/>
    </widget>
    <widget class="QMenu" name="menuOther">
     <property name="title">
@@ -95,13 +136,26 @@
     <addaction name="actionFocus_Parent"/>
     <addaction name="actionHide_Show_Note_Tree"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionQt"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOther"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
+  <widget class="QToolBar" name="ToolBar">
    <property name="windowTitle">
     <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
@@ -197,7 +251,24 @@
     <string>Load From Disk</string>
    </property>
   </action>
+  <action name="actionQt">
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionSet_Font_Text_Editors">
+   <property name="text">
+    <string>Set Font (Text Editors)</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header location="global">plaintextedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

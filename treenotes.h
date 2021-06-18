@@ -13,16 +13,28 @@
 #include <QShortcut>
 #include <QMessageBox>
 #include <QKeyEvent>
-#include <QtXml>
 #include <QTextStream>
 #include <QLabel>
 #include <QTimer>
 #include <QSplitter>
+#include <QFontDialog>
+#include <QSettings>
+#include <QSpacerItem>
+#include <QDir>
 
-#include <QtWinExtras>
+//Xml imports
+//#include <QtXml>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+
+//Win only
+//#include <QtWinExtras>
+#include <QtWin>
 
 #include "treewidgetitem.h"
 #include "iconselectordialog.h"
+#include "plaintextedit.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TreeNotes; }
@@ -46,52 +58,46 @@ public:
         int notetree_indentation_size;
         int opacity; //100 for solid, 0 for transparent
         bool treeWidgetAnimated;
+        bool doubleClickToEditMessage;
+        unsigned short int tabSize;
     };
 
 private slots:
+    QString dateTimeNoSpace();
+    void AttemptSaveBackup();
+    void Save(TreeWidgetItem *target);
+    void Delete(QTreeWidgetItem *target);
     void ReadAppConfig(struct app_config appConfig);
-
+    void ReadQSettings();
     int NoteCount();
-
     void RefreshLabels();
-
     void InitStatusLabels();
-
     void InitShortcuts();
-
+    void saveQSettings();
     void InitIconVector();
-
     void AddChildren(QDomDocument *doc ,QDomElement *elem, QTreeWidgetItem *parent);
-
     void saveToFile();
-
-    void readFromFile();
-
+    void ReadFromFile();
     void ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *parent);
-
-    void AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon());
-
-    void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
-
-    void on_actionAdd_triggered();
-
-    void on_actionSave_triggered();
-
-    void on_actionDelete_triggered();
-
+    TreeWidgetItem* AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon());
     void MoveUp(TreeWidgetItem *item);
-
     void MoveDown(TreeWidgetItem *item);
 
+    QString boolToString(bool a);
+    bool stringToBool(QString a);
+
+    void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void on_actionAdd_triggered();
+    void on_actionSave_triggered();
+    void on_actionDelete_triggered();
     void on_actionMove_Up_triggered();
-
     void on_actionMove_Down_triggered();
-
     void on_actionSet_Icon_triggered();
-
     void on_actionFocus_Parent_triggered();
-
     void on_actionHide_Show_Note_Tree_triggered();
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
+    void on_actionQt_triggered();
+    void on_actionSet_Font_Text_Editors_triggered();
 
 private:
     Ui::TreeNotes *ui;
@@ -99,6 +105,10 @@ private:
     QTreeWidget *noteTree;
 
     QLabel *noteCntLabel;
+    QLabel *childrenCntLabel;
+    QLabel *dateTimeLabel;
+
+    bool doubleClickToEditMessage;
 };
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"

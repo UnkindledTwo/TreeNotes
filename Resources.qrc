@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>Resources/Icon.ico</file>
         <file>Resources/Icon.png</file>
+        <file>Resources/Icon_Solidbg.jpeg</file>
     </qresource>
 </RCC>

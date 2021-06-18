@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QTreeWidget>
+#include <QDateTime>
 
 class TreeWidgetItem : public QTreeWidgetItem
 {
@@ -13,6 +14,10 @@ public:
     QString message = "";
 
     int iconVectorIndex = 6;
+
+    QDateTime lastEdited = QDateTime::currentDateTime();
+
+    TreeWidgetItem *_clone();
 };
 
 #endif // TREEWIDGETITEM_H

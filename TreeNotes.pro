@@ -14,16 +14,19 @@ CONFIG += c++11
 SOURCES += \
     iconselectordialog.cpp \
     main.cpp \
+    plaintextedit.cpp \
     treenotes.cpp \
     treewidgetitem.cpp
 
 HEADERS += \
     iconselectordialog.h \
+    plaintextedit.h \
     treenotes.h \
     treewidgetitem.h
 
 FORMS += \
     iconselectordialog.ui \
+    plaintextedit.ui \
     treenotes.ui
 
 # Default rules for deployment.
