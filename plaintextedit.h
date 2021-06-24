@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QPlainTextEdit>
 #include <QShortcut>
+#include <iostream>
 #include <QTextList>
 
 namespace Ui {
@@ -23,6 +24,8 @@ public:
 private slots:
 private:
     Ui::PlainTextEdit *ui;
+
+    void keyPressEvent(QKeyEvent *e);
 };
 
 #endif // PLAINTEXTEDIT_H

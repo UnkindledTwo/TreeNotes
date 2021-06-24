@@ -231,6 +231,9 @@
    </property>
   </action>
   <action name="actionHide_Show_Note_Tree">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Hide/Show Note Tree</string>
    </property>

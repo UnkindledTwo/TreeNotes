@@ -6,6 +6,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     ui(new Ui::PlainTextEdit)
 {
     ui->setupUi(this);
+    this->setCursorWidth(2);
 
     QShortcut *moveToStart = new QShortcut(QKeySequence("Ctrl+Shift+G"), this);
     connect(moveToStart, &QShortcut::activated,this, [&](){
@@ -60,4 +61,8 @@ int PlainTextEdit::lineCount(){
     }
 
     return cnt + 1;
+}
+
+void PlainTextEdit::keyPressEvent(QKeyEvent *e){
+    QPlainTextEdit::keyPressEvent(e);
 }

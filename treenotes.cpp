@@ -88,6 +88,7 @@ void TreeNotes::ReadQSettings(){
     //Set splitter sizes
     if(settings.value("noteTreeHidden", false).toBool()){
         on_actionHide_Show_Note_Tree_triggered();
+        ui->actionHide_Show_Note_Tree->setChecked(true);
     }
     else{
         ((QSplitter*)noteTree->parent())->setSizes({settings.value("s1", this->width() / 2).toInt(), settings.value("s2", this->width() / 2).toInt()});
@@ -356,6 +357,8 @@ void TreeNotes::on_actionDelete_triggered()
 }
 
 void TreeNotes::MoveUp(TreeWidgetItem *item){
+    if(!noteTree->currentItem()) return;
+
     TreeWidgetItem *i = (TreeWidgetItem*)noteTree->currentItem();
     bool expanded = i->isExpanded();
     int row = noteTree->currentIndex().row();
@@ -378,6 +381,8 @@ void TreeNotes::MoveUp(TreeWidgetItem *item){
 }
 
 void TreeNotes::MoveDown(TreeWidgetItem *item){
+    if(!noteTree->currentItem()) return;
+
     TreeWidgetItem *i = (TreeWidgetItem*)noteTree->currentItem();
     bool expanded = i->isExpanded();
     int row = noteTree->currentIndex().row();
@@ -434,7 +439,6 @@ void TreeNotes::on_actionFocus_Parent_triggered()
     }
 }
 
-
 void TreeNotes::InitIconVector(){
     iconVector.append(QIcon(":/Resources/Icon.ico"));
     iconVector.append(style()->standardIcon(QStyle::SP_FileIcon));
@@ -456,13 +460,13 @@ void TreeNotes::InitIconVector(){
 
 void TreeNotes::InitShortcuts(){
     QShortcut *jumpToMessageBox = new QShortcut(QKeySequence(SHORTCUT_JUMP_MSG), this);
-    connect(jumpToMessageBox, &QShortcut::activated, [&](){ui->messageEdit->setFocus();});
+    connect(jumpToMessageBox, &QShortcut::activated, this, [&](){ui->messageEdit->setFocus();});
 
     QShortcut *jumpToTitleBox = new QShortcut(QKeySequence(SHORTCUT_JUMP_TITLE), this);
-    connect(jumpToTitleBox, &QShortcut::activated, [&](){ui->titleEdit->setFocus();});
+    connect(jumpToTitleBox, &QShortcut::activated, this, [&](){ui->titleEdit->setFocus();});
 
     QShortcut *jumpToNoteTree = new QShortcut(QKeySequence(SHORTCUT_JUMP_TREE), this);
-    connect(jumpToNoteTree, &QShortcut::activated, [&](){noteTree->setFocus();
+    connect(jumpToNoteTree, &QShortcut::activated, this, [&](){noteTree->setFocus();
         if(noteTree->topLevelItemCount() > 0 && noteTree->selectedItems().count() == 0)
             noteTree->topLevelItem(0)->setSelected(true);
     }
@@ -484,11 +488,11 @@ void TreeNotes::InitStatusLabels(){
     dateTimeLabel = new QLabel(this);
     dateTimeLabel->setScaledContents(true);
 
-    ui->statusbar->addWidget(noteCntLabel);
+    ui->statusbar->addWidget(noteCntLabel, 0);
     ui->statusbar->addWidget(line);
-    ui->statusbar->addWidget(childrenCntLabel);
-    ui->statusbar->addWidget(line);
-    ui->statusbar->addWidget(dateTimeLabel);
+    ui->statusbar->addWidget(childrenCntLabel, 0);
+    ui->statusbar->addWidget(line, 1);
+    ui->statusbar->addWidget(dateTimeLabel, 1);
 
 
     qDebug() << "Init status labels finished";
