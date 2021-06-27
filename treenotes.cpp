@@ -151,6 +151,10 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
 
 void TreeNotes::closeEvent(QCloseEvent *e){
     qDebug().noquote() << "\n\n--------------------\nClose Event" << e;
+    if(noteTree->currentItem()){
+        Save((TreeWidgetItem*)noteTree->currentItem());
+    }
+
     AttemptSaveBackup();
     saveToFile();
     saveQSettings();
@@ -491,7 +495,7 @@ void TreeNotes::InitStatusLabels(){
     ui->statusbar->addWidget(noteCntLabel, 0);
     ui->statusbar->addWidget(line);
     ui->statusbar->addWidget(childrenCntLabel, 0);
-    ui->statusbar->addWidget(line, 1);
+    ui->statusbar->addWidget(line, 999);
     ui->statusbar->addWidget(dateTimeLabel, 1);
 
 
