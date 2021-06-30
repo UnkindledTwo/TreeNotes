@@ -21,6 +21,7 @@
 #include <QSettings>
 #include <QSpacerItem>
 #include <QDir>
+#include <QFileDialog>
 
 //Xml imports
 //#include <QtXml>
@@ -55,11 +56,13 @@ public:
 
     struct app_config{
         bool notetree_alternating_row_colors;
+        bool notetree_select_rows;
         int notetree_indentation_size;
         int opacity; //100 for solid, 0 for transparent
         bool treeWidgetAnimated;
         bool doubleClickToEditMessage;
         unsigned short int tabSize;
+        unsigned short int layoutMargin;
     };
 
 private slots:
@@ -79,7 +82,7 @@ private slots:
     void saveToFile();
     void ReadFromFile();
     void ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *parent);
-    TreeWidgetItem* AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon());
+    TreeWidgetItem* AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon(":/Resources/Icon.png"));
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
 
@@ -99,10 +102,15 @@ private slots:
     void on_actionQt_triggered();
     void on_actionSet_Font_Text_Editors_triggered();
 
+    void on_actionImport_Text_File_triggered();
+
+    void on_actionExport_Text_File_triggered();
+
 private:
     Ui::TreeNotes *ui;
 
     QTreeWidget *noteTree;
+    QSplitter *splitter;
 
     QLabel *noteCntLabel;
     QLabel *childrenCntLabel;

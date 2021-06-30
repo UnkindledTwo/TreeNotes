@@ -43,6 +43,12 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
         textCursor1.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor, 1);
         this->setTextCursor(textCursor1);
     });
+
+}
+
+void PlainTextEdit::paintEvent(QPaintEvent *e){
+
+    QPlainTextEdit::paintEvent(e);
 }
 
 PlainTextEdit::~PlainTextEdit()

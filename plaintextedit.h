@@ -7,6 +7,8 @@
 #include <QShortcut>
 #include <iostream>
 #include <QTextList>
+#include <QPainter>
+#include <QPaintEvent>
 
 namespace Ui {
 class PlainTextEdit;
@@ -21,7 +23,11 @@ public:
     ~PlainTextEdit();
 
     int lineCount();
+
 private slots:
+protected:
+    void paintEvent(QPaintEvent *e);
+
 private:
     Ui::PlainTextEdit *ui;
 

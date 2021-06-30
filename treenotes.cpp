@@ -21,19 +21,27 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.treeWidgetAnimated = true;
     appConfig.doubleClickToEditMessage = true;
     appConfig.tabSize = 4;
+    appConfig.layoutMargin = 10;
+    appConfig.notetree_select_rows = false;
 
     noteTree = ui->treeWidget;
     noteTree->clear();
 
     /*Init the splitter*/
-    QSplitter *splitter = new QSplitter(this);
+    splitter = new QSplitter();
     splitter->addWidget(noteTree);
+
     QWidget* wrapper = new QWidget();
     ui->verticalLayout->setMargin(0);
     ui->verticalLayout->setParent(NULL);
     wrapper->setLayout(ui->verticalLayout);
     splitter->addWidget(wrapper);
-    setCentralWidget(splitter);
+    QGridLayout *grid = new QGridLayout();
+    grid->addWidget(splitter);
+    QWidget *central = new QWidget();
+    central->setLayout(grid);
+    this->setCentralWidget(central);
+
 
     //Auto timer for refreshing label(s)
     QTimer *timer = new QTimer(this);
@@ -60,7 +68,6 @@ TreeNotes::TreeNotes(QWidget *parent)
 
 
     qDebug() << "Initilization of the main window is finished";
-
 }
 
 TreeNotes::~TreeNotes()
@@ -145,6 +152,13 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     noteTree->setAnimated(appConfig.treeWidgetAnimated);
     doubleClickToEditMessage = appConfig.doubleClickToEditMessage;
     ui->messageEdit->setTabStopWidth(appConfig.tabSize);
+    centralWidget()->layout()->setMargin(appConfig.layoutMargin);
+    if(appConfig.notetree_select_rows){
+        noteTree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    }
+    else{
+        noteTree->setSelectionBehavior(QAbstractItemView::SelectItems);
+    }
 
     qDebug() << "App config read finished";
 }
@@ -327,7 +341,7 @@ part2:
 
 void TreeNotes::on_actionAdd_triggered()
 {
-    AddNote((TreeWidgetItem*)noteTree->currentItem(), "New Note", "", iconVector.at(0));
+    AddNote((TreeWidgetItem*)noteTree->currentItem(), "New Note", "");
 }
 
 
@@ -357,7 +371,7 @@ void TreeNotes::Delete(QTreeWidgetItem *target){
 
 void TreeNotes::on_actionDelete_triggered()
 {
-    Delete(noteTree->currentItem());
+    Delete((TreeWidgetItem*)noteTree->currentItem());
 }
 
 void TreeNotes::MoveUp(TreeWidgetItem *item){
@@ -571,3 +585,35 @@ QString TreeNotes::boolToString(bool a){
 bool TreeNotes::stringToBool(QString a){
     return a == "true";
 }
+
+void TreeNotes::on_actionImport_Text_File_triggered()
+{
+    QStringList paths = QFileDialog::getOpenFileNames(this, "Import Text Files");
+    foreach (QString path, paths) {
+        QFile file(path);
+        QFileInfo fi(file);
+        if(!file.exists()) continue;
+        file.open(QIODevice::ReadOnly);
+        QTextStream stream(&file);
+
+        AddNote((TreeWidgetItem*)noteTree->currentItem(), fi.fileName(), stream.readAll());
+
+        file.close();
+    }
+}
+
+
+void TreeNotes::on_actionExport_Text_File_triggered()
+{
+    if(!noteTree->currentItem()) return;
+    QString path = QFileDialog::getExistingDirectory(this, "Export Text File");
+    QDir dir(path);
+    if(!dir.exists()) return;
+    QFile file(path + "/" + noteTree->currentItem()->text(0));
+    file.open(QIODevice::WriteOnly);
+    QTextStream stream(&file);
+    stream << ((TreeWidgetItem*)noteTree->currentItem())->message;
+
+    file.close();
+}
+
