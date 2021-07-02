@@ -10,24 +10,23 @@ TreeNotes::TreeNotes(QWidget *parent)
     qDebug() << "Initializing window";
     ui->setupUi(this);
 
+    noteTree = ui->treeWidget;
+    noteTree->clear();
+
     this->setFocusPolicy(Qt::StrongFocus);
     this->setFocus();
 
-    //Make an app config
-    struct app_config appConfig;
+    //Make an app config, this is the default config used when the settings in file are not found.
     appConfig.notetree_alternating_row_colors = true;
     appConfig.notetree_indentation_size = 20;
     appConfig.opacity = 100;
     appConfig.treeWidgetAnimated = true;
     appConfig.doubleClickToEditMessage = true;
-    appConfig.tabSize = 4;
-    appConfig.layoutMargin = 10;
+    appConfig.layoutMargin = 5;
     appConfig.notetree_select_rows = false;
+    appConfig.splitter_handle_width = 6;
 
-    noteTree = ui->treeWidget;
-    noteTree->clear();
-
-    /*Init the splitter*/
+    //Init the splitter
     splitter = new QSplitter();
     splitter->addWidget(noteTree);
 
@@ -49,8 +48,8 @@ TreeNotes::TreeNotes(QWidget *parent)
     connect(timer, &QTimer::timeout, [&](){RefreshLabels();});
     timer->start();
 
-    //(Windows only) set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
-    QString styleSheetFocus = "border: 1px solid " + QtWin::colorizationColor().name() + ";";
+    // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
+    QString styleSheetFocus = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
     ui->messageEdit->setStyleSheet(ui->messageEdit->styleSheet() + styleSheetFocus);
     ui->treeWidget->setStyleSheet(ui->treeWidget->styleSheet() + styleSheetFocus);
     ui->titleEdit->setStyleSheet(ui->titleEdit->styleSheet() + styleSheetFocus);
@@ -101,6 +100,18 @@ void TreeNotes::ReadQSettings(){
         ((QSplitter*)noteTree->parent())->setSizes({settings.value("s1", this->width() / 2).toInt(), settings.value("s2", this->width() / 2).toInt()});
     }
 
+    settings.beginGroup("AppConfig");
+    appConfig.notetree_alternating_row_colors = settings.value("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors).toBool();
+    appConfig.notetree_indentation_size = settings.value("notetree_indentation_size", appConfig.notetree_indentation_size).toInt();
+    appConfig.opacity = settings.value("opacity", appConfig.opacity).toInt();
+    appConfig.treeWidgetAnimated = settings.value("treeWidgetAnimated", appConfig.treeWidgetAnimated).toBool();
+    appConfig.doubleClickToEditMessage = settings.value("doubleClickToEditMessage", appConfig.doubleClickToEditMessage).toBool();
+    appConfig.layoutMargin = settings.value("layoutMargin", appConfig.layoutMargin).toInt();
+    appConfig.notetree_select_rows = settings.value("notetree_select_rows", appConfig.notetree_select_rows).toBool();
+    appConfig.splitter_handle_width = settings.value("splitter_handle_width", appConfig.splitter_handle_width).toInt();
+    settings.endGroup();
+    ReadAppConfig(appConfig);
+
     qDebug() << "Reading QSettings is finished, file: " << settings.fileName();
 }
 
@@ -114,6 +125,19 @@ void TreeNotes::saveQSettings(){
     settings.setValue("noteTreeHidden", noteTree->isHidden());
     settings.setValue("s1", ((QSplitter*)noteTree->parent())->sizes().at(0));
     settings.setValue("s2", ((QSplitter*)noteTree->parent())->sizes().at(1));
+
+
+    settings.beginGroup("AppConfig");
+    settings.setValue("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors);
+    settings.setValue("notetree_indentation_size", appConfig.notetree_indentation_size);
+    settings.setValue("opacity", appConfig.opacity);
+    settings.setValue("treeWidgetAnimated", appConfig.treeWidgetAnimated);
+    settings.setValue("doubleClickToEditMessage", appConfig.doubleClickToEditMessage);
+    settings.setValue("layoutMargin", appConfig.layoutMargin);
+    settings.setValue("notetree_select_rows", appConfig.notetree_select_rows);
+    settings.setValue("splitter_handle_width", appConfig.splitter_handle_width);
+    settings.endGroup();
+
     qDebug() << "Saved QSettings, file: " << settings.fileName();
 }
 
@@ -151,8 +175,8 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     this->setWindowOpacity(qreal(appConfig.opacity)/100);
     noteTree->setAnimated(appConfig.treeWidgetAnimated);
     doubleClickToEditMessage = appConfig.doubleClickToEditMessage;
-    ui->messageEdit->setTabStopWidth(appConfig.tabSize);
     centralWidget()->layout()->setMargin(appConfig.layoutMargin);
+    splitter->setHandleWidth(appConfig.splitter_handle_width);
     if(appConfig.notetree_select_rows){
         noteTree->setSelectionBehavior(QAbstractItemView::SelectRows);
     }
@@ -595,6 +619,7 @@ void TreeNotes::on_actionImport_Text_File_triggered()
         if(!file.exists()) continue;
         file.open(QIODevice::ReadOnly);
         QTextStream stream(&file);
+        stream.setCodec("UTF-8");
 
         AddNote((TreeWidgetItem*)noteTree->currentItem(), fi.fileName(), stream.readAll());
 
@@ -612,6 +637,7 @@ void TreeNotes::on_actionExport_Text_File_triggered()
     QFile file(path + "/" + noteTree->currentItem()->text(0));
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
+    stream.setCodec("UTF-8");
     stream << ((TreeWidgetItem*)noteTree->currentItem())->message;
 
     file.close();

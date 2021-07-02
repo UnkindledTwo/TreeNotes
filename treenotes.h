@@ -61,8 +61,8 @@ public:
         int opacity; //100 for solid, 0 for transparent
         bool treeWidgetAnimated;
         bool doubleClickToEditMessage;
-        unsigned short int tabSize;
         unsigned short int layoutMargin;
+        unsigned short int splitter_handle_width;
     };
 
 private slots:
@@ -108,6 +108,8 @@ private slots:
 
 private:
     Ui::TreeNotes *ui;
+
+    app_config appConfig;
 
     QTreeWidget *noteTree;
     QSplitter *splitter;

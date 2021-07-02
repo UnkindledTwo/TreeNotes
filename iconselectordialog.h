@@ -15,6 +15,7 @@ class IconSelectorDialog : public QDialog
     Q_OBJECT
 
 public:
+
     explicit IconSelectorDialog(QWidget *parent = nullptr, QVector<QIcon> iconVector = QVector<QIcon>());
     ~IconSelectorDialog();
 
