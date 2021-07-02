@@ -22,6 +22,7 @@
 #include <QSpacerItem>
 #include <QDir>
 #include <QFileDialog>
+#include <QMetaMethod>
 
 //Xml imports
 //#include <QtXml>
@@ -76,6 +77,7 @@ private slots:
     void RefreshLabels();
     void InitStatusLabels();
     void InitShortcuts();
+    void InitMacroVector();
     void saveQSettings();
     void InitIconVector();
     void AddChildren(QDomDocument *doc ,QDomElement *elem, QTreeWidgetItem *parent);
@@ -106,6 +108,8 @@ private slots:
 
     void on_actionExport_Text_File_triggered();
 
+    void on_messageEdit_textChanged();
+
 private:
     Ui::TreeNotes *ui;
 
@@ -119,6 +123,7 @@ private:
     QLabel *dateTimeLabel;
 
     bool doubleClickToEditMessage;
+    QVector<QPair<QString, std::function<QString()>>> macroVec;
 };
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"

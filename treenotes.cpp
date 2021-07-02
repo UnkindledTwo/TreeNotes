@@ -64,7 +64,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     ReadFromFile();
     ReadAppConfig(appConfig);
     ReadQSettings();
-
+    InitMacroVector();
 
     qDebug() << "Initilization of the main window is finished";
 }
@@ -342,8 +342,20 @@ void TreeNotes::Save(TreeWidgetItem *target){
     if(ui->messageEdit->toPlainText() != target->message || ui->titleEdit->text() != target->text(0)){
         target->lastEdited = QDateTime::currentDateTime();
     }
-    target->message = ui->messageEdit->toPlainText();
+
+    QTextCursor savedCursor = ui->messageEdit->textCursor();
+    QString finaltext = ui->messageEdit->toPlainText();
+
+    for(int i = 0; i < macroVec.count(); i++){
+        finaltext.replace(macroVec.at(i).first, macroVec.at(i).second());
+    }
+
+    target->message = finaltext;
     target->setText(0, ui->titleEdit->text());
+
+    on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
+
+    ui->messageEdit->setTextCursor(savedCursor);
 }
 
 void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
@@ -643,3 +655,28 @@ void TreeNotes::on_actionExport_Text_File_triggered()
     file.close();
 }
 
+
+void TreeNotes::on_messageEdit_textChanged()
+{
+
+}
+
+void TreeNotes::InitMacroVector(){
+    macroVec.append(QPair<QString, std::function<QString()>>("{title}", [&]() ->QString {return ui->titleEdit->text();}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.second}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("ss");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.minute}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("mm");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.hour}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("hh");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.day}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("dd");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.month}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("MM");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.year}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("yyyy");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.second}", [&]() ->QString {return QDateTime::currentDateTime().toString("ss");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.minute}", [&]() ->QString {return QDateTime::currentDateTime().toString("mm");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.hour}", [&]() ->QString {return QDateTime::currentDateTime().toString("hh");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.day}", [&]() ->QString {return QDateTime::currentDateTime().toString("dd");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.month}", [&]() ->QString {return QDateTime::currentDateTime().toString("MM");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.year}", [&]() ->QString {return QDateTime::currentDateTime().toString("yyyy");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{datetime}", [&]() ->QString {return QDateTime::currentDateTime().toString();}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{parent.message}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->message;}return "";}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{parent.title}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->text(0);}return "";}));
+    //macroVec.append(QPair<QString, std::function<QString()>>("{title}", [&]() ->QString {return ui->titleEdit->text();}));
+}
