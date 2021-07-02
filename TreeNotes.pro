@@ -13,6 +13,7 @@ CONFIG += c++11
 
 SOURCES += \
     iconselectordialog.cpp \
+    macrohelp.cpp \
     main.cpp \
     plaintextedit.cpp \
     treenotes.cpp \
@@ -20,12 +21,14 @@ SOURCES += \
 
 HEADERS += \
     iconselectordialog.h \
+    macrohelp.h \
     plaintextedit.h \
     treenotes.h \
     treewidgetitem.h
 
 FORMS += \
     iconselectordialog.ui \
+    macrohelp.ui \
     plaintextedit.ui \
     treenotes.ui
 

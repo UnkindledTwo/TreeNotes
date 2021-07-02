@@ -680,3 +680,14 @@ void TreeNotes::InitMacroVector(){
     macroVec.append(QPair<QString, std::function<QString()>>("{parent.title}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->text(0);}return "";}));
     //macroVec.append(QPair<QString, std::function<QString()>>("{title}", [&]() ->QString {return ui->titleEdit->text();}));
 }
+
+void TreeNotes::on_actionMacros_triggered()
+{
+    MacroHelp *mh = new MacroHelp(this, macroVec);
+    mh->show();
+    mh->setStyleSheet(this->styleSheet());
+    mh->setFont(this->font());
+    mh->listWidget()->setStyleSheet(mh->listWidget()->styleSheet() + ui->messageEdit->styleSheet());
+    mh->plainTextEdit()->setStyleSheet(mh->plainTextEdit()->styleSheet() +  ui->messageEdit->styleSheet());
+}
+

@@ -37,6 +37,7 @@
 #include "treewidgetitem.h"
 #include "iconselectordialog.h"
 #include "plaintextedit.h"
+#include "macrohelp.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TreeNotes; }
@@ -109,6 +110,8 @@ private slots:
     void on_actionExport_Text_File_triggered();
 
     void on_messageEdit_textChanged();
+
+    void on_actionMacros_triggered();
 
 private:
     Ui::TreeNotes *ui;
