@@ -14,7 +14,7 @@ A Note Taking Application Made With Qt.
 9. Execute the command `windeployqt TreeNotes.exe -release --no-transtalions --no-opengl-sw`
 10. All Done!
 
-#Linux
+## Linux
 1. Install Qt 5 and gnu make
 2. Remove all the windows only code from the application
 3. Execute `qmake`
