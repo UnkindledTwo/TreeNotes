@@ -17,14 +17,16 @@ SOURCES += \
     main.cpp \
     plaintextedit.cpp \
     treenotes.cpp \
-    treewidgetitem.cpp
+    treewidgetitem.cpp \
+    undoitem.cpp
 
 HEADERS += \
     iconselectordialog.h \
     macrohelp.h \
     plaintextedit.h \
     treenotes.h \
-    treewidgetitem.h
+    treewidgetitem.h \
+    undoitem.h
 
 FORMS += \
     iconselectordialog.ui \

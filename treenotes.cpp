@@ -2,7 +2,7 @@
 #include "ui_treenotes.h"
 
 TreeNotes::TreeNotes(QWidget *parent)
-   : QMainWindow(parent)
+    : QMainWindow(parent)
     , ui(new Ui::TreeNotes)
 {
     qDebug() << "{";
@@ -19,12 +19,14 @@ TreeNotes::TreeNotes(QWidget *parent)
     //Make an app config, this is the default config used when the settings in file are not found.
     appConfig.notetree_alternating_row_colors = true;
     appConfig.notetree_indentation_size = 20;
-    appConfig.opacity = 100;
+    appConfig.opacity = 100.0;
     appConfig.treeWidgetAnimated = true;
     appConfig.doubleClickToEditMessage = true;
     appConfig.layoutMargin = 5;
     appConfig.notetree_select_rows = false;
     appConfig.splitter_handle_width = 6;
+    appConfig.confirm_delete = true;
+    appConfig.line_wrapping = true;
 
     //Init the splitter
     splitter = new QSplitter();
@@ -109,6 +111,8 @@ void TreeNotes::ReadQSettings(){
     appConfig.layoutMargin = settings.value("layoutMargin", appConfig.layoutMargin).toInt();
     appConfig.notetree_select_rows = settings.value("notetree_select_rows", appConfig.notetree_select_rows).toBool();
     appConfig.splitter_handle_width = settings.value("splitter_handle_width", appConfig.splitter_handle_width).toInt();
+    appConfig.confirm_delete = settings.value("confirm_delete", appConfig.confirm_delete).toBool();
+    appConfig.line_wrapping = settings.value("line_wrapping", appConfig.line_wrapping).toBool();
     settings.endGroup();
     ReadAppConfig(appConfig);
 
@@ -136,6 +140,8 @@ void TreeNotes::saveQSettings(){
     settings.setValue("layoutMargin", appConfig.layoutMargin);
     settings.setValue("notetree_select_rows", appConfig.notetree_select_rows);
     settings.setValue("splitter_handle_width", appConfig.splitter_handle_width);
+    settings.setValue("confirm_delete", appConfig.confirm_delete);
+    settings.setValue("line_wrapping", appConfig.line_wrapping);
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
@@ -182,6 +188,12 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     }
     else{
         noteTree->setSelectionBehavior(QAbstractItemView::SelectItems);
+    }
+    if(appConfig.line_wrapping){
+        ui->messageEdit->setLineWrapMode(PlainTextEdit::WidgetWidth);
+    }
+    else{
+        ui->messageEdit->setLineWrapMode(PlainTextEdit::NoWrap);
     }
 
     qDebug() << "App config read finished";
@@ -393,21 +405,39 @@ void TreeNotes::Delete(QTreeWidgetItem *target){
         qDebug() << "Found no item, return";
         return;
     }
+
     qDebug() << "Parent of selected item: "  << target->parent();
     QTreeWidgetItem *currentItem = target;
+
+    UndoItem undoitem;
+    undoitem.item = target;
+    undoitem.parent = target->parent();
+
     if(currentItem->parent() != 0x0){
         target->parent()->removeChild(noteTree->currentItem());
+        undoitem.isTopLevelItem = false;
     }
     else if(!currentItem->parent()){
         qDebug() << "No parent found";
         noteTree->takeTopLevelItem(noteTree->indexOfTopLevelItem(noteTree->currentItem()));
+        undoitem.isTopLevelItem = true;
     }
+
+    undoVector.append(undoitem);
+
+    //qDebug() << undoVector;
     qDebug() << "Deleted item";
 }
 
 void TreeNotes::on_actionDelete_triggered()
 {
-    Delete((TreeWidgetItem*)noteTree->currentItem());
+    QMessageBox::StandardButton reply;
+
+    if(appConfig.confirm_delete) reply = QMessageBox::question(this, "Delete Item", "Are you sure you want to delete the current item?\nAll the children will be removed as well.", QMessageBox::Yes | QMessageBox::No);
+
+    if(reply == QMessageBox::Yes || !appConfig.confirm_delete){
+        Delete((TreeWidgetItem*)noteTree->currentItem());
+    }
 }
 
 void TreeNotes::MoveUp(TreeWidgetItem *item){
@@ -669,6 +699,7 @@ void TreeNotes::InitMacroVector(){
     macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.day}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("dd");}));
     macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.month}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("MM");}));
     macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.year}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("yyyy");}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString();}));
     macroVec.append(QPair<QString, std::function<QString()>>("{datetime.second}", [&]() ->QString {return QDateTime::currentDateTime().toString("ss");}));
     macroVec.append(QPair<QString, std::function<QString()>>("{datetime.minute}", [&]() ->QString {return QDateTime::currentDateTime().toString("mm");}));
     macroVec.append(QPair<QString, std::function<QString()>>("{datetime.hour}", [&]() ->QString {return QDateTime::currentDateTime().toString("hh");}));
@@ -689,5 +720,33 @@ void TreeNotes::on_actionMacros_triggered()
     mh->setFont(this->font());
     mh->listWidget()->setStyleSheet(mh->listWidget()->styleSheet() + ui->messageEdit->styleSheet());
     mh->plainTextEdit()->setStyleSheet(mh->plainTextEdit()->styleSheet() +  ui->messageEdit->styleSheet());
+}
+
+
+void TreeNotes::on_actionUndo_Delete_triggered()
+{
+    start:
+    if(undoVector.isEmpty()){
+        qDebug() << "No undos to do";
+        return;
+    }
+    if(!undoVector.last().item){
+        undoVector.removeLast();
+        goto start;
+    }
+    else if(!undoVector.last().parent && !undoVector.last().isTopLevelItem){
+        undoVector.removeLast();
+        goto start;
+    }
+    else{
+        UndoItem undoitem = undoVector.last();
+        if(undoitem.isTopLevelItem){
+            noteTree->addTopLevelItem(undoitem.item);
+        }
+        else{
+            undoitem.parent->addChild(undoitem.item);
+        }
+        undoVector.removeLast();
+    }
 }
 

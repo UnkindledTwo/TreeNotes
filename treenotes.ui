@@ -31,6 +31,9 @@
           <pointsize>11</pointsize>
          </font>
         </property>
+        <property name="frame">
+         <bool>true</bool>
+        </property>
         <property name="placeholderText">
          <string>Ctrl + J</string>
         </property>
@@ -77,12 +80,6 @@
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectItems</enum>
       </property>
-      <property name="iconSize">
-       <size>
-        <width>16</width>
-        <height>16</height>
-       </size>
-      </property>
       <property name="indentation">
        <number>10</number>
       </property>
@@ -127,6 +124,7 @@
     <addaction name="actionAdd"/>
     <addaction name="actionSave"/>
     <addaction name="actionDelete"/>
+    <addaction name="actionUndo_Delete"/>
     <addaction name="actionSet_Icon"/>
     <addaction name="separator"/>
     <addaction name="actionLoad_From_Disk"/>
@@ -296,6 +294,14 @@
   <action name="actionMacros">
    <property name="text">
     <string>Macros</string>
+   </property>
+  </action>
+  <action name="actionUndo_Delete">
+   <property name="text">
+    <string>Undo Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
    </property>
   </action>
  </widget>

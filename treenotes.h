@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QMetaMethod>
+#include <QMessageBox>
 
 //Xml imports
 //#include <QtXml>
@@ -38,6 +39,7 @@
 #include "iconselectordialog.h"
 #include "plaintextedit.h"
 #include "macrohelp.h"
+#include "undoitem.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TreeNotes; }
@@ -65,6 +67,8 @@ public:
         bool doubleClickToEditMessage;
         unsigned short int layoutMargin;
         unsigned short int splitter_handle_width;
+        bool confirm_delete;
+        bool line_wrapping;
     };
 
 private slots:
@@ -113,6 +117,8 @@ private slots:
 
     void on_actionMacros_triggered();
 
+    void on_actionUndo_Delete_triggered();
+
 private:
     Ui::TreeNotes *ui;
 
@@ -127,6 +133,8 @@ private:
 
     bool doubleClickToEditMessage;
     QVector<QPair<QString, std::function<QString()>>> macroVec;
+
+    QVector<UndoItem> undoVector;
 };
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"
