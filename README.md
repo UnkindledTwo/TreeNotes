@@ -1,8 +1,8 @@
 # TreeNotes
 A Note Taking Application Made With Qt.
 
-#Building
-##Windows
+# Building
+## Windows
 1. Install Qt 5 and QtCreator
 2. CLone the source code `git clone https://github.com/UnkindledTwo/TreeNotes.git`
 3. Open QtCreator
