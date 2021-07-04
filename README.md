@@ -1,3 +1,4 @@
+![logo](/Resources/Icon.png)
 # TreeNotes
 A Note Taking Application Made With Qt.
 
