@@ -46,7 +46,7 @@ TreeNotes::TreeNotes(QWidget *parent)
 
     //Auto timer for refreshing label(s)
     QTimer *timer = new QTimer(this);
-    timer->setInterval(500);
+    timer->setInterval(50);
     connect(timer, &QTimer::timeout, [&](){RefreshLabels();});
     timer->start();
 
@@ -566,16 +566,19 @@ void TreeNotes::InitStatusLabels(){
     line->setFrameShadow(QFrame::Sunken);
 
     noteCntLabel = new QLabel(this);
-    noteCntLabel->setScaledContents(true);
     childrenCntLabel = new QLabel(this);
-    childrenCntLabel->setScaledContents(true);
     dateTimeLabel = new QLabel(this);
-    dateTimeLabel->setScaledContents(true);
+    lineCountLabel = new QLabel(this);
+    lengthLabel = new QLabel(this);
 
-    ui->statusbar->addWidget(noteCntLabel, 0);
-    ui->statusbar->addWidget(line);
-    ui->statusbar->addWidget(childrenCntLabel, 0);
-    ui->statusbar->addWidget(line, 999);
+    ui->statusbar->addWidget(noteCntLabel, 1);
+    ui->statusbar->addWidget(line, 1);
+    ui->statusbar->addWidget(childrenCntLabel, 1);
+    ui->statusbar->addWidget(line, 1);
+    ui->statusbar->addWidget(lineCountLabel, 1);
+    ui->statusbar->addWidget(line, 1);
+    ui->statusbar->addWidget(lengthLabel, 1);
+    ui->statusbar->addWidget(line, 20);
     ui->statusbar->addWidget(dateTimeLabel, 1);
 
 
@@ -583,14 +586,21 @@ void TreeNotes::InitStatusLabels(){
 }
 
 void TreeNotes::RefreshLabels(){
-    noteCntLabel->setText("Note count: "+ QString::number(NoteCount()));
+    noteCntLabel->setText("Notes : "+ QString::number(NoteCount()));
     if(noteTree->currentItem()){
-        childrenCntLabel->setText("Children count: "+ QString::number(noteTree->currentItem()->childCount()));
+        childrenCntLabel->setText("Children: "+ QString::number(noteTree->currentItem()->childCount()));
         dateTimeLabel->setText("Last edited: "+((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString());
     }
     else{
-        childrenCntLabel->setText("Children count: 0");
+        childrenCntLabel->setText("Children: 0");
         dateTimeLabel->setText("Last edited: ");
+    }
+    lineCountLabel->setText("Lines: " + QString::number(ui->messageEdit->lineCount()));
+    if(ui->messageEdit->textCursor().selectedText().length() > 0){
+        lengthLabel->setText("Length (Sel): " + QString::number(ui->messageEdit->textCursor().selectedText().length()));
+    }
+    else{
+        lengthLabel->setText("Length: "+ QString::number(ui->messageEdit->toPlainText().length()));
     }
 }
 
