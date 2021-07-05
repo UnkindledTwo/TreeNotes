@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Select an Icon</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="1,2">
    <item row="2" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="sizePolicy">
@@ -66,6 +66,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>iconBox</tabstop>
+  <tabstop>treeWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

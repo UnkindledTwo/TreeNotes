@@ -355,7 +355,7 @@ void TreeNotes::Save(TreeWidgetItem *target){
         target->lastEdited = QDateTime::currentDateTime();
     }
 
-    QTextCursor savedCursor = ui->messageEdit->textCursor();
+    int savedPos = ui->messageEdit->textCursor().position();
     QString finaltext = ui->messageEdit->toPlainText();
 
     for(int i = 0; i < macroVec.count(); i++){
@@ -367,7 +367,9 @@ void TreeNotes::Save(TreeWidgetItem *target){
 
     on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
 
-    ui->messageEdit->setTextCursor(savedCursor);
+    QTextCursor a = ui->messageEdit->textCursor();
+    a.setPosition(savedPos);
+    ui->messageEdit->setTextCursor(a);
 }
 
 void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
@@ -414,11 +416,13 @@ void TreeNotes::Delete(QTreeWidgetItem *target){
     undoitem.parent = target->parent();
 
     if(currentItem->parent() != 0x0){
+        undoitem.position = target->parent()->indexOfChild(target);
         target->parent()->removeChild(noteTree->currentItem());
         undoitem.isTopLevelItem = false;
     }
     else if(!currentItem->parent()){
         qDebug() << "No parent found";
+        undoitem.position = noteTree->indexOfTopLevelItem(target);
         noteTree->takeTopLevelItem(noteTree->indexOfTopLevelItem(noteTree->currentItem()));
         undoitem.isTopLevelItem = true;
     }
@@ -751,10 +755,10 @@ void TreeNotes::on_actionUndo_Delete_triggered()
     else{
         UndoItem undoitem = undoVector.last();
         if(undoitem.isTopLevelItem){
-            noteTree->addTopLevelItem(undoitem.item);
+            noteTree->insertTopLevelItem(undoitem.position, undoitem.item);
         }
         else{
-            undoitem.parent->addChild(undoitem.item);
+            undoitem.parent->insertChild(undoitem.position, undoitem.item);
         }
         undoVector.removeLast();
     }

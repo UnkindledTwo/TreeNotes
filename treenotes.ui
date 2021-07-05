@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1123</width>
     <height>600</height>
    </rect>
   </property>
@@ -106,7 +106,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1123</width>
      <height>22</height>
     </rect>
    </property>
@@ -180,6 +180,7 @@
    <addaction name="actionAdd"/>
    <addaction name="actionSave"/>
    <addaction name="actionDelete"/>
+   <addaction name="actionUndo_Delete"/>
    <addaction name="actionSet_Icon"/>
    <addaction name="separator"/>
    <addaction name="actionMove_Up"/>
@@ -187,6 +188,7 @@
    <addaction name="actionFocus_Parent"/>
    <addaction name="actionHide_Show_Note_Tree"/>
    <addaction name="separator"/>
+   <addaction name="actionSet_Font_Text_Editors"/>
   </widget>
   <action name="actionAdd">
    <property name="text">
