@@ -16,3 +16,5 @@ After you launch the app the first time, edit the settings.ini that is created i
 You can change the values under [AppConfig].
 
 Or you can use the settings menu from `Other -> Settings`
+
+![screenshot](/Resources/screenshot.png)
