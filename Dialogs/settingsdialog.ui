@@ -14,42 +14,107 @@
    <string>Settings</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QCheckBox" name="notetree_alternating_row_colors">
-     <property name="text">
-      <string>Alternating Row Colors</string>
+   <item row="10" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QCheckBox" name="notetree_select_rows">
+   <item row="5" column="0" colspan="2">
+    <widget class="QCheckBox" name="double_click_to_edit">
      <property name="text">
-      <string>Select Rows Instead Of Items</string>
+      <string>Double Click To Jump To The Title Box</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+   <item row="8" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Tree Indentation Size</string>
+        <string>Splitter Handle Width</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="notetree_indentation_size">
-       <property name="minimum">
-        <number>3</number>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="maximum">
-        <number>50</number>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="splitter_handle_width">
+       <property name="minimum">
+        <number>1</number>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item row="10" column="0">
+    <widget class="QCheckBox" name="line_wrapping">
+     <property name="text">
+      <string>Line Wrapping</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
+    <widget class="QCheckBox" name="confirm_delete">
+     <property name="text">
+      <string>Confirm Delete</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Layout Margin</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="layout_margin">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="6" column="0" colspan="2">
+    <widget class="QCheckBox" name="notetree_animated">
+     <property name="text">
+      <string>Tree Animated</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QLabel" name="label_2">
@@ -57,6 +122,19 @@
         <string>Opacity (100 for solid, 0 for transparent)</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="QSpinBox" name="opacity">
@@ -70,77 +148,51 @@
      </item>
     </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="QCheckBox" name="notetree_animated">
-     <property name="text">
-      <string>Tree Animated</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0">
-    <widget class="QCheckBox" name="double_click_to_edit">
-     <property name="text">
-      <string>Double Click To Jump To The Title Box</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <item row="2" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Layout Margin</string>
+        <string>Tree Indentation Size</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="layout_margin">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="notetree_indentation_size">
        <property name="minimum">
-        <number>1</number>
+        <number>3</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
        </property>
       </widget>
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Splitter Handle Width</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="splitter_handle_width">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="8" column="0">
-    <widget class="QCheckBox" name="confirm_delete">
+   <item row="1" column="0" colspan="2">
+    <widget class="QCheckBox" name="notetree_select_rows">
      <property name="text">
-      <string>Confirm Delete</string>
+      <string>Select Rows Instead Of Items</string>
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
-    <widget class="QCheckBox" name="line_wrapping">
+   <item row="0" column="0" colspan="2">
+    <widget class="QCheckBox" name="notetree_alternating_row_colors">
      <property name="text">
-      <string>Line Wrapping</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <string>Alternating Row Colors</string>
      </property>
     </widget>
    </item>
