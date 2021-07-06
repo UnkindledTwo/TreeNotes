@@ -17,4 +17,4 @@ You can change the values under [AppConfig].
 
 Or you can use the settings menu from `Other -> Settings`
 
-![screenshot](/Resources/screenshot.png)
+![screenshot](/Resources/Screenshot1.png)
