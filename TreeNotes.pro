@@ -12,8 +12,9 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    iconselectordialog.cpp \
-    macrohelp.cpp \
+    Dialogs/iconselectordialog.cpp \
+    Dialogs/macrohelp.cpp \
+    Dialogs/settingsdialog.cpp \
     main.cpp \
     plaintextedit.cpp \
     treenotes.cpp \
@@ -21,16 +22,19 @@ SOURCES += \
     undoitem.cpp
 
 HEADERS += \
-    iconselectordialog.h \
-    macrohelp.h \
+    Dialogs/iconselectordialog.h \
+    Dialogs/macrohelp.h \
+    Dialogs/settingsdialog.h \
+    appconfig.h \
     plaintextedit.h \
     treenotes.h \
     treewidgetitem.h \
     undoitem.h
 
 FORMS += \
-    iconselectordialog.ui \
-    macrohelp.ui \
+    Dialogs/iconselectordialog.ui \
+    Dialogs/macrohelp.ui \
+    Dialogs/settingsdialog.ui \
     plaintextedit.ui \
     treenotes.ui
 

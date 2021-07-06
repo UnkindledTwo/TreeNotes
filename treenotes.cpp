@@ -20,7 +20,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.notetree_alternating_row_colors = true;
     appConfig.notetree_indentation_size = 20;
     appConfig.opacity = 100.0;
-    appConfig.treeWidgetAnimated = true;
+    appConfig.notetree_animated = true;
     appConfig.doubleClickToEditMessage = true;
     appConfig.layoutMargin = 5;
     appConfig.notetree_select_rows = false;
@@ -130,7 +130,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.notetree_alternating_row_colors = settings.value("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors).toBool();
     appConfig.notetree_indentation_size = settings.value("notetree_indentation_size", appConfig.notetree_indentation_size).toInt();
     appConfig.opacity = settings.value("opacity", appConfig.opacity).toInt();
-    appConfig.treeWidgetAnimated = settings.value("treeWidgetAnimated", appConfig.treeWidgetAnimated).toBool();
+    appConfig.notetree_animated = settings.value("notetree_animated", appConfig.notetree_animated).toBool();
     appConfig.doubleClickToEditMessage = settings.value("doubleClickToEditMessage", appConfig.doubleClickToEditMessage).toBool();
     appConfig.layoutMargin = settings.value("layoutMargin", appConfig.layoutMargin).toInt();
     appConfig.notetree_select_rows = settings.value("notetree_select_rows", appConfig.notetree_select_rows).toBool();
@@ -160,7 +160,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors);
     settings.setValue("notetree_indentation_size", appConfig.notetree_indentation_size);
     settings.setValue("opacity", appConfig.opacity);
-    settings.setValue("treeWidgetAnimated", appConfig.treeWidgetAnimated);
+    settings.setValue("notetree_animated", appConfig.notetree_animated);
     settings.setValue("doubleClickToEditMessage", appConfig.doubleClickToEditMessage);
     settings.setValue("layoutMargin", appConfig.layoutMargin);
     settings.setValue("notetree_select_rows", appConfig.notetree_select_rows);
@@ -204,7 +204,7 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     noteTree->setIndentation(appConfig.notetree_indentation_size);
     noteTree->setAlternatingRowColors(appConfig.notetree_alternating_row_colors);
     this->setWindowOpacity(qreal(appConfig.opacity)/100);
-    noteTree->setAnimated(appConfig.treeWidgetAnimated);
+    noteTree->setAnimated(appConfig.notetree_animated);
     doubleClickToEditMessage = appConfig.doubleClickToEditMessage;
     centralWidget()->layout()->setMargin(appConfig.layoutMargin);
     splitter->setHandleWidth(appConfig.splitter_handle_width);
@@ -786,6 +786,21 @@ void TreeNotes::on_actionUndo_Delete_triggered()
             undoitem.parent->insertChild(undoitem.position, undoitem.item);
         }
         undoVector.removeLast();
+    }
+}
+
+
+void TreeNotes::on_actionSettings_triggered()
+{
+    SettingsDialog *sd = new SettingsDialog(this);
+    sd->setAppConfig(appConfig);
+    sd->setFont(this->font());
+
+    sd->show();
+
+    if(sd->exec()){
+        this->appConfig = sd->appConfig();
+        ReadAppConfig(this->appConfig);
     }
 }
 

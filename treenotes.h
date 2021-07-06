@@ -36,10 +36,12 @@
 #include <QtWin>
 
 #include "treewidgetitem.h"
-#include "iconselectordialog.h"
+#include "Dialogs/iconselectordialog.h"
 #include "plaintextedit.h"
-#include "macrohelp.h"
+#include "Dialogs/macrohelp.h"
 #include "undoitem.h"
+#include "appconfig.h"
+#include "Dialogs/settingsdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TreeNotes; }
@@ -57,7 +59,7 @@ public:
 
     TreeNotes(QWidget *parent = nullptr);
     ~TreeNotes();
-
+/*
     struct app_config{
         bool notetree_alternating_row_colors;
         bool notetree_select_rows;
@@ -69,7 +71,7 @@ public:
         unsigned short int splitter_handle_width;
         bool confirm_delete;
         bool line_wrapping;
-    };
+    };*/
 
 private slots:
     QString dateTimeNoSpace();
@@ -119,6 +121,8 @@ private slots:
     void on_actionMacros_triggered();
 
     void on_actionUndo_Delete_triggered();
+
+    void on_actionSettings_triggered();
 
 private:
     Ui::TreeNotes *ui;

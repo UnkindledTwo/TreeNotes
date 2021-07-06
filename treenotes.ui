@@ -142,6 +142,7 @@
     <addaction name="actionMove_Down"/>
     <addaction name="actionFocus_Parent"/>
     <addaction name="actionHide_Show_Note_Tree"/>
+    <addaction name="actionSettings"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -304,6 +305,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>
