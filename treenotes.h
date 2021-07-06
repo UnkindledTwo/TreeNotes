@@ -92,6 +92,7 @@ private slots:
     TreeWidgetItem* AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon(":/Resources/Icon.png"));
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
+    void ShowContextMenu(const QPoint &pos);
 
     QString boolToString(bool a);
     bool stringToBool(QString a);

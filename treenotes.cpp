@@ -60,6 +60,10 @@ TreeNotes::TreeNotes(QWidget *parent)
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
     connect(ui->actionLoad_From_Disk, &QAction::triggered, this, &TreeNotes::ReadFromFile);
 
+    //Context menu event
+    noteTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(noteTree, &QTreeWidget::customContextMenuRequested, this, &TreeNotes::ShowContextMenu);
+
     InitIconVector();
     InitShortcuts();
     InitStatusLabels();
@@ -76,6 +80,24 @@ TreeNotes::~TreeNotes()
     delete ui;
 }
 
+void TreeNotes::ShowContextMenu(const QPoint &pos){
+    if(!noteTree->rect().contains(pos)){
+        return;
+    }
+    QMenu contextMenu(tr("Context Menu"), this);
+
+    contextMenu.addAction(ui->actionAdd);
+    contextMenu.addAction(ui->actionSave);
+    contextMenu.addAction(ui->actionDelete);
+    contextMenu.addAction(ui->actionUndo_Delete);
+    contextMenu.addAction(ui->actionSet_Icon);
+    contextMenu.addAction(ui->actionMove_Up);
+    contextMenu.addAction(ui->actionMove_Down);
+    contextMenu.addAction(ui->actionFocus_Parent);
+
+   contextMenu.exec(mapToGlobal(pos));
+}
+
 void TreeNotes::ReadQSettings(){
     qDebug() << "Reading QSettings";
 
@@ -85,6 +107,8 @@ void TreeNotes::ReadQSettings(){
     ui->messageEdit->setFont(loadedFont);
     ui->titleEdit->setFont(loadedFont);
 
+
+    ui->ToolBar->setHidden(settings.value("toolbar_hidden", false).toBool());
     //Set window size
     if(settings.value("maximized", false).toBool()){
         this->showMaximized();
@@ -129,6 +153,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("noteTreeHidden", noteTree->isHidden());
     settings.setValue("s1", ((QSplitter*)noteTree->parent())->sizes().at(0));
     settings.setValue("s2", ((QSplitter*)noteTree->parent())->sizes().at(1));
+    settings.setValue("toolbar_hidden", ui->ToolBar->isHidden());
 
 
     settings.beginGroup("AppConfig");
