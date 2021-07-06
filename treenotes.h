@@ -33,7 +33,9 @@
 
 //Win only
 //#include <QtWinExtras>
+#ifdef Q_OS_WIN
 #include <QtWin>
+#endif
 
 #include "treewidgetitem.h"
 #include "Dialogs/iconselectordialog.h"

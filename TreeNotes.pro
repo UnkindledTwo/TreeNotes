@@ -1,4 +1,7 @@
-QT       += core gui xml winextras
+QT       += core gui xml
+win32{
+    QT += winextras
+}
 
 RC_ICONS = Resources/Icon.ico
 

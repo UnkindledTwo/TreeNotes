@@ -51,7 +51,11 @@ TreeNotes::TreeNotes(QWidget *parent)
     timer->start();
 
     // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
+#ifdef Q_OS_WIN
     QString styleSheetFocus = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
+#else
+    QString styleSheetFocus = "border: 1.50px solid;";
+#endif
     ui->messageEdit->setStyleSheet(ui->messageEdit->styleSheet() + styleSheetFocus);
     ui->treeWidget->setStyleSheet(ui->treeWidget->styleSheet() + styleSheetFocus);
     ui->titleEdit->setStyleSheet(ui->titleEdit->styleSheet() + styleSheetFocus);
