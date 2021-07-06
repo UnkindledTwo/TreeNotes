@@ -549,6 +549,7 @@ void TreeNotes::on_actionFocus_Parent_triggered()
     }
     else{
         noteTree->clearSelection();
+        noteTree->setCurrentItem(NULL);
     }
 }
 
@@ -801,6 +802,7 @@ void TreeNotes::on_actionSettings_triggered()
     if(sd->exec()){
         this->appConfig = sd->appConfig();
         ReadAppConfig(this->appConfig);
+        saveQSettings();
     }
 }
 
