@@ -9,7 +9,7 @@ You can build this application like you would a Qt app normally,
 * [Mac](https://doc.qt.io/qt-5/macos.html#deploying-applications-on-macos)
 
 ### Note
-You need to remove windows only code in mac and linux versions. Simply remove the word `winextras` from TreeNotes.pro and remove the block:
+You need to remove windows only code in mac and linux versions. Simply remove the word `winextras` from `TreeNotes.pro` and remove the block:
 ```cpp
  54   QString styleSheetFocus = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
  55   ui->messageEdit->setStyleSheet(ui->messageEdit->styleSheet() + styleSheetFocus);
