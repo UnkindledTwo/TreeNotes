@@ -27,6 +27,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.splitter_handle_width = 6;
     appConfig.confirm_delete = true;
     appConfig.line_wrapping = true;
+    appConfig.pair_completion = true;
 
     //Init the splitter
     splitter = new QSplitter();
@@ -75,6 +76,8 @@ TreeNotes::TreeNotes(QWidget *parent)
     ReadAppConfig(appConfig);
     ReadQSettings();
     InitMacroVector();
+
+    ui->messageEdit->setCursorWidth(2);
 
     qDebug() << "Initilization of the main window is finished";
 }
@@ -141,6 +144,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.splitter_handle_width = settings.value("splitter_handle_width", appConfig.splitter_handle_width).toInt();
     appConfig.confirm_delete = settings.value("confirm_delete", appConfig.confirm_delete).toBool();
     appConfig.line_wrapping = settings.value("line_wrapping", appConfig.line_wrapping).toBool();
+    appConfig.pair_completion = settings.value("pair_completion", appConfig.pair_completion).toBool();
     settings.endGroup();
     ReadAppConfig(appConfig);
 
@@ -171,6 +175,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("splitter_handle_width", appConfig.splitter_handle_width);
     settings.setValue("confirm_delete", appConfig.confirm_delete);
     settings.setValue("line_wrapping", appConfig.line_wrapping);
+    settings.setValue("pair_completion", appConfig.pair_completion);
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
@@ -224,6 +229,7 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     else{
         ui->messageEdit->setLineWrapMode(PlainTextEdit::NoWrap);
     }
+    ui->messageEdit->setPairCompletion(appConfig.pair_completion);
 
     qDebug() << "App config read finished";
 }

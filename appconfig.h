@@ -12,6 +12,7 @@ struct app_config{
     unsigned short int splitter_handle_width;
     bool confirm_delete;
     bool line_wrapping;
+    bool pair_completion;
 };
 
 #endif // APPCONFIG_H

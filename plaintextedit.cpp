@@ -6,7 +6,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     ui(new Ui::PlainTextEdit)
 {
     ui->setupUi(this);
-    this->setCursorWidth(2);
+    connect(this, &PlainTextEdit::textChanged, this, &PlainTextEdit::TextChanged);
 
     QShortcut *moveToStart = new QShortcut(QKeySequence("Ctrl+Shift+G"), this);
     connect(moveToStart, &QShortcut::activated,this, [&](){
@@ -44,6 +44,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
         this->setTextCursor(textCursor1);
     });
 
+    initPairCompletionMap();
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
@@ -70,5 +71,33 @@ int PlainTextEdit::lineCount(){
 }
 
 void PlainTextEdit::keyPressEvent(QKeyEvent *e){
+    if(!pairCompletion()) goto noPairCompletion;
+    if(pairCompletionMap[e->text()] != ""){
+        insertPlainText(pairCompletionMap[e->text()]);
+        moveCursor(QTextCursor::Left, QTextCursor::MoveAnchor);
+    }
+
+noPairCompletion:
     QPlainTextEdit::keyPressEvent(e);
+}
+
+void PlainTextEdit::TextChanged(){
+
+}
+
+bool PlainTextEdit::pairCompletion(){
+    return m_pairCompletion;
+}
+
+void PlainTextEdit::setPairCompletion(bool completion){
+    m_pairCompletion = completion;
+    emit pairCompletionChanged();
+}
+
+void PlainTextEdit::initPairCompletionMap(){
+    pairCompletionMap["{"] = "}";
+    pairCompletionMap["("] = ")";
+    pairCompletionMap["["] = "]";
+    pairCompletionMap["\""] = "\"";
+    pairCompletionMap["'"] = "'";
 }

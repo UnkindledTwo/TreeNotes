@@ -25,6 +25,7 @@ void SettingsDialog::setAppConfig(app_config appConfig){
     ui->splitter_handle_width->setValue(appConfig.splitter_handle_width);
     ui->confirm_delete->setChecked(appConfig.confirm_delete);
     ui->line_wrapping->setChecked(appConfig.line_wrapping);
+    ui->pair_completion->setChecked(appConfig.pair_completion);
 }
 
 struct app_config SettingsDialog::appConfig(){
@@ -38,6 +39,7 @@ struct app_config SettingsDialog::appConfig(){
     m_appConfig.splitter_handle_width = ui->splitter_handle_width->value();
     m_appConfig.confirm_delete = ui->confirm_delete->isChecked();
     m_appConfig.line_wrapping = ui->line_wrapping->isChecked();
+    m_appConfig.pair_completion = ui->pair_completion->isChecked();
 
     return m_appConfig;
 }
