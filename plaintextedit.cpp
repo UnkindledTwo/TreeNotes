@@ -99,5 +99,4 @@ void PlainTextEdit::initPairCompletionMap(){
     pairCompletionMap["("] = ")";
     pairCompletionMap["["] = "]";
     pairCompletionMap["\""] = "\"";
-    pairCompletionMap["'"] = "'";
 }
