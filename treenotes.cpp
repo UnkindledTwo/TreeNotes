@@ -74,7 +74,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     InitShortcuts();
     InitStatusLabels();
     ReadFromFile();
-    ReadAppConfig(appConfig);
+    //ReadAppConfig(appConfig);
     ReadQSettings();
     InitMacroVector();
 

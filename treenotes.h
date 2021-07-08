@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QMetaMethod>
 #include <QMessageBox>
+#include <QTranslator>
 
 //Xml imports
 //#include <QtXml>
