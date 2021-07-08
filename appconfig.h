@@ -14,6 +14,7 @@ struct app_config{
     bool line_wrapping;
     bool pair_completion;
     bool notetree_drag_drop;
+    int maximum_backups;
 };
 
 #endif // APPCONFIG_H

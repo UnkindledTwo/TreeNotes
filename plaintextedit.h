@@ -14,7 +14,7 @@ namespace Ui {
 class PlainTextEdit;
 }
 
-class PlainTextEdit : public QTextEdit
+class PlainTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 

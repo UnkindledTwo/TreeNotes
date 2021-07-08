@@ -29,6 +29,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.line_wrapping = true;
     appConfig.pair_completion = true;
     appConfig.notetree_drag_drop = true;
+    appConfig.maximum_backups = 10;
 
     //Init the splitter
     splitter = new QSplitter();
@@ -147,6 +148,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.line_wrapping = settings.value("line_wrapping", appConfig.line_wrapping).toBool();
     appConfig.pair_completion = settings.value("pair_completion", appConfig.pair_completion).toBool();
     appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
+    appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
     settings.endGroup();
     ReadAppConfig(appConfig);
 
@@ -179,6 +181,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("line_wrapping", appConfig.line_wrapping);
     settings.setValue("pair_completion", appConfig.pair_completion);
     settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
+    settings.setValue("maximum_backups", appConfig.maximum_backups);
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
@@ -209,6 +212,8 @@ void TreeNotes::AttemptSaveBackup(){
     currentDir.rename(qApp->applicationDirPath() + "/save.xml", qApp->applicationDirPath() + "/backup/save" + dateTimeNoSpace() + ".xml");
 
     if(QFile(qApp->applicationDirPath() + "/save.xml").exists()) qCritical().noquote() << "\n!!!Backup Failed!!!\n";
+
+    CleanBackups(appConfig.maximum_backups, dir.absolutePath());
     qDebug() << "AttempSaveBackup() finished";
 }
 
@@ -829,4 +834,37 @@ void TreeNotes::SetNoteTreeDragDrop(bool a){
     else
         noteTree->setDragDropMode(QAbstractItemView::NoDragDrop);
 
+}
+
+void TreeNotes::CleanBackups(int max, QString backupsDir){
+    qDebug() << "Cleaning backups, Backups dir:" << backupsDir << " Max backups:" << max;
+
+    QDir backups(backupsDir);
+    if(!backups.exists()){
+        qDebug() << "Backup directory doesn't exist";
+        return;
+    }
+
+    backups.setNameFilters({"*.xml"});
+    QStringList entries = backups.entryList(QDir::Files, QDir::Time);
+
+    if(max > entries.length()){
+        max = entries.length();
+    }
+
+    QStringList removeList;
+
+    for(int i = max; i < entries.count(); i++){
+        removeList.append(entries[i]);
+    }
+
+    qDebug() << removeList;
+
+    qDebug() << entries;
+    qDebug() << "entrieslength" << entries.length();
+    qDebug() << "removelistlength" << removeList.length();
+
+    foreach (QString fileToRemove, removeList) {
+        backups.remove(backups.absolutePath() + "/" + fileToRemove);
+    }
 }

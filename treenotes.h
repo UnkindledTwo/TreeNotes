@@ -99,6 +99,7 @@ private slots:
     void MoveDown(TreeWidgetItem *item);
     void ShowContextMenu(const QPoint &pos);
     void SetNoteTreeDragDrop(bool);
+    void CleanBackups(int max, QString backupsDir);
 
     QString boolToString(bool a);
     bool stringToBool(QString a);
@@ -146,6 +147,7 @@ private:
     QVector<QPair<QString, std::function<QString()>>> macroVec;
 
     QVector<UndoItem> undoVector;
+
 };
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"

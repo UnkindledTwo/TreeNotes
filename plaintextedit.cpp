@@ -2,7 +2,7 @@
 #include "ui_plaintextedit.h"
 
 PlainTextEdit::PlainTextEdit(QWidget *parent) :
-    QTextEdit(parent),
+    QPlainTextEdit(parent),
     ui(new Ui::PlainTextEdit)
 {
     ui->setupUi(this);
@@ -49,7 +49,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
 
-    QTextEdit::paintEvent(e);
+    QPlainTextEdit::paintEvent(e);
 }
 
 PlainTextEdit::~PlainTextEdit()
@@ -78,7 +78,7 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
     }
 
 noPairCompletion:
-    QTextEdit::keyPressEvent(e);
+    QPlainTextEdit::keyPressEvent(e);
 }
 
 void PlainTextEdit::TextChanged(){
