@@ -13,6 +13,7 @@ struct app_config{
     bool confirm_delete;
     bool line_wrapping;
     bool pair_completion;
+    bool notetree_drag_drop;
 };
 
 #endif // APPCONFIG_H

@@ -26,6 +26,7 @@ void SettingsDialog::setAppConfig(app_config appConfig){
     ui->confirm_delete->setChecked(appConfig.confirm_delete);
     ui->line_wrapping->setChecked(appConfig.line_wrapping);
     ui->pair_completion->setChecked(appConfig.pair_completion);
+    ui->notetree_drag_drop->setChecked(appConfig.notetree_drag_drop);
 }
 
 struct app_config SettingsDialog::appConfig(){
@@ -40,6 +41,7 @@ struct app_config SettingsDialog::appConfig(){
     m_appConfig.confirm_delete = ui->confirm_delete->isChecked();
     m_appConfig.line_wrapping = ui->line_wrapping->isChecked();
     m_appConfig.pair_completion = ui->pair_completion->isChecked();
+    m_appConfig.notetree_drag_drop = ui->notetree_drag_drop->isChecked();
 
     return m_appConfig;
 }

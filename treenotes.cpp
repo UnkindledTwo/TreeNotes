@@ -28,6 +28,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.confirm_delete = true;
     appConfig.line_wrapping = true;
     appConfig.pair_completion = true;
+    appConfig.notetree_drag_drop = true;
 
     //Init the splitter
     splitter = new QSplitter();
@@ -145,6 +146,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.confirm_delete = settings.value("confirm_delete", appConfig.confirm_delete).toBool();
     appConfig.line_wrapping = settings.value("line_wrapping", appConfig.line_wrapping).toBool();
     appConfig.pair_completion = settings.value("pair_completion", appConfig.pair_completion).toBool();
+    appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
     settings.endGroup();
     ReadAppConfig(appConfig);
 
@@ -176,6 +178,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("confirm_delete", appConfig.confirm_delete);
     settings.setValue("line_wrapping", appConfig.line_wrapping);
     settings.setValue("pair_completion", appConfig.pair_completion);
+    settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
@@ -230,6 +233,7 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
         ui->messageEdit->setLineWrapMode(PlainTextEdit::NoWrap);
     }
     ui->messageEdit->setPairCompletion(appConfig.pair_completion);
+    SetNoteTreeDragDrop(appConfig.notetree_drag_drop);
 
     qDebug() << "App config read finished";
 }
@@ -816,3 +820,13 @@ void TreeNotes::on_actionSettings_triggered()
     }
 }
 
+void TreeNotes::SetNoteTreeDragDrop(bool a){
+    noteTree->setDragEnabled(a);
+    noteTree->viewport()->setAcceptDrops(a);
+    noteTree->setDropIndicatorShown(a);
+    if(a)
+        noteTree->setDragDropMode(QAbstractItemView::InternalMove);
+    else
+        noteTree->setDragDropMode(QAbstractItemView::NoDragDrop);
+
+}

@@ -161,7 +161,11 @@
    <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>true</bool>
+   </property>
+  </widget>
   <widget class="QToolBar" name="ToolBar">
    <property name="windowTitle">
     <string>toolBar</string>

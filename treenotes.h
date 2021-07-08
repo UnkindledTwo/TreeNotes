@@ -97,6 +97,7 @@ private slots:
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
     void ShowContextMenu(const QPoint &pos);
+    void SetNoteTreeDragDrop(bool);
 
     QString boolToString(bool a);
     bool stringToBool(QString a);

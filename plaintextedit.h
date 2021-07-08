@@ -14,7 +14,7 @@ namespace Ui {
 class PlainTextEdit;
 }
 
-class PlainTextEdit : public QPlainTextEdit
+class PlainTextEdit : public QTextEdit
 {
     Q_OBJECT
 
@@ -34,6 +34,7 @@ private slots:
     void TextChanged();
 
     void initPairCompletionMap();
+
 protected:
     void paintEvent(QPaintEvent *e);
 
@@ -45,6 +46,7 @@ private:
     bool m_pairCompletion = true;
 
     QMap<QString, QString> pairCompletionMap;
+
 };
 
 #endif // PLAINTEXTEDIT_H
