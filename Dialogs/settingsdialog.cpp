@@ -27,6 +27,7 @@ void SettingsDialog::setAppConfig(app_config appConfig){
     ui->line_wrapping->setChecked(appConfig.line_wrapping);
     ui->pair_completion->setChecked(appConfig.pair_completion);
     ui->notetree_drag_drop->setChecked(appConfig.notetree_drag_drop);
+    ui->maximum_backups->setValue(appConfig.maximum_backups);
 }
 
 struct app_config SettingsDialog::appConfig(){
@@ -42,6 +43,7 @@ struct app_config SettingsDialog::appConfig(){
     m_appConfig.line_wrapping = ui->line_wrapping->isChecked();
     m_appConfig.pair_completion = ui->pair_completion->isChecked();
     m_appConfig.notetree_drag_drop = ui->notetree_drag_drop->isChecked();
+    m_appConfig.maximum_backups = ui->maximum_backups->value();
 
     return m_appConfig;
 }

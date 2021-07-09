@@ -409,6 +409,10 @@ void TreeNotes::Save(TreeWidgetItem *target){
     target->message = finaltext;
     target->setText(0, ui->titleEdit->text());
 
+    target->vScrollBarPos = ui->messageEdit->verticalScrollBar()->value();
+    target->hScrollBarPos = ui->messageEdit->horizontalScrollBar()->value();
+
+
     on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
 
     QTextCursor a = ui->messageEdit->textCursor();
@@ -430,6 +434,9 @@ part2:
     if(!currentItem){return;}
     ui->messageEdit->setPlainText(currentItem->message);
     ui->titleEdit->setText(currentItem->text(0));
+
+    ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollBarPos);
+    ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollBarPos);
 }
 
 
@@ -619,6 +626,8 @@ void TreeNotes::InitStatusLabels(){
     dateTimeLabel = new QLabel(this);
     lineCountLabel = new QLabel(this);
     lengthLabel = new QLabel(this);
+    currentLineLabel = new QLabel(this);
+    currentColumnLabel = new QLabel(this);
 
     ui->statusbar->addWidget(noteCntLabel, 1);
     ui->statusbar->addWidget(line, 1);
@@ -627,6 +636,9 @@ void TreeNotes::InitStatusLabels(){
     ui->statusbar->addWidget(lineCountLabel, 1);
     ui->statusbar->addWidget(line, 1);
     ui->statusbar->addWidget(lengthLabel, 1);
+    ui->statusbar->addWidget(line, 3);
+    ui->statusbar->addWidget(currentLineLabel, 1);
+    ui->statusbar->addWidget(currentColumnLabel, 1);
     ui->statusbar->addWidget(line, 20);
     ui->statusbar->addWidget(dateTimeLabel, 1);
 
@@ -651,6 +663,8 @@ void TreeNotes::RefreshLabels(){
     else{
         lengthLabel->setText("Length: "+ QString::number(ui->messageEdit->toPlainText().length()));
     }
+    currentLineLabel->setText("Line: " + QString::number(ui->messageEdit->currentLine()));
+    currentColumnLabel->setText("Col: " + QString::number(ui->messageEdit->currentColumn()));
 }
 
 int TreeNotes::NoteCount(){

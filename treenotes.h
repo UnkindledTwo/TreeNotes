@@ -3,12 +3,10 @@
 
 #include <QMainWindow>
 #include <QTreeWidget>
-#include <QListWidget>
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <QPushButton>
 #include <QStyle>
 #include <QShortcut>
 #include <QMessageBox>
@@ -25,8 +23,9 @@
 #include <QMetaMethod>
 #include <QMessageBox>
 #include <QTranslator>
+#include <QScrollArea>
+#include <QScrollBar>
 
-//Xml imports
 //#include <QtXml>
 #include <QDomDocument>
 #include <QDomElement>
@@ -142,6 +141,8 @@ private:
     QLabel *dateTimeLabel;
     QLabel *lineCountLabel;
     QLabel *lengthLabel;
+    QLabel *currentLineLabel;
+    QLabel *currentColumnLabel;
 
     bool doubleClickToEditMessage;
     QVector<QPair<QString, std::function<QString()>>> macroVec;

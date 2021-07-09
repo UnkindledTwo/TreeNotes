@@ -27,6 +27,9 @@ public:
     int lineCount();
     bool pairCompletion();
     void setPairCompletion(bool);
+    QString lineAt(int);
+    int currentLine();
+    int currentColumn();
 
 signals:
     void pairCompletionChanged();

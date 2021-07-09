@@ -18,6 +18,9 @@ public:
     QDateTime lastEdited = QDateTime::currentDateTime();
 
     TreeWidgetItem *_clone();
+
+    int vScrollBarPos;
+    int hScrollBarPos;
 };
 
 #endif // TREEWIDGETITEM_H
