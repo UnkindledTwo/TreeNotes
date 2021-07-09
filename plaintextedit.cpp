@@ -74,6 +74,9 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
 
     if(!pairCompletion()) goto noPairCompletion;
     if(pairCompletionMap[e->text()] != ""){
+        //e->text() = (
+        //pairCompletion()[e->text()] = )
+
         insertPlainText(pairCompletionMap[e->text()]);
         moveCursor(QTextCursor::Left, QTextCursor::MoveAnchor);
     }
@@ -81,8 +84,6 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
 noPairCompletion:
     QPlainTextEdit::keyPressEvent(e);
 
-    qDebug() << "Line: " << currentLine();
-    qDebug() << "Column: " << currentColumn();
 }
 
 void PlainTextEdit::TextChanged(){
@@ -106,6 +107,7 @@ void PlainTextEdit::initPairCompletionMap(){
 }
 
 QString PlainTextEdit::lineAt(int line){
+    qDebug() << "Calculating line at" << line;
     QString returnVal = "";
     int currentLine = 1;
 
@@ -117,33 +119,17 @@ QString PlainTextEdit::lineAt(int line){
             //Stop the loop if the line interpreted by the loop is higher than the desired line.
             if(currentLine > line) break;
         }
+        if(toPlainText().at(i) == '\n') currentLine++;
     }
 
+    qDebug() << "Calculating line at" << line << "finished";
     return returnVal;
 }
 
 int PlainTextEdit::currentLine(){
-    int currentLine = 1;
-    int position = this->textCursor().position();
-
-    if(position == toPlainText().length()) return lineCount();
-
-    for(int i = 0; i < toPlainText().length(); i++){
-        if(i == position){
-            return currentLine;
-        }
-
-        if(toPlainText().at(i) == '\n'){
-            currentLine++;
-        }
-    }
+     return textCursor().blockNumber() + 1;
 }
 
 int PlainTextEdit::currentColumn(){
-    int currentLine = this->currentLine();
-    int pos = this->textCursor().position();
-    for(int i = 1; i < currentLine; i++){
-        pos -= lineAt(i).length();
-    }
-    return pos + 1;
+    return textCursor().columnNumber() + 1;
 }

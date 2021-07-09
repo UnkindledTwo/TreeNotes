@@ -295,7 +295,6 @@ void TreeNotes::ReadFromFile(){
         qDebug() << "Error while setting xmldoc content: " << errMsg << QString::number(errLine) << QString::number(errColumn);
     }
     file.close();
-    qDebug().noquote()<< document.toString(4);
 
     QDomNodeList childElementList = document.childNodes();
     for(int j = 0; j < childElementList.count(); j++){
@@ -364,7 +363,6 @@ void TreeNotes::saveToFile(){
     file.close();
     stream.flush();
 
-    qDebug().noquote() << document.toString();
     qDebug() << "Saving to file finished";
 }
 
@@ -415,6 +413,9 @@ void TreeNotes::Save(TreeWidgetItem *target){
 
     on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
 
+    if(savedPos > target->message.length()){
+        savedPos = target->message.length();
+    }
     QTextCursor a = ui->messageEdit->textCursor();
     a.setPosition(savedPos);
     ui->messageEdit->setTextCursor(a);
