@@ -619,15 +619,15 @@ void TreeNotes::InitStatusLabels(){
     QFrame *line;
     line = new QFrame(this);
     line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
+    line->setFrameShadow(QFrame::Plain);
+    line->resize(this->width(), ui->statusbar->height());
 
     noteCntLabel = new QLabel(this);
     childrenCntLabel = new QLabel(this);
     dateTimeLabel = new QLabel(this);
     lineCountLabel = new QLabel(this);
     lengthLabel = new QLabel(this);
-    currentLineLabel = new QLabel(this);
-    currentColumnLabel = new QLabel(this);
+    currentPositionLabel = new QLabel(this);
 
     ui->statusbar->addWidget(noteCntLabel, 1);
     ui->statusbar->addWidget(line, 1);
@@ -637,8 +637,7 @@ void TreeNotes::InitStatusLabels(){
     ui->statusbar->addWidget(line, 1);
     ui->statusbar->addWidget(lengthLabel, 1);
     ui->statusbar->addWidget(line, 3);
-    ui->statusbar->addWidget(currentLineLabel, 1);
-    ui->statusbar->addWidget(currentColumnLabel, 1);
+    ui->statusbar->addWidget(currentPositionLabel, 1);
     ui->statusbar->addWidget(line, 20);
     ui->statusbar->addWidget(dateTimeLabel, 1);
 
@@ -663,8 +662,7 @@ void TreeNotes::RefreshLabels(){
     else{
         lengthLabel->setText("Length: "+ QString::number(ui->messageEdit->toPlainText().length()));
     }
-    currentLineLabel->setText("Line: " + QString::number(ui->messageEdit->currentLine()));
-    currentColumnLabel->setText("Col: " + QString::number(ui->messageEdit->currentColumn()));
+    currentPositionLabel->setText("ln: " + QString::number(ui->messageEdit->currentLine()) + ", col: " + QString::number(ui->messageEdit->currentColumn()));
 }
 
 int TreeNotes::NoteCount(){

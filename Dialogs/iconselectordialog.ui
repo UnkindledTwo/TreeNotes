@@ -39,7 +39,7 @@
       </sizepolicy>
      </property>
      <property name="maxVisibleItems">
-      <number>20</number>
+      <number>999999999</number>
      </property>
      <property name="iconSize">
       <size>

@@ -141,8 +141,7 @@ private:
     QLabel *dateTimeLabel;
     QLabel *lineCountLabel;
     QLabel *lengthLabel;
-    QLabel *currentLineLabel;
-    QLabel *currentColumnLabel;
+    QLabel *currentPositionLabel;
 
     bool doubleClickToEditMessage;
     QVector<QPair<QString, std::function<QString()>>> macroVec;
