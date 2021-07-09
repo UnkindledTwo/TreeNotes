@@ -30,6 +30,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.pair_completion = true;
     appConfig.notetree_drag_drop = true;
     appConfig.maximum_backups = 10;
+    appConfig.highlightColor = QColor(181, 255, 249);
 
     //Init the splitter
     splitter = new QSplitter();
@@ -149,6 +150,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.pair_completion = settings.value("pair_completion", appConfig.pair_completion).toBool();
     appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
     appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
+    appConfig.highlightColor = qvariant_cast<QColor>(settings.value("highlight_color", appConfig.highlightColor));
     settings.endGroup();
     ReadAppConfig(appConfig);
 
@@ -182,6 +184,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("pair_completion", appConfig.pair_completion);
     settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
     settings.setValue("maximum_backups", appConfig.maximum_backups);
+    settings.setValue("highlight_color", appConfig.highlightColor);
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
@@ -239,6 +242,7 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     }
     ui->messageEdit->setPairCompletion(appConfig.pair_completion);
     SetNoteTreeDragDrop(appConfig.notetree_drag_drop);
+    ui->messageEdit->setHighlightBrush(QBrush(appConfig.highlightColor));
 
     qDebug() << "App config read finished";
 }
@@ -656,14 +660,14 @@ void TreeNotes::RefreshLabels(){
         childrenCntLabel->setText("Children: 0");
         dateTimeLabel->setText("Last edited: ");
     }
-    lineCountLabel->setText("Lines: " + QString::number(ui->messageEdit->lineCount()));
-    if(ui->messageEdit->textCursor().selectedText().length() > 0){
+    if(!ui->messageEdit->textCursor().selectedText().isEmpty()){
         lengthLabel->setText("Length (Sel): " + QString::number(ui->messageEdit->textCursor().selectedText().length()));
     }
     else{
         lengthLabel->setText("Length: "+ QString::number(ui->messageEdit->toPlainText().length()));
     }
     currentPositionLabel->setText("ln: " + QString::number(ui->messageEdit->currentLine()) + ", col: " + QString::number(ui->messageEdit->currentColumn()));
+    lineCountLabel->setText("Lines: " + QString::number(ui->messageEdit->lineCount()));
 }
 
 int TreeNotes::NoteCount(){

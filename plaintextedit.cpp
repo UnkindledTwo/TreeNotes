@@ -45,11 +45,36 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
 
     initPairCompletionMap();
+/*
+    QTimer *t = new QTimer(this);
+    t->setInterval(10);
+    connect(t, &QTimer::timeout, this, [&](){
+       highlightCurrentLine();
+    });
+    t->start();*/
+    connect(this, &PlainTextEdit::cursorPositionChanged, this, &PlainTextEdit::highlightCurrentLine);
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
-
     QPlainTextEdit::paintEvent(e);
+}
+
+void PlainTextEdit::highlightCurrentLine(){
+    if(!textCursor().selectedText().isEmpty())
+        return;
+
+    QTextCharFormat fmt;
+    fmt.setBackground(Qt::white);
+    QTextCursor c = textCursor();
+    int pos = c.position();
+    c.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    c.setCharFormat(fmt);
+    fmt.setBackground(highlightBrush());
+    c.setPosition(pos);
+    c.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    c.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    c.setCharFormat(fmt);
 }
 
 PlainTextEdit::~PlainTextEdit()
@@ -58,16 +83,7 @@ PlainTextEdit::~PlainTextEdit()
 }
 
 int PlainTextEdit::lineCount(){
-    int cnt = 0;
-    QString text = this->toPlainText();
-
-    for(int i = 0; i < text.length(); i++){
-        if(text[i] == '\n'){
-            cnt++;
-        }
-    }
-
-    return cnt + 1;
+    return this->blockCount();
 }
 
 void PlainTextEdit::keyPressEvent(QKeyEvent *e){
@@ -77,12 +93,18 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
         //e->text() = (
         //pairCompletion()[e->text()] = )
 
+        //Check if pair already exists
+        if(pairCompletionMap[e->text()].at(0) == toPlainText()[textCursor().position()]){
+            goto noPairCompletion;
+        }
+
         insertPlainText(pairCompletionMap[e->text()]);
         moveCursor(QTextCursor::Left, QTextCursor::MoveAnchor);
     }
 
 noPairCompletion:
     QPlainTextEdit::keyPressEvent(e);
+
 
 }
 
@@ -132,4 +154,13 @@ int PlainTextEdit::currentLine(){
 
 int PlainTextEdit::currentColumn(){
     return textCursor().columnNumber() + 1;
+}
+
+QBrush PlainTextEdit::highlightBrush(){
+    return m_highligtBrush;
+}
+
+void PlainTextEdit::setHighlightBrush(QBrush b){
+    this->m_highligtBrush = b;
+    emit highlightBrushChanged();
 }

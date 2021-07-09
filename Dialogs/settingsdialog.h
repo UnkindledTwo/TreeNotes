@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDebug>
+#include <QColorDialog>
 #include "../appconfig.h"
 
 namespace Ui {
@@ -20,9 +21,12 @@ public:
     void setAppConfig(struct app_config appConfig);
     struct app_config appConfig();
 
+private slots:
+
 private:
     Ui::SettingsDialog *ui;
     struct app_config m_appConfig;
+
 };
 
 #endif // SETTINGSDIALOG_H

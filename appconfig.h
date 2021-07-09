@@ -15,6 +15,7 @@ struct app_config{
     bool pair_completion;
     bool notetree_drag_drop;
     int maximum_backups;
+    QColor highlightColor;
 };
 
 #endif // APPCONFIG_H

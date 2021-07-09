@@ -7,6 +7,7 @@
 #include <QShortcut>
 #include <iostream>
 #include <QTextList>
+#include <QTimer>
 #include <QPainter>
 #include <QPaintEvent>
 
@@ -19,8 +20,10 @@ class PlainTextEdit : public QPlainTextEdit
     Q_OBJECT
 
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
+    Q_PROPERTY(QBrush highlightBrush READ highlightBrush WRITE setHighlightBrush NOTIFY highlightBrushChanged)
 
 public:
+    void paintEvent(QPaintEvent *e);
     explicit PlainTextEdit(QWidget *parent = nullptr);
     ~PlainTextEdit();
 
@@ -31,15 +34,21 @@ public:
     int currentLine();
     int currentColumn();
 
+    void highlightCurrentLine();
+
+    QBrush highlightBrush();
+    void setHighlightBrush(QBrush b);
+
 signals:
     void pairCompletionChanged();
+
+    void highlightBrushChanged();
 private slots:
     void TextChanged();
 
     void initPairCompletionMap();
 
 protected:
-    void paintEvent(QPaintEvent *e);
 
 private:
     Ui::PlainTextEdit *ui;
@@ -49,6 +58,8 @@ private:
     bool m_pairCompletion = true;
 
     QMap<QString, QString> pairCompletionMap;
+
+    QBrush m_highligtBrush;
 
 };
 
