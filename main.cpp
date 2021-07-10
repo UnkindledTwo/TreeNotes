@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
 
     TreeNotes w;
     QSplashScreen ss(QPixmap(":/Resources/Icon.png").scaled(w.size()));
+    ss.move(w.pos());
     ss.show();
     w.show();
     ss.finish(&w);

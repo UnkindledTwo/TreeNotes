@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QRegularExpression>
 
 namespace Ui {
 class PlainTextEdit;
@@ -47,6 +48,7 @@ private slots:
     void TextChanged();
 
     void initPairCompletionMap();
+    void initRegexVector();
 
 protected:
 
@@ -60,6 +62,10 @@ private:
     QMap<QString, QString> pairCompletionMap;
 
     QBrush m_highligtBrush;
+
+    QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
+
+    QPair<QString, QPair<QColor, QColor>> regexVectorItem(QString exp, QColor fore, QColor back = Qt::white);
 
 };
 

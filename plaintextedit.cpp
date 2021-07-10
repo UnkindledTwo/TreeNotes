@@ -6,6 +6,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     ui(new Ui::PlainTextEdit)
 {
     ui->setupUi(this);
+    initRegexVector();
     connect(this, &PlainTextEdit::textChanged, this, &PlainTextEdit::TextChanged);
 
     QShortcut *moveToStart = new QShortcut(QKeySequence("Ctrl+Shift+G"), this);
@@ -53,6 +54,8 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
     t->start();*/
     connect(this, &PlainTextEdit::cursorPositionChanged, this, &PlainTextEdit::highlightCurrentLine);
+
+
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
@@ -67,6 +70,8 @@ void PlainTextEdit::highlightCurrentLine(){
     fmt.setBackground(Qt::white);
     QTextCursor c = textCursor();
     int pos = c.position();
+
+
     c.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     c.setCharFormat(fmt);
@@ -74,6 +79,27 @@ void PlainTextEdit::highlightCurrentLine(){
     c.setPosition(pos);
     c.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     c.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+
+    c.setCharFormat(fmt);
+    c.setPosition(pos);
+    //Apply highlighting
+    for(int i = 0; i < regexVector.count(); i++){
+        QRegularExpression reA(regexVector.at(i).first);
+        QRegularExpressionMatchIterator it = reA.globalMatch(toPlainText());
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+            if (match.hasMatch()) {
+                //qDebug() << "Match, capturedstart" << match.capturedStart() << "capturedend" << match.capturedEnd();
+                c.setPosition(match.capturedStart());
+                c.setPosition(match.capturedEnd(), QTextCursor::KeepAnchor);
+                fmt.setBackground(regexVector.at(i).second.second);
+                fmt.setForeground(regexVector.at(i).second.first);
+                c.setCharFormat(fmt);
+            }
+        }
+    }
+
     c.setCharFormat(fmt);
 }
 
@@ -163,4 +189,12 @@ QBrush PlainTextEdit::highlightBrush(){
 void PlainTextEdit::setHighlightBrush(QBrush b){
     this->m_highligtBrush = b;
     emit highlightBrushChanged();
+}
+
+QPair<QString, QPair<QColor, QColor>> PlainTextEdit::regexVectorItem(QString exp, QColor fore, QColor back){
+    return QPair<QString, QPair<QColor, QColor>>(exp, QPair<QColor, QColor>(fore, back));
+}
+
+void PlainTextEdit::initRegexVector(){
+    regexVector.append(regexVectorItem("(http|https)://.*?\\s", Qt::blue, Qt::white));
 }

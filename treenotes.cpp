@@ -30,7 +30,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.pair_completion = true;
     appConfig.notetree_drag_drop = true;
     appConfig.maximum_backups = 10;
-    appConfig.highlightColor = QColor(181, 255, 249);
+    appConfig.highlightColor = QColor(230,230,230);
 
     //Init the splitter
     splitter = new QSplitter();
@@ -51,18 +51,18 @@ TreeNotes::TreeNotes(QWidget *parent)
     //Auto timer for refreshing label(s)
     QTimer *timer = new QTimer(this);
     timer->setInterval(50);
-    connect(timer, &QTimer::timeout, [&](){RefreshLabels();});
+    connect(timer, &QTimer::timeout, this,[&](){RefreshLabels();});
     timer->start();
 
     // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
 #ifdef Q_OS_WIN
-    QString styleSheetFocus = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
+    QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
 #else
     QString styleSheetFocus = "border: 1.50px solid;";
 #endif
-    ui->messageEdit->setStyleSheet(ui->messageEdit->styleSheet() + styleSheetFocus);
-    ui->treeWidget->setStyleSheet(ui->treeWidget->styleSheet() + styleSheetFocus);
-    ui->titleEdit->setStyleSheet(ui->titleEdit->styleSheet() + styleSheetFocus);
+    ui->messageEdit->setStyleSheet(ui->messageEdit->styleSheet() + styleSheet);
+    ui->treeWidget->setStyleSheet(ui->treeWidget->styleSheet() + styleSheet);
+    ui->titleEdit->setStyleSheet(ui->titleEdit->styleSheet() + styleSheet);
 
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
@@ -150,7 +150,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.pair_completion = settings.value("pair_completion", appConfig.pair_completion).toBool();
     appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
     appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
-    appConfig.highlightColor = qvariant_cast<QColor>(settings.value("highlight_color", appConfig.highlightColor));
+    //appConfig.highlightColor = qvariant_cast<QColor>(settings.value("highlight_color", appConfig.highlightColor));
     settings.endGroup();
     ReadAppConfig(appConfig);
 
@@ -184,7 +184,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("pair_completion", appConfig.pair_completion);
     settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
     settings.setValue("maximum_backups", appConfig.maximum_backups);
-    settings.setValue("highlight_color", appConfig.highlightColor);
+    //settings.setValue("highlight_color", appConfig.highlightColor);
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
