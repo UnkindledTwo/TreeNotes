@@ -71,15 +71,18 @@ void PlainTextEdit::highlightCurrentLine(){
     QTextCursor c = textCursor();
     int pos = c.position();
 
-
     c.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     c.setCharFormat(fmt);
-    fmt.setBackground(highlightBrush());
+    if(lineHighlighting()){
+        fmt.setBackground(highlightBrush());
+    }
+
     c.setPosition(pos);
     c.select(QTextCursor::LineUnderCursor);
     //c.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     //c.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
 
 
     c.setCharFormat(fmt);
@@ -97,6 +100,10 @@ void PlainTextEdit::highlightCurrentLine(){
                 fmt.setBackground(regexVector.at(i).background);
                 fmt.setForeground(regexVector.at(i).foreground);
 
+                if(regexVector.at(i).highlightFontFamily == HighlightFontFamily::Monospace){
+                    fmt.setFontFamily(monospaceFontFamily);
+                }
+
                 HighlightFontSize fontSize = regexVector.at(i).highlighFontSize;
                 if(fontSize == HighlightFontSize::Same) fmt.setFontPointSize(this->font().pointSize());
                 if(fontSize == HighlightFontSize::Twice) fmt.setFontPointSize(this->font().pointSize() * 2);
@@ -108,6 +115,7 @@ void PlainTextEdit::highlightCurrentLine(){
                 else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
 
                 c.setCharFormat(fmt);
+                fmt.setFont(this->font());
             }
         }
     }
@@ -204,7 +212,15 @@ void PlainTextEdit::setHighlightBrush(QBrush b){
     emit highlightBrushChanged();
 }
 
-HighlightItem PlainTextEdit::regexVectorItem(QString exp, QColor fore, QColor back, HighlightFontSize fontSize, bool isBold, bool isItalic, bool isUnderLine){
+HighlightItem PlainTextEdit::regexVectorItem(QString exp,
+                                             QColor fore,
+                                             QColor back,
+                                             HighlightFontSize fontSize,
+                                             bool isBold,
+                                             bool isItalic,
+                                             bool isUnderLine,
+                                             bool isMonospaced
+                                             ){
     HighlightItem h;
     h.regex = exp;
     h.background = back;
@@ -213,6 +229,8 @@ HighlightItem PlainTextEdit::regexVectorItem(QString exp, QColor fore, QColor ba
     h.isUnderLine = isUnderLine;
     h.isBold = isBold;
     h.isItalic = isItalic;
+    isMonospaced ? h.highlightFontFamily = HighlightFontFamily::Monospace :
+            h.highlightFontFamily = HighlightFontFamily::Regular;
     return h;
     //    return QPair<QString, QPair<QColor, QColor>>(exp, QPair<QColor, QColor>(fore, back));
 }
@@ -221,5 +239,16 @@ void PlainTextEdit::initRegexVector(){
     //regexVector.append(regexVectorItem("(http|https)://[^\\n].*", Qt::blue, Qt::white));
     regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*", Qt::blue, Qt::white, HighlightFontSize::Same, false, false, true));
     regexVector.append(regexVectorItem("# .*" ,Qt::darkBlue, Qt::white, HighlightFontSize::Twice, true));
-    regexVector.append(regexVectorItem("\\*{2}.*\\*{2}", Qt::black, Qt::white, HighlightFontSize::Same, true));
+    regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}", Qt::black, Qt::white, HighlightFontSize::Same, true));
+    regexVector.append(regexVectorItem("`.*`", Qt::white, QColor(40,44,52), HighlightFontSize::Same, false, false, false, true));
+}
+
+bool PlainTextEdit::lineHighlighting(){
+    return m_lineHighlighing;
+}
+
+void PlainTextEdit::setLineHighlighting(bool l){
+    m_lineHighlighing = l;
+    highlightCurrentLine();
+    emit lineHighlightingChanged();
 }

@@ -205,6 +205,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QCheckBox" name="highlight_current_line">
+       <property name="text">
+        <string>Highlight Current Line</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
         <widget class="QCheckBox" name="notetree_drag_drop">

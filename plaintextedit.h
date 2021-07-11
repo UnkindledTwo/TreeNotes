@@ -23,6 +23,7 @@ class PlainTextEdit : public QPlainTextEdit
     Q_OBJECT
 
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
+    Q_PROPERTY(bool lineHighlighting READ lineHighlighting WRITE setLineHighlighting NOTIFY lineHighlightingChanged)
     Q_PROPERTY(QBrush highlightBrush READ highlightBrush WRITE setHighlightBrush NOTIFY highlightBrushChanged)
 
 public:
@@ -42,10 +43,14 @@ public:
     QBrush highlightBrush();
     void setHighlightBrush(QBrush b);
 
+    bool lineHighlighting();
+    void setLineHighlighting(bool l);
+
 signals:
     void pairCompletionChanged();
 
     void highlightBrushChanged();
+    void lineHighlightingChanged();
 private slots:
     void TextChanged();
 
@@ -60,6 +65,7 @@ private:
     void keyPressEvent(QKeyEvent *e);
 
     bool m_pairCompletion = true;
+    bool m_lineHighlighing = true;
 
     QMap<QString, QString> pairCompletionMap;
 
@@ -68,8 +74,10 @@ private:
     //QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
     QVector<HighlightItem> regexVector;
 
-    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, HighlightFontSize fontSize = HighlightFontSize::Same, bool isBold = false, bool isItalic = false, bool isUnderLine = false);
+    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, HighlightFontSize fontSize = HighlightFontSize::Same, bool isBold = false, bool isItalic = false, bool isUnderLine = false, bool isMonospaced = false);
 
+    int monospaceFontId = QFontDatabase::addApplicationFont(":/Resources/Fonts/SourceCodePro-Regular.ttf");
+    QString monospaceFontFamily = QFontDatabase::applicationFontFamilies(monospaceFontId).at(0);
 };
 
 #endif // PLAINTEXTEDIT_H
