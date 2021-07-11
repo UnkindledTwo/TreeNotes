@@ -30,7 +30,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.pair_completion = true;
     appConfig.notetree_drag_drop = true;
     appConfig.maximum_backups = 10;
-    appConfig.highlightColor = QColor(230,230,230);
+    appConfig.highlightColor = QColor(238,238,238);
 
     //Init the splitter
     splitter = new QSplitter();

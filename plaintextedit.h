@@ -11,6 +11,8 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QRegularExpression>
+#include <tuple>
+#include "highlightitem.h"
 
 namespace Ui {
 class PlainTextEdit;
@@ -63,9 +65,10 @@ private:
 
     QBrush m_highligtBrush;
 
-    QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
+    //QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
+    QVector<HighlightItem> regexVector;
 
-    QPair<QString, QPair<QColor, QColor>> regexVectorItem(QString exp, QColor fore, QColor back = Qt::white);
+    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, HighlightFontSize fontSize = HighlightFontSize::Same, bool isBold = false, bool isItalic = false, bool isUnderLine = false);
 
 };
 

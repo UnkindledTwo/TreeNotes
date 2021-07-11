@@ -18,6 +18,7 @@ SOURCES += \
     Dialogs/iconselectordialog.cpp \
     Dialogs/macrohelp.cpp \
     Dialogs/settingsdialog.cpp \
+    highlightitem.cpp \
     main.cpp \
     plaintextedit.cpp \
     treenotes.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     Dialogs/macrohelp.h \
     Dialogs/settingsdialog.h \
     appconfig.h \
+    highlightitem.h \
     plaintextedit.h \
     treenotes.h \
     treewidgetitem.h \
