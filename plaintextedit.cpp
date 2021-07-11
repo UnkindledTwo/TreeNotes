@@ -104,11 +104,6 @@ void PlainTextEdit::highlightCurrentLine(){
                     fmt.setFontFamily(monospaceFontFamily);
                 }
 
-                HighlightFontSize fontSize = regexVector.at(i).highlighFontSize;
-                if(fontSize == HighlightFontSize::Same) fmt.setFontPointSize(this->font().pointSize());
-                if(fontSize == HighlightFontSize::Twice) fmt.setFontPointSize(this->font().pointSize() * 2);
-                if(fontSize == HighlightFontSize::Half) fmt.setFontPointSize(this->font().pointSize() / 2);
-
                 if(regexVector.at(i).isBold) fmt.setFontWeight(QFont::Bold);
                 if(regexVector.at(i).isItalic) fmt.setFontItalic(true);
                 if(regexVector.at(i).isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
@@ -215,7 +210,6 @@ void PlainTextEdit::setHighlightBrush(QBrush b){
 HighlightItem PlainTextEdit::regexVectorItem(QString exp,
                                              QColor fore,
                                              QColor back,
-                                             HighlightFontSize fontSize,
                                              bool isBold,
                                              bool isItalic,
                                              bool isUnderLine,
@@ -225,7 +219,6 @@ HighlightItem PlainTextEdit::regexVectorItem(QString exp,
     h.regex = exp;
     h.background = back;
     h.foreground = fore;
-    h.highlighFontSize = fontSize;
     h.isUnderLine = isUnderLine;
     h.isBold = isBold;
     h.isItalic = isItalic;
@@ -237,8 +230,9 @@ HighlightItem PlainTextEdit::regexVectorItem(QString exp,
 
 void PlainTextEdit::initRegexVector(){
     //regexVector.append(regexVectorItem("(http|https)://[^\\n].*", Qt::blue, Qt::white));
-    regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*", Qt::blue, Qt::white, HighlightFontSize::Same, false, false, true));
-    regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}", Qt::black, Qt::white, HighlightFontSize::Same, true));
+    regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*", Qt::blue, Qt::white,  false, false, true));
+    regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}", Qt::black, Qt::white, true));
+    regexVector.append(regexVectorItem("\\`{1}.*\\`{1}", Qt::black, Qt::lightGray, false, false, false, true));
 }
 
 bool PlainTextEdit::lineHighlighting(){

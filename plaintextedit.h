@@ -74,7 +74,7 @@ private:
     //QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
     QVector<HighlightItem> regexVector;
 
-    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, HighlightFontSize fontSize = HighlightFontSize::Same, bool isBold = false, bool isItalic = false, bool isUnderLine = false, bool isMonospaced = false);
+    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, bool isBold = false, bool isItalic = false, bool isUnderLine = false, bool isMonospaced = false);
 
     int monospaceFontId = QFontDatabase::addApplicationFont(":/Resources/Fonts/SourceCodePro-Regular.ttf");
     QString monospaceFontFamily = QFontDatabase::applicationFontFamilies(monospaceFontId).at(0);

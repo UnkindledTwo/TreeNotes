@@ -5,12 +5,6 @@
 #include <QColor>
 #include <QFont>
 
-enum class HighlightFontSize{
-    Twice,
-    Half,
-    Same
-};
-
 enum class HighlightFontFamily{
     Regular,
     Monospace
@@ -27,7 +21,6 @@ public:
     QString regex;
     QColor background;
     QColor foreground;
-    HighlightFontSize highlighFontSize;
     HighlightFontFamily highlightFontFamily = HighlightFontFamily::Regular;
 };
 
