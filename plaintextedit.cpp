@@ -238,9 +238,7 @@ HighlightItem PlainTextEdit::regexVectorItem(QString exp,
 void PlainTextEdit::initRegexVector(){
     //regexVector.append(regexVectorItem("(http|https)://[^\\n].*", Qt::blue, Qt::white));
     regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*", Qt::blue, Qt::white, HighlightFontSize::Same, false, false, true));
-    regexVector.append(regexVectorItem("# .*" ,Qt::darkBlue, Qt::white, HighlightFontSize::Twice, true));
     regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}", Qt::black, Qt::white, HighlightFontSize::Same, true));
-    regexVector.append(regexVectorItem("`.*`", Qt::white, QColor(40,44,52), HighlightFontSize::Same, false, false, false, true));
 }
 
 bool PlainTextEdit::lineHighlighting(){
