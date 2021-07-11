@@ -59,7 +59,7 @@ TreeNotes::TreeNotes(QWidget *parent)
 #ifdef Q_OS_WIN
     QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
 #else
-    QString styleSheetFocus = "border: 1.50px solid;";
+    QString styleSheet = "border: 1.50px solid;";
 #endif
     ui->messageEdit->setStyleSheet(ui->messageEdit->styleSheet() + styleSheet);
     ui->treeWidget->setStyleSheet(ui->treeWidget->styleSheet() + styleSheet);
