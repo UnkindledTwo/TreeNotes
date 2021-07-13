@@ -12,7 +12,9 @@
 #include <QPaintEvent>
 #include <QRegularExpression>
 #include <tuple>
+
 #include "highlightitem.h"
+#include "Dialogs/searchdialog.h"
 
 namespace Ui {
 class PlainTextEdit;
@@ -27,6 +29,7 @@ class PlainTextEdit : public QPlainTextEdit
     Q_PROPERTY(QBrush highlightBrush READ highlightBrush WRITE setHighlightBrush NOTIFY highlightBrushChanged)
 
 public:
+    void select(int start, int end);
     void paintEvent(QPaintEvent *e);
     explicit PlainTextEdit(QWidget *parent = nullptr);
     ~PlainTextEdit();
@@ -74,7 +77,7 @@ private:
     //QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
     QVector<HighlightItem> regexVector;
 
-    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, bool isBold = false, bool isItalic = false, bool isUnderLine = false, bool isMonospaced = false);
+    HighlightItem regexVectorItem( QString exp, HighlightFontSize fs, QColor fore, QColor back = Qt::white, bool isBold = false, bool isItalic = false, bool isUnderLine = false, bool isMonospaced = false);
 
     int monospaceFontId = QFontDatabase::addApplicationFont(":/Resources/Fonts/SourceCodePro-Regular.ttf");
     QString monospaceFontFamily = QFontDatabase::applicationFontFamilies(monospaceFontId).at(0);

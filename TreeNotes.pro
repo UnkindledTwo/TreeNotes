@@ -17,6 +17,7 @@ CONFIG += c++11
 SOURCES += \
     Dialogs/iconselectordialog.cpp \
     Dialogs/macrohelp.cpp \
+    Dialogs/searchdialog.cpp \
     Dialogs/settingsdialog.cpp \
     highlightitem.cpp \
     main.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 HEADERS += \
     Dialogs/iconselectordialog.h \
     Dialogs/macrohelp.h \
+    Dialogs/searchdialog.h \
     Dialogs/settingsdialog.h \
     appconfig.h \
     highlightitem.h \
@@ -39,6 +41,7 @@ HEADERS += \
 FORMS += \
     Dialogs/iconselectordialog.ui \
     Dialogs/macrohelp.ui \
+    Dialogs/searchdialog.ui \
     Dialogs/settingsdialog.ui \
     plaintextedit.ui \
     treenotes.ui

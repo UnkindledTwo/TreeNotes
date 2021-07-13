@@ -48,7 +48,6 @@ TreeNotes::TreeNotes(QWidget *parent)
     central->setLayout(grid);
     this->setCentralWidget(central);
 
-
     //Auto timer for refreshing label(s)
     QTimer *timer = new QTimer(this);
     timer->setInterval(50);
@@ -275,10 +274,12 @@ void TreeNotes::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *p
 
     QDomNodeList itemList = node.toElement().elementsByTagName("NoteItem");
     for(int i = 0; i < node.toElement().childNodes().count(); i++){
+        QDomElement currentElement = node.toElement().childNodes().at(i).toElement();
         TreeWidgetItem *newItem = new TreeWidgetItem();
-        newItem->setIcon(0 , iconVector.at(node.toElement().childNodes().at(i).toElement().attribute("icon").toInt()));
-        newItem->iconVectorIndex = node.toElement().childNodes().at(i).toElement().attribute("icon").toInt();
-        newItem->lastEdited = QDateTime::fromString(node.toElement().childNodes().at(i).toElement().attribute("lastEdited"));
+
+        newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
+        newItem->iconVectorIndex = currentElement.attribute("icon").toInt();
+        newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
         parent->addChild(newItem);
         ReadChildren(doc, node.toElement().childNodes().at(i), newItem);
     }
@@ -312,10 +313,11 @@ void TreeNotes::ReadFromFile(){
             if(!itemList.at(i).toElement().hasAttribute("message")) continue;
             if(itemList.at(i).toElement().attribute("title") == "") continue;
 
+            QDomElement currentElement = root.toElement().childNodes().at(i).toElement();
             TreeWidgetItem *newItem = new TreeWidgetItem();
-            newItem->setIcon(0 , iconVector.at(root.toElement().childNodes().at(i).toElement().attribute("icon").toInt()));
-            newItem->iconVectorIndex = (root.toElement().childNodes().at(i).toElement().attribute("icon").toInt());
-            newItem->lastEdited = QDateTime::fromString(root.toElement().childNodes().at(i).toElement().attribute("lastEdited"));
+            newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
+            newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
+            newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
             noteTree->addTopLevelItem(newItem);
             ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
         }
@@ -368,8 +370,18 @@ void TreeNotes::saveToFile(){
     QTextStream stream(&file);
     stream.setCodec("UTF-8");
     stream << document.toString(4);
+
+    QFile fileB64(qApp->applicationDirPath()+"/save.xml.b64");
+    fileB64.open(QIODevice::WriteOnly);
+    QTextStream streamB64(&fileB64);
+    streamB64.setCodec("UTF-8");
+    streamB64 << document.toString(4).toUtf8().toBase64();
+    fileB64.close();
+    streamB64.flush();
+
     file.close();
     stream.flush();
+
 
     qDebug() << "Saving to file finished";
 }
@@ -388,6 +400,7 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
     itemToAdd->setText(0,text);
     itemToAdd->iconVectorIndex = 0;
     itemToAdd->message = message;
+    itemToAdd->setBackground(0, Qt::white);
 
     if(parent == NULL){
         noteTree->addTopLevelItem(itemToAdd);
@@ -789,6 +802,8 @@ void TreeNotes::InitMacroVector(){
     macroVec.append(QPair<QString, std::function<QString()>>("{datetime}", [&]() ->QString {return QDateTime::currentDateTime().toString();}));
     macroVec.append(QPair<QString, std::function<QString()>>("{parent.message}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->message;}return "";}));
     macroVec.append(QPair<QString, std::function<QString()>>("{parent.title}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->text(0);}return "";}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{yes}", []() ->QString {return "✔";}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{no}", []() ->QString {return "✖";}));
     //macroVec.append(QPair<QString, std::function<QString()>>("{title}", [&]() ->QString {return ui->titleEdit->text();}));
 }
 
