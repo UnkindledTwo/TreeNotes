@@ -8,7 +8,7 @@ SearchDialog::SearchDialog(QPlainTextEdit *parent) :
     ui->setupUi(this);
     ui->searchBox->setFocus();
     this->setStyleSheet("");
-    this->setStyleSheet("QLabel{border : 0px solid; } QCheckBox{border : 0px solid;} QLineEdit{font-size: 16px;}");
+    this->setStyleSheet("QLabel{border : 0px solid; } QCheckBox{border : 0px solid;} QLineEdit{font-size: 16px;} QPushButton:hover{background-color: white;}");
 }
 
 SearchDialog::~SearchDialog()

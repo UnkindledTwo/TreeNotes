@@ -12,6 +12,7 @@
 #include <QPaintEvent>
 #include <QRegularExpression>
 #include <tuple>
+#include <cmath>
 
 #include "highlightitem.h"
 #include "Dialogs/searchdialog.h"

@@ -8,8 +8,7 @@
 enum class HighlightFontSize{
     Same,
     Double,
-    Half,
-    OneAndAHalf
+    Half
 };
 
 enum class HighlightFontFamily{

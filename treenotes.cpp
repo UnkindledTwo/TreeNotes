@@ -60,9 +60,9 @@ TreeNotes::TreeNotes(QWidget *parent)
 #else
     QString styleSheet = "border: 1.50px solid;";
 #endif
-    ui->messageEdit->setStyleSheet(ui->messageEdit->styleSheet() + styleSheet);
-    ui->treeWidget->setStyleSheet(ui->treeWidget->styleSheet() + styleSheet);
-    ui->titleEdit->setStyleSheet(ui->titleEdit->styleSheet() + styleSheet);
+    ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
+    ui->treeWidget->setStyleSheet("QTreeWidget{" + ui->treeWidget->styleSheet() + styleSheet + "}");
+    ui->titleEdit->setStyleSheet("QLineEdit{" + ui->titleEdit->styleSheet() + styleSheet + "}");
 
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
@@ -445,7 +445,11 @@ void TreeNotes::Save(TreeWidgetItem *target){
 void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
     qDebug() << "Item changed";
-    if(!current) return;
+    if(!current){
+        ui->messageEdit->clear();
+        ui->titleEdit->clear();
+        return;
+    }
 
     TreeWidgetItem *previousItem = (TreeWidgetItem*)previous;
     if(!previous || !previousItem) goto part2;

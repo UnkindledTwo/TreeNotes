@@ -142,9 +142,8 @@ void PlainTextEdit::highlightCurrentLine(){
                 if(regexVector.at(i).isStrikeThrough) fmt.setFontStrikeOut(true);
                 else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
 
-                if(regexVector.at(i).highlightFontSize == HighlightFontSize::Double) fmt.setFontPointSize(this->font().pointSize() * 2);
-                if(regexVector.at(i).highlightFontSize == HighlightFontSize::Half) fmt.setFontPointSize(this->font().pointSize() / 2);
-                if(regexVector.at(i).highlightFontSize == HighlightFontSize::OneAndAHalf) fmt.setFontPointSize(this->font().pointSize() * 3/2);
+                if(regexVector.at(i).highlightFontSize == HighlightFontSize::Double) fmt.setFontPointSize(trunc(this->font().pointSize() * 2));
+                if(regexVector.at(i).highlightFontSize == HighlightFontSize::Half) fmt.setFontPointSize(trunc(this->font().pointSize() / 2));
 
                 c.setCharFormat(fmt);
                 fmt.setFont(this->font());
@@ -277,7 +276,7 @@ void PlainTextEdit::initRegexVector(){
     HighlightItem i = regexVectorItem("~.*~", HighlightFontSize::Same, Qt::black, Qt::white);
     i.isStrikeThrough = true;
     regexVector.append(i);
-    regexVector.append(regexVectorItem("# .*", HighlightFontSize::OneAndAHalf, Qt::darkBlue, Qt::white, true));
+    regexVector.append(regexVectorItem("# .*", HighlightFontSize::Double, Qt::darkBlue, Qt::white, true));
     //regexVector.append(regexVectorItem("\\`{1}.*\\`{1}", Qt::black, Qt::lightGray, false, false, false, true));
 }
 
