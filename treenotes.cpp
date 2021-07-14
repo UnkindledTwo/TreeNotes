@@ -23,7 +23,6 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.notetree_animated = true;
     appConfig.doubleClickToEditMessage = true;
     appConfig.layoutMargin = 5;
-    appConfig.notetree_select_rows = false;
     appConfig.splitter_handle_width = 6;
     appConfig.confirm_delete = true;
     appConfig.line_wrapping = true;
@@ -76,11 +75,15 @@ TreeNotes::TreeNotes(QWidget *parent)
     InitShortcuts();
     InitStatusLabels();
     ReadFromFile();
-    //ReadAppConfig(appConfig);
     ReadQSettings();
     InitMacroVector();
 
     ui->messageEdit->setCursorWidth(2);
+
+    noteTree->expandAll();
+    noteTree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    noteTree->resizeColumnToContents(1);
+    noteTree->collapseAll();
 
     qDebug() << "Initilization of the main window is finished";
 }
@@ -143,7 +146,6 @@ void TreeNotes::ReadQSettings(){
     appConfig.notetree_animated = settings.value("notetree_animated", appConfig.notetree_animated).toBool();
     appConfig.doubleClickToEditMessage = settings.value("doubleClickToEditMessage", appConfig.doubleClickToEditMessage).toBool();
     appConfig.layoutMargin = settings.value("layoutMargin", appConfig.layoutMargin).toInt();
-    appConfig.notetree_select_rows = settings.value("notetree_select_rows", appConfig.notetree_select_rows).toBool();
     appConfig.splitter_handle_width = settings.value("splitter_handle_width", appConfig.splitter_handle_width).toInt();
     appConfig.confirm_delete = settings.value("confirm_delete", appConfig.confirm_delete).toBool();
     appConfig.line_wrapping = settings.value("line_wrapping", appConfig.line_wrapping).toBool();
@@ -178,7 +180,6 @@ void TreeNotes::saveQSettings(){
     settings.setValue("notetree_animated", appConfig.notetree_animated);
     settings.setValue("doubleClickToEditMessage", appConfig.doubleClickToEditMessage);
     settings.setValue("layoutMargin", appConfig.layoutMargin);
-    settings.setValue("notetree_select_rows", appConfig.notetree_select_rows);
     settings.setValue("splitter_handle_width", appConfig.splitter_handle_width);
     settings.setValue("confirm_delete", appConfig.confirm_delete);
     settings.setValue("line_wrapping", appConfig.line_wrapping);
@@ -230,12 +231,6 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     doubleClickToEditMessage = appConfig.doubleClickToEditMessage;
     centralWidget()->layout()->setMargin(appConfig.layoutMargin);
     splitter->setHandleWidth(appConfig.splitter_handle_width);
-    if(appConfig.notetree_select_rows){
-        noteTree->setSelectionBehavior(QAbstractItemView::SelectRows);
-    }
-    else{
-        noteTree->setSelectionBehavior(QAbstractItemView::SelectItems);
-    }
     if(appConfig.line_wrapping){
         ui->messageEdit->setLineWrapMode(PlainTextEdit::WidgetWidth);
     }
@@ -280,7 +275,9 @@ void TreeNotes::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *p
         newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
         newItem->iconVectorIndex = currentElement.attribute("icon").toInt();
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
+        newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", false));
         parent->addChild(newItem);
+        setStar(newItem, newItem->starred);
         ReadChildren(doc, node.toElement().childNodes().at(i), newItem);
     }
 }
@@ -318,7 +315,9 @@ void TreeNotes::ReadFromFile(){
             newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
             newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
+            newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", false));
             noteTree->addTopLevelItem(newItem);
+            setStar(newItem, newItem->starred);
             ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
         }
     }
@@ -335,6 +334,7 @@ void TreeNotes::AddChildren(QDomDocument *doc, QDomElement* elem, QTreeWidgetIte
             newElem.setAttribute("title", ((TreeWidgetItem*)(*it))->text(0));
             newElem.setAttribute("icon", ((TreeWidgetItem*)(*it))->iconVectorIndex);
             newElem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
+            newElem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
             elem->appendChild(newElem);
             AddChildren(doc, &newElem, *it);
         }
@@ -359,6 +359,7 @@ void TreeNotes::saveToFile(){
             elem.setAttribute("title", (*it)->text(0));
             elem.setAttribute("icon", ((TreeWidgetItem*)(*it))->iconVectorIndex);
             elem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
+            elem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
             AddChildren(&document, &elem, (*it));
             root.appendChild(elem);
         }
@@ -400,7 +401,6 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
     itemToAdd->setText(0,text);
     itemToAdd->iconVectorIndex = 0;
     itemToAdd->message = message;
-    itemToAdd->setBackground(0, Qt::white);
 
     if(parent == NULL){
         noteTree->addTopLevelItem(itemToAdd);
@@ -409,6 +409,8 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
 
     parent->addChild(itemToAdd);
     parent->setExpanded(true);
+
+    noteTree->setCurrentItem(itemToAdd);
 
     return itemToAdd;
 }
@@ -584,7 +586,8 @@ void TreeNotes::on_actionMove_Down_triggered()
 void TreeNotes::on_actionSet_Icon_triggered()
 {
     if(!noteTree->currentItem()) return;
-    IconSelectorDialog *isd = new IconSelectorDialog(NULL, iconVector);
+    IconSelectorDialog *isd = new IconSelectorDialog(this, iconVector, ((TreeWidgetItem*)noteTree->currentItem())->iconVectorIndex);
+
     isd->setFont(this->font());
     if(isd->exec()){
         noteTree->currentItem()->setIcon(0, isd->selectedIcon);
@@ -622,6 +625,7 @@ void TreeNotes::InitIconVector(){
     iconVector.append(style()->standardIcon(QStyle::SP_DesktopIcon));
     iconVector.append(style()->standardIcon(QStyle::SP_VistaShield));
     iconVector.append(style()->standardIcon(QStyle::SP_ArrowBack));
+    iconVector.append(QIcon(":/Resources/Icons/star.png"));
 }
 
 void TreeNotes::InitShortcuts(){
@@ -908,3 +912,24 @@ void TreeNotes::CleanBackups(int max, QString backupsDir){
         backups.remove(backups.absolutePath() + "/" + fileToRemove);
     }
 }
+
+void TreeNotes::setStar(TreeWidgetItem* i, bool s){
+    if(s)
+    //i->setText(1, "★");
+    i->setIcon(1, QIcon(":/Resources/Icons/star.png"));
+    else
+    //i->setText(1, "");
+    i->setIcon(1, QIcon());
+
+    i->starred = s;
+
+    noteTree->resizeColumnToContents(1);
+}
+
+void TreeNotes::on_actionStar_Unstar_triggered()
+{
+    if(!noteTree->currentItem()) return;
+    setStar((TreeWidgetItem*)noteTree->currentItem(), !((TreeWidgetItem*)noteTree->currentItem())->starred);
+    noteTree->setCurrentItem(noteTree->currentItem());
+}
+

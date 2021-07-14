@@ -17,13 +17,9 @@
 #include <QSplitter>
 #include <QFontDialog>
 #include <QSettings>
-#include <QSpacerItem>
 #include <QDir>
 #include <QFileDialog>
-#include <QMetaMethod>
 #include <QMessageBox>
-#include <QTranslator>
-#include <QScrollArea>
 #include <QScrollBar>
 
 //#include <QtXml>
@@ -99,6 +95,7 @@ private slots:
     void ShowContextMenu(const QPoint &pos);
     void SetNoteTreeDragDrop(bool);
     void CleanBackups(int max, QString backupsDir);
+    void setStar(TreeWidgetItem*, bool);
 
     QString boolToString(bool a);
     bool stringToBool(QString a);
@@ -127,6 +124,8 @@ private slots:
     void on_actionUndo_Delete_triggered();
 
     void on_actionSettings_triggered();
+
+    void on_actionStar_Unstar_triggered();
 
 private:
     Ui::TreeNotes *ui;

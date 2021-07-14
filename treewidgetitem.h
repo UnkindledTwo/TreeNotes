@@ -19,6 +19,8 @@ public:
 
     TreeWidgetItem *_clone();
 
+    bool starred = false;
+
     int vScrollBarPos;
     int hScrollBarPos;
 };

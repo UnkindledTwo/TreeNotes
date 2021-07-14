@@ -1,7 +1,7 @@
 #include "iconselectordialog.h"
 #include "ui_iconselectordialog.h"
 
-IconSelectorDialog::IconSelectorDialog(QWidget *parent, QVector<QIcon> iconVector) :
+IconSelectorDialog::IconSelectorDialog(QWidget *parent, QVector<QIcon> iconVector, int initialPosition) :
     QDialog(parent),
     ui(new Ui::IconSelectorDialog)
 {
@@ -25,6 +25,8 @@ IconSelectorDialog::IconSelectorDialog(QWidget *parent, QVector<QIcon> iconVecto
     for(int i = 0; i < icons.count(); i++){
         ui->iconBox->addItem(icons[i], "");
     }
+
+    ui->iconBox->setCurrentIndex(initialPosition);
 }
 
 IconSelectorDialog::~IconSelectorDialog()

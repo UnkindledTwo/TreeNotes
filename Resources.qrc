@@ -17,5 +17,7 @@
         <file>Resources/Fonts/SourceCodePro-MediumIt.ttf</file>
         <file>Resources/Fonts/SourceCodePro-Semibold.ttf</file>
         <file>Resources/Fonts/SourceCodePro-SemiboldIt.ttf</file>
+        <file>Resources/Icons/star.png</file>
+        <file>Resources/Screenshot1.png</file>
     </qresource>
 </RCC>

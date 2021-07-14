@@ -16,7 +16,6 @@ SettingsDialog::~SettingsDialog()
 void SettingsDialog::setAppConfig(app_config appConfig){
     this->m_appConfig = appConfig;
     ui->notetree_alternating_row_colors->setChecked(appConfig.notetree_alternating_row_colors);
-    ui->notetree_select_rows->setChecked(appConfig.notetree_select_rows);
     ui->notetree_indentation_size->setValue(appConfig.notetree_indentation_size);
     ui->opacity->setValue(appConfig.opacity);
     ui->notetree_animated->setChecked(appConfig.notetree_animated);
@@ -33,7 +32,6 @@ void SettingsDialog::setAppConfig(app_config appConfig){
 
 struct app_config SettingsDialog::appConfig(){
     m_appConfig.notetree_alternating_row_colors = ui->notetree_alternating_row_colors->isChecked();
-    m_appConfig.notetree_select_rows = ui->notetree_select_rows->isChecked();
     m_appConfig.notetree_indentation_size = ui->notetree_indentation_size->value();
     m_appConfig.opacity = ui->opacity->value();
     m_appConfig.notetree_animated = ui->notetree_animated->isChecked();
