@@ -26,6 +26,13 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
+      <widget class="QCheckBox" name="notetree_select_new_items">
+       <property name="text">
+        <string>Select New Items Automatically</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QCheckBox" name="notetree_alternating_row_colors">
        <property name="text">
         <string>Alternating Row Colors</string>

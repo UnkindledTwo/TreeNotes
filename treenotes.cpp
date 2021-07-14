@@ -17,6 +17,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     this->setFocus();
 
     //Make an app config, this is the default config used when the settings in file are not found.
+    appConfig.notetree_select_new_items = false;
     appConfig.notetree_alternating_row_colors = true;
     appConfig.notetree_indentation_size = 20;
     appConfig.opacity = 100.0;
@@ -140,6 +141,7 @@ void TreeNotes::ReadQSettings(){
     }
 
     settings.beginGroup("AppConfig");
+    appConfig.notetree_select_new_items = settings.value("notetree_select_new_items", appConfig.notetree_select_new_items).toBool();
     appConfig.notetree_alternating_row_colors = settings.value("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors).toBool();
     appConfig.notetree_indentation_size = settings.value("notetree_indentation_size", appConfig.notetree_indentation_size).toInt();
     appConfig.opacity = settings.value("opacity", appConfig.opacity).toInt();
@@ -174,6 +176,7 @@ void TreeNotes::saveQSettings(){
 
 
     settings.beginGroup("AppConfig");
+    settings.setValue("notetree_select_new_items", appConfig.notetree_select_new_items);
     settings.setValue("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors);
     settings.setValue("notetree_indentation_size", appConfig.notetree_indentation_size);
     settings.setValue("opacity", appConfig.opacity);
@@ -410,6 +413,7 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
     parent->addChild(itemToAdd);
     parent->setExpanded(true);
 
+    if(appConfig.notetree_select_new_items)
     noteTree->setCurrentItem(itemToAdd);
 
     return itemToAdd;

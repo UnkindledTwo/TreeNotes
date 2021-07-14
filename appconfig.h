@@ -2,6 +2,7 @@
 #define APPCONFIG_H
 
 struct app_config{
+    bool notetree_select_new_items;
     bool notetree_alternating_row_colors;
     int notetree_indentation_size;
     int opacity; //100 for solid, 0 for transparent
