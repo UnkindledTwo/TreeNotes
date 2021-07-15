@@ -278,7 +278,7 @@ void TreeNotes::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *p
         newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
         newItem->iconVectorIndex = currentElement.attribute("icon").toInt();
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
-        newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", false));
+        newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
         parent->addChild(newItem);
         setStar(newItem, newItem->starred);
         ReadChildren(doc, node.toElement().childNodes().at(i), newItem);
@@ -318,7 +318,7 @@ void TreeNotes::ReadFromFile(){
             newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
             newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
-            newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", false));
+            newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
             noteTree->addTopLevelItem(newItem);
             setStar(newItem, newItem->starred);
             ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
