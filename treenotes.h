@@ -21,6 +21,10 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QScrollBar>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QJsonDocument>
 
 //#include <QtXml>
 #include <QDomDocument>
@@ -96,6 +100,7 @@ private slots:
     void SetNoteTreeDragDrop(bool);
     void CleanBackups(int max, QString backupsDir);
     void setStar(TreeWidgetItem*, bool);
+    QString latestTag();
 
     QString boolToString(bool a);
     bool stringToBool(QString a);
@@ -126,6 +131,8 @@ private slots:
     void on_actionSettings_triggered();
 
     void on_actionStar_Unstar_triggered();
+
+    void on_actionCheck_For_Updates_triggered();
 
 private:
     Ui::TreeNotes *ui;

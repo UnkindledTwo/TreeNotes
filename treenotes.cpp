@@ -937,3 +937,33 @@ void TreeNotes::on_actionStar_Unstar_triggered()
     noteTree->setCurrentItem(noteTree->currentItem());
 }
 
+QString TreeNotes::latestTag(){
+    QUrl url("https://api.github.com/repos/UnkindledTwo/TreeNotes/tags");
+    qInfo() << url.toString();
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QNetworkAccessManager nam;
+    QNetworkReply * reply = nam.get(request);
+
+    while(true){
+        qApp->processEvents();
+        if(reply->isFinished()) break;
+    }
+
+    if(reply->isFinished()){
+        QByteArray response_data = reply->readAll();
+        QJsonDocument json = QJsonDocument::fromJson(response_data);
+        return json[0]["name"].toString();
+    }
+}
+void TreeNotes::on_actionCheck_For_Updates_triggered()
+{
+    qDebug() << latestTag();
+    if(latestTag() != qApp->applicationVersion()){
+        QMessageBox::warning(this, "Update", "A new update is available");
+    }
+    else{
+        QMessageBox::information(this, "Update", "No update is available");
+    }
+}
+
