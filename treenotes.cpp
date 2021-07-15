@@ -939,13 +939,17 @@ void TreeNotes::on_actionStar_Unstar_triggered()
 
 QString TreeNotes::latestTag(){
     QUrl url("https://api.github.com/repos/UnkindledTwo/TreeNotes/tags");
-    qInfo() << url.toString();
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QNetworkAccessManager nam;
     QNetworkReply * reply = nam.get(request);
 
-    while(true){
+    bool timeout = false;
+    QTimer::singleShot(5000, [&](){
+        timeout = true;
+    });
+
+    while(!timeout){
         qApp->processEvents();
         if(reply->isFinished()) break;
     }
@@ -955,11 +959,19 @@ QString TreeNotes::latestTag(){
         QJsonDocument json = QJsonDocument::fromJson(response_data);
         return json[0]["name"].toString();
     }
+    else if(timeout){
+        return "timeout";
+    }
 }
 void TreeNotes::on_actionCheck_For_Updates_triggered()
 {
+    QString tag = latestTag();
     qDebug() << latestTag();
-    if(latestTag() != qApp->applicationVersion()){
+    if(tag == "timeout" || tag == ""){
+        QMessageBox::warning(this, "Can't connect", "Make sure you have an active internet connection");
+        return;
+    }
+    if(tag != qApp->applicationVersion()){
         QMessageBox::warning(this, "Update", "A new update is available");
     }
     else{
