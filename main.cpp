@@ -6,7 +6,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setApplicationVersion("v6.1");
+    a.setApplicationVersion("v6.2");
 
     TreeNotes w;
     QSplashScreen ss(QPixmap(":/Resources/Icon.png").scaled(w.size()));
