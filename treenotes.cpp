@@ -59,18 +59,19 @@ TreeNotes::TreeNotes(QWidget *parent)
     QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
     styleSheet += "border-radius: 3px;";
     styleSheet += "padding: 2px;";
+    ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
     styleSheet += "selection-background-color:" + QtWin::colorizationColor().name() + ";";
 #else
     QString styleSheet = "border: 1.50px solid;";
     styleSheet += "border-radius: 3px;";
     styleSheet += "padding: 2px;";
+    ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
     styleSheet += "selection-background-color: purple;";
 #endif
     ui->titleEdit->setStyleSheet("QLineEdit{" + styleSheet + "}");
     ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
-    ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
 
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
