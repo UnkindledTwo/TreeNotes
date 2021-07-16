@@ -32,6 +32,7 @@ class PlainTextEdit : public QPlainTextEdit
 public:
     void select(int start, int end);
     void paintEvent(QPaintEvent *e);
+    void keyPressEvent(QKeyEvent *e);
     explicit PlainTextEdit(QWidget *parent = nullptr);
     ~PlainTextEdit();
 
@@ -66,7 +67,6 @@ protected:
 private:
     Ui::PlainTextEdit *ui;
 
-    void keyPressEvent(QKeyEvent *e);
 
     bool m_pairCompletion = true;
     bool m_lineHighlighing = true;
@@ -78,7 +78,7 @@ private:
     //QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
     QVector<HighlightItem> regexVector;
 
-    HighlightItem regexVectorItem( QString exp, HighlightFontSize fs, QColor fore, QColor back = Qt::white, bool isBold = false, bool isItalic = false, bool isUnderLine = false, bool isMonospaced = false);
+    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, bool isBold = false, bool isItalic = false, bool isUnderLine = false);
 
     int monospaceFontId = QFontDatabase::addApplicationFont(":/Resources/Fonts/SourceCodePro-Regular.ttf");
     QString monospaceFontFamily = QFontDatabase::applicationFontFamilies(monospaceFontId).at(0);

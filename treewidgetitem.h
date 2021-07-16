@@ -21,8 +21,10 @@ public:
 
     bool starred = false;
 
-    int vScrollBarPos;
-    int hScrollBarPos;
+    int hScrollbarPos;
+    int vScrollbarPos;
+
+    bool readOnly = false;
 };
 
 #endif // TREEWIDGETITEM_H

@@ -57,12 +57,20 @@ TreeNotes::TreeNotes(QWidget *parent)
     // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
 #ifdef Q_OS_WIN
     QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
+    styleSheet += "border-radius: 3px;";
+    styleSheet += "padding: 2px;";
+    styleSheet += "selection-color: white;";
+    styleSheet += "selection-background-color:" + QtWin::colorizationColor().name() + ";";
 #else
     QString styleSheet = "border: 1.50px solid;";
+    styleSheet += "border-radius: 3px;";
+    styleSheet += "padding: 2px;";
+    styleSheet += "selection-color: white;";
+    styleSheet += "selection-background-color: purple;";
 #endif
+    ui->titleEdit->setStyleSheet("QLineEdit{" + styleSheet + "}");
     ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
-    ui->treeWidget->setStyleSheet("QTreeWidget{" + ui->treeWidget->styleSheet() + styleSheet + "}");
-    ui->titleEdit->setStyleSheet("QLineEdit{" + ui->titleEdit->styleSheet() + styleSheet + "}");
+    ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
 
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
@@ -279,6 +287,7 @@ void TreeNotes::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *p
         newItem->iconVectorIndex = currentElement.attribute("icon").toInt();
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
         newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
+        newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
         parent->addChild(newItem);
         setStar(newItem, newItem->starred);
         ReadChildren(doc, node.toElement().childNodes().at(i), newItem);
@@ -319,6 +328,7 @@ void TreeNotes::ReadFromFile(){
             newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
             newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
+            newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
             noteTree->addTopLevelItem(newItem);
             setStar(newItem, newItem->starred);
             ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
@@ -338,6 +348,7 @@ void TreeNotes::AddChildren(QDomDocument *doc, QDomElement* elem, QTreeWidgetIte
             newElem.setAttribute("icon", ((TreeWidgetItem*)(*it))->iconVectorIndex);
             newElem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
             newElem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
+            newElem.setAttribute("readOnly", ((TreeWidgetItem*)(*it))->readOnly);
             elem->appendChild(newElem);
             AddChildren(doc, &newElem, *it);
         }
@@ -363,6 +374,7 @@ void TreeNotes::saveToFile(){
             elem.setAttribute("icon", ((TreeWidgetItem*)(*it))->iconVectorIndex);
             elem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
             elem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
+            elem.setAttribute("readOnly", ((TreeWidgetItem*)(*it))->readOnly);
             AddChildren(&document, &elem, (*it));
             root.appendChild(elem);
         }
@@ -434,15 +446,15 @@ void TreeNotes::Save(TreeWidgetItem *target){
     target->message = finaltext;
     target->setText(0, ui->titleEdit->text());
 
-    target->vScrollBarPos = ui->messageEdit->verticalScrollBar()->value();
-    target->hScrollBarPos = ui->messageEdit->horizontalScrollBar()->value();
-
+    target->hScrollbarPos = ui->messageEdit->horizontalScrollBar()->value();
+    target->vScrollbarPos = ui->messageEdit->verticalScrollBar()->value();
 
     on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
 
     if(savedPos > target->message.length()){
         savedPos = target->message.length();
     }
+
     QTextCursor a = ui->messageEdit->textCursor();
     a.setPosition(savedPos);
     ui->messageEdit->setTextCursor(a);
@@ -466,9 +478,12 @@ part2:
     if(!currentItem){return;}
     ui->messageEdit->setPlainText(currentItem->message);
     ui->titleEdit->setText(currentItem->text(0));
+    ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollbarPos);
+    ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollbarPos);
 
-    ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollBarPos);
-    ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollBarPos);
+    ui->messageEdit->setReadOnly(currentItem->readOnly);
+    ui->titleEdit->setReadOnly(currentItem->readOnly);
+    ui->actionRead_Only->setChecked(currentItem->readOnly);
 }
 
 
@@ -723,7 +738,13 @@ void TreeNotes::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colum
 {
     qDebug() << "Item double clicked" << item << "column" << column;
     if(doubleClickToEditMessage)
+    {
+        /*
+        item->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+        noteTree->editItem(item);
+        */
         ui->titleEdit->setFocus();
+    }
 }
 
 
@@ -918,12 +939,16 @@ void TreeNotes::CleanBackups(int max, QString backupsDir){
 }
 
 void TreeNotes::setStar(TreeWidgetItem* i, bool s){
-    if(s)
-    //i->setText(1, "★");
-    i->setIcon(1, QIcon(":/Resources/Icons/star.png"));
-    else
-    //i->setText(1, "");
-    i->setIcon(1, QIcon());
+    if(s){
+        //i->setText(1, "★");
+        i->setIcon(1, QIcon(":/Resources/Icons/star.png"));
+        i->setForeground(0, Qt::darkYellow);
+    }
+    else{
+        //i->setText(1, "");
+        i->setIcon(1, QIcon());
+        i->setForeground(0, Qt::black);
+    }
 
     i->starred = s;
 
@@ -977,5 +1002,57 @@ void TreeNotes::on_actionCheck_For_Updates_triggered()
     else{
         QMessageBox::information(this, "Update", "No update is available");
     }
+}
+
+
+void TreeNotes::on_actionExpand_All_triggered()
+{
+    if(!noteTree->currentItem()){
+        noteTree->expandAll();
+        return;
+    }
+
+    QVector<QTreeWidgetItem*> items;
+    noteTree->currentItem()->setExpanded(true);
+    AddAllChildren(noteTree->currentItem(), &items);
+    for(int i = 0; i < items.count(); i++){
+        items[i]->setExpanded(true);
+    }
+}
+
+void TreeNotes::on_actionCollapse_All_triggered()
+{
+    if(!noteTree->currentItem()){
+        noteTree->collapseAll();
+        return;
+    }
+
+    QVector<QTreeWidgetItem*> items;
+    noteTree->currentItem()->setExpanded(false);
+    AddAllChildren(noteTree->currentItem(), &items);
+    for(int i = 0; i < items.count(); i++){
+        items[i]->setExpanded(false);
+    }
+}
+
+void TreeNotes::AddAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items){
+    for(int i = 0; i < item->childCount(); i++){
+        items->append(item->child(i));
+        AddAllChildren(item->child(i), items);
+    }
+}
+void TreeNotes::on_actionRead_Only_toggled(bool arg1)
+{
+    ui->titleEdit->setReadOnly(arg1);
+    ui->messageEdit->setReadOnly(arg1);
+    ui->messageEdit->highlightCurrentLine();
+    if(noteTree->currentItem()) ((TreeWidgetItem*)noteTree->currentItem())->readOnly = arg1;
+}
+
+
+void TreeNotes::on_titleEdit_textChanged(const QString &arg1)
+{
+    if(!noteTree->currentItem()) return;
+    noteTree->currentItem()->setText(0, arg1);
 }
 

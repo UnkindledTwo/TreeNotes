@@ -27,6 +27,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
 
     QShortcut *newLine = new QShortcut(QKeySequence("Ctrl+O"), this);
     connect(newLine, &QShortcut::activated, this, [&](){    qDebug() << "Shortcut";
+        if(this->isReadOnly()) return;
         QTextCursor textCursor = this->textCursor();
         textCursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor, 1);
         this->setTextCursor(textCursor);
@@ -53,6 +54,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
 
     QShortcut *makeHeading = new QShortcut(QKeySequence("Alt+H"), this);
     connect(makeHeading, &QShortcut::activated, this, [&](){
+        if(this->isReadOnly()) return;
         QTextCursor c = this->textCursor();
         int pos = c.position();
         c.movePosition(QTextCursor::StartOfBlock);
@@ -63,6 +65,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
 
     QShortcut *makeBold = new QShortcut(QKeySequence("Alt+B"), this);
     connect(makeBold, &QShortcut::activated, this, [&](){
+        if(this->isReadOnly()) return;
         QTextCursor c = this->textCursor();
         int selStart = c.selectionStart();
         int selEnd = c.selectionEnd();
@@ -98,7 +101,9 @@ void PlainTextEdit::highlightCurrentLine(){
         return;
 
     QTextCharFormat fmt;
-    fmt.setBackground(Qt::white);
+
+    fmt.setBackground(this->palette().color(QPalette::Base));
+
     QTextCursor c = textCursor();
     int pos = c.position();
 
@@ -106,19 +111,23 @@ void PlainTextEdit::highlightCurrentLine(){
     c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     c.setCharFormat(fmt);
     if(lineHighlighting()){
-        fmt.setBackground(highlightBrush());
+        QColor backColor = this->palette().color(QPalette::Background);
+        if(backColor.lightness() > 120){
+            fmt.setBackground(backColor.darker(105));
+        }
+        else{
+            fmt.setBackground(backColor.lighter(105));
+        }
+        //fmt.setBackground(highlightBrush());
     }
 
     c.setPosition(pos);
     c.movePosition(QTextCursor::StartOfBlock);
     c.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    //c.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    //c.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-
 
     c.setCharFormat(fmt);
     c.setPosition(pos);
+    fmt.setBackground(this->palette().color(QPalette::Base));
     //Apply highlighting
     for(int i = 0; i < regexVector.count(); i++){
         QRegularExpression reA(regexVector.at(i).regex);
@@ -129,12 +138,16 @@ void PlainTextEdit::highlightCurrentLine(){
                 //qDebug() << "Match, capturedstart" << match.capturedStart() << "capturedend" << match.capturedEnd();
                 c.setPosition(match.capturedStart());
                 c.setPosition(match.capturedEnd(), QTextCursor::KeepAnchor);
-                fmt.setBackground(regexVector.at(i).background);
+                //fmt.setBackground(regexVector.at(i).background);
+                if(regexVector.at(i).foreground == Qt::black) fmt.setForeground(this->palette().color(QPalette::Foreground));
+                else
                 fmt.setForeground(regexVector.at(i).foreground);
 
+                /*
                 if(regexVector.at(i).highlightFontFamily == HighlightFontFamily::Monospace){
                     fmt.setFontFamily(monospaceFontFamily);
                 }
+                */
 
                 if(regexVector.at(i).isBold) fmt.setFontWeight(QFont::Bold);
                 if(regexVector.at(i).isItalic) fmt.setFontItalic(true);
@@ -142,17 +155,15 @@ void PlainTextEdit::highlightCurrentLine(){
                 if(regexVector.at(i).isStrikeThrough) fmt.setFontStrikeOut(true);
                 else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
 
-                if(regexVector.at(i).highlightFontSize == HighlightFontSize::Double) fmt.setFontPointSize(trunc(this->font().pointSize() * 2));
-                if(regexVector.at(i).highlightFontSize == HighlightFontSize::Half) fmt.setFontPointSize(trunc(this->font().pointSize() / 2));
+                //if(regexVector.at(i).highlightFontSize == HighlightFontSize::Double) fmt.setFontPointSize(trunc(this->font().pointSize() * 2));
+                //if(regexVector.at(i).highlightFontSize == HighlightFontSize::Half) fmt.setFontPointSize(trunc(this->font().pointSize() / 2));
 
                 c.setCharFormat(fmt);
                 fmt.setFont(this->font());
             }
         }
     }
-
     fmt.merge(c.charFormat());
-    //c.setCharFormat(fmt);
 }
 
 PlainTextEdit::~PlainTextEdit()
@@ -168,8 +179,6 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
 
     if(!pairCompletion()) goto noPairCompletion;
     if(pairCompletionMap[e->text()] != ""){
-        //e->text() = (
-        //pairCompletion()[e->text()] = )
 
         //Check if pair already exists
         if(pairCompletionMap[e->text()].at(0) == toPlainText()[textCursor().position()]){
@@ -245,13 +254,11 @@ void PlainTextEdit::setHighlightBrush(QBrush b){
 
 HighlightItem PlainTextEdit::regexVectorItem(
         QString exp,
-        HighlightFontSize fs,
         QColor fore,
         QColor back,
         bool isBold,
         bool isItalic,
-        bool isUnderLine,
-        bool isMonospaced
+        bool isUnderLine
         ){
     HighlightItem h;
     h.regex = exp;
@@ -260,23 +267,25 @@ HighlightItem PlainTextEdit::regexVectorItem(
     h.isUnderLine = isUnderLine;
     h.isBold = isBold;
     h.isItalic = isItalic;
+    /*
     h.highlightFontSize = fs;
     isMonospaced ? h.highlightFontFamily = HighlightFontFamily::Monospace :
             h.highlightFontFamily = HighlightFontFamily::Regular;
+            */
     return h;
     //    return QPair<QString, QPair<QColor, QColor>>(exp, QPair<QColor, QColor>(fore, back));
 }
 
 void PlainTextEdit::initRegexVector(){
     //regexVector.append(regexVectorItem("(http|https)://[^\\n].*", Qt::blue, Qt::white));
-    regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*", HighlightFontSize::Same, Qt::blue, Qt::white,  false, false, true));
-    regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}",HighlightFontSize::Same, Qt::black, Qt::white, true));
-    regexVector.append(regexVectorItem("✔.*", HighlightFontSize::Same, Qt::darkGreen, Qt::white));
-    regexVector.append(regexVectorItem("✖.*", HighlightFontSize::Same, Qt::darkRed, Qt::white));
-    HighlightItem i = regexVectorItem("~.*~", HighlightFontSize::Same, Qt::black, Qt::white);
+    regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*",  Qt::blue, Qt::white,  false, false, true));
+    regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}", Qt::black, Qt::white, true));
+    regexVector.append(regexVectorItem("✔.*",  Qt::darkGreen, Qt::white));
+    regexVector.append(regexVectorItem("✖.*", Qt::darkRed, Qt::white));
+    HighlightItem i = regexVectorItem("~.*~",  Qt::black, Qt::white);
     i.isStrikeThrough = true;
     regexVector.append(i);
-    regexVector.append(regexVectorItem("# .*", HighlightFontSize::Double, Qt::darkBlue, Qt::white, true));
+    regexVector.append(regexVectorItem("# .*",  Qt::darkBlue, Qt::white, true));
     //regexVector.append(regexVectorItem("\\`{1}.*\\`{1}", Qt::black, Qt::lightGray, false, false, false, true));
 }
 

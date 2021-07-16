@@ -19,6 +19,10 @@
   <property name="windowTitle">
    <string>TreeNotes</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="Resources.qrc">
+    <normaloff>:/Resources/Icon.png</normaloff>:/Resources/Icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
     <item row="0" column="1">
@@ -124,7 +128,7 @@
      <x>0</x>
      <y>0</y>
      <width>1123</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -151,6 +155,7 @@
     <addaction name="separator"/>
     <addaction name="menuText"/>
     <addaction name="actionStar_Unstar"/>
+    <addaction name="actionRead_Only"/>
    </widget>
    <widget class="QMenu" name="menuOther">
     <property name="title">
@@ -160,6 +165,8 @@
     <addaction name="actionMove_Down"/>
     <addaction name="actionFocus_Parent"/>
     <addaction name="actionHide_Show_Note_Tree"/>
+    <addaction name="actionExpand_All"/>
+    <addaction name="actionCollapse_All"/>
     <addaction name="actionSettings"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -204,9 +211,13 @@
    <addaction name="actionAdd"/>
    <addaction name="actionSave"/>
    <addaction name="actionDelete"/>
+   <addaction name="actionRead_Only"/>
    <addaction name="actionUndo_Delete"/>
    <addaction name="actionStar_Unstar"/>
    <addaction name="actionSet_Icon"/>
+   <addaction name="separator"/>
+   <addaction name="actionExpand_All"/>
+   <addaction name="actionCollapse_All"/>
    <addaction name="separator"/>
    <addaction name="actionMove_Up"/>
    <addaction name="actionMove_Down"/>
@@ -214,6 +225,7 @@
    <addaction name="actionHide_Show_Note_Tree"/>
    <addaction name="separator"/>
    <addaction name="actionSet_Font_Text_Editors"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionAdd">
    <property name="text">
@@ -346,6 +358,24 @@
     <string>Check For Updates</string>
    </property>
   </action>
+  <action name="actionExpand_All">
+   <property name="text">
+    <string>Expand All</string>
+   </property>
+  </action>
+  <action name="actionCollapse_All">
+   <property name="text">
+    <string>Collapse All</string>
+   </property>
+  </action>
+  <action name="actionRead_Only">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Read Only</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -354,6 +384,8 @@
    <header location="global">plaintextedit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

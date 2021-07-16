@@ -61,19 +61,6 @@ public:
 
     TreeNotes(QWidget *parent = nullptr);
     ~TreeNotes();
-/*
-    struct app_config{
-        bool notetree_alternating_row_colors;
-        bool notetree_select_rows;
-        int notetree_indentation_size;
-        int opacity; //100 for solid, 0 for transparent
-        bool treeWidgetAnimated;
-        bool doubleClickToEditMessage;
-        unsigned short int layoutMargin;
-        unsigned short int splitter_handle_width;
-        bool confirm_delete;
-        bool line_wrapping;
-    };*/
 
 private slots:
     QString dateTimeNoSpace();
@@ -101,6 +88,7 @@ private slots:
     void CleanBackups(int max, QString backupsDir);
     void setStar(TreeWidgetItem*, bool);
     QString latestTag();
+    void AddAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items);
 
     QString boolToString(bool a);
     bool stringToBool(QString a);
@@ -117,22 +105,20 @@ private slots:
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
     void on_actionQt_triggered();
     void on_actionSet_Font_Text_Editors_triggered();
-
     void on_actionImport_Text_File_triggered();
-
     void on_actionExport_Text_File_triggered();
-
     void on_messageEdit_textChanged();
-
     void on_actionMacros_triggered();
-
     void on_actionUndo_Delete_triggered();
-
     void on_actionSettings_triggered();
-
     void on_actionStar_Unstar_triggered();
-
     void on_actionCheck_For_Updates_triggered();
+    void on_actionExpand_All_triggered();
+    void on_actionCollapse_All_triggered();
+
+    void on_actionRead_Only_toggled(bool arg1);
+
+    void on_titleEdit_textChanged(const QString &arg1);
 
 private:
     Ui::TreeNotes *ui;

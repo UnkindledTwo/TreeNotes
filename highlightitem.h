@@ -28,8 +28,6 @@ public:
     QString regex;
     QColor background;
     QColor foreground;
-    HighlightFontFamily highlightFontFamily = HighlightFontFamily::Regular;
-    HighlightFontSize highlightFontSize = HighlightFontSize::Same;
 };
 
 #endif // HIGHLIGHTITEM_H
