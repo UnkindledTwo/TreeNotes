@@ -25,6 +25,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QJsonDocument>
+#include <QtConcurrent>
 
 //#include <QtXml>
 #include <QDomDocument>
@@ -89,6 +90,7 @@ private slots:
     void setStar(TreeWidgetItem*, bool);
     QString latestTag();
     void AddAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items);
+    void ApplyMacroVector();
 
     QString boolToString(bool a);
     bool stringToBool(QString a);
@@ -139,7 +141,6 @@ private:
     QVector<QPair<QString, std::function<QString()>>> macroVec;
 
     QVector<UndoItem> undoVector;
-
 };
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"

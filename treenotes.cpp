@@ -57,15 +57,15 @@ TreeNotes::TreeNotes(QWidget *parent)
     // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
 #ifdef Q_OS_WIN
     QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
-    styleSheet += "border-radius: 3px;";
-    styleSheet += "padding: 2px;";
+    styleSheet += "border-radius: 4px;";
+    styleSheet += "padding: 3px;";
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
     styleSheet += "selection-background-color:" + QtWin::colorizationColor().name() + ";";
 #else
     QString styleSheet = "border: 1.50px solid;";
-    styleSheet += "border-radius: 3px;";
-    styleSheet += "padding: 2px;";
+    styleSheet += "border-radius: 4px;";
+    styleSheet += "padding: 3px;";
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
     styleSheet += "selection-background-color: purple;";
@@ -309,8 +309,15 @@ void TreeNotes::ReadFromFile(){
     {
         // Error while loading file
         qDebug() << "Error while loading file";
+        return;
     }
-    if(!document.setContent(file.readAll(), false, &errMsg, &errLine, &errColumn)){
+
+    QFuture<QString> future = QtConcurrent::run([&]() ->QString{return file.readAll();});
+    while(!future.isFinished() && future.isRunning()){
+        qApp->processEvents();
+    }
+
+    if(!document.setContent(future.result(), false, &errMsg, &errLine, &errColumn)){
         qDebug() << "Error while setting xmldoc content: " << errMsg << QString::number(errLine) << QString::number(errColumn);
     }
     file.close();
@@ -382,23 +389,29 @@ void TreeNotes::saveToFile(){
         it++;
     }
 
-    QFile file(qApp->applicationDirPath()+"/save.xml");
-    file.open(QIODevice::WriteOnly);
-    QTextStream stream(&file);
-    stream.setCodec("UTF-8");
-    stream << document.toString(4);
+    QFuture<void> future = QtConcurrent::run([&](){
+        QFile file(qApp->applicationDirPath()+"/save.xml");
+        file.open(QIODevice::WriteOnly);
+        QTextStream stream(&file);
+        stream.setCodec("UTF-8");
+        stream << document.toString(4);
 
-    QFile fileB64(qApp->applicationDirPath()+"/save.xml.b64");
-    fileB64.open(QIODevice::WriteOnly);
-    QTextStream streamB64(&fileB64);
-    streamB64.setCodec("UTF-8");
-    streamB64 << document.toString(4).toUtf8().toBase64();
-    fileB64.close();
-    streamB64.flush();
+        QFile fileB64(qApp->applicationDirPath()+"/save.xml.b64");
+        fileB64.open(QIODevice::WriteOnly);
+        QTextStream streamB64(&fileB64);
+        streamB64.setCodec("UTF-8");
+        streamB64 << document.toString(4).toUtf8().toBase64();
+        fileB64.close();
+        streamB64.flush();
 
-    file.close();
-    stream.flush();
+        file.close();
+        stream.flush();
+    });
 
+    while(!future.isFinished() && future.isRunning()){
+        this->setEnabled(false);
+        qApp->processEvents();
+    }
 
     qDebug() << "Saving to file finished";
 }
@@ -438,13 +451,10 @@ void TreeNotes::Save(TreeWidgetItem *target){
     }
 
     int savedPos = ui->messageEdit->textCursor().position();
-    QString finaltext = ui->messageEdit->toPlainText();
 
-    for(int i = 0; i < macroVec.count(); i++){
-        finaltext.replace(macroVec.at(i).first, macroVec.at(i).second());
-    }
+    ApplyMacroVector();
 
-    target->message = finaltext;
+    target->message = ui->messageEdit->toPlainText();
     target->setText(0, ui->titleEdit->text());
 
     target->hScrollbarPos = ui->messageEdit->horizontalScrollBar()->value();
@@ -786,11 +796,23 @@ void TreeNotes::on_actionImport_Text_File_triggered()
         QFile file(path);
         QFileInfo fi(file);
         if(!file.exists()) continue;
-        file.open(QIODevice::ReadOnly);
-        QTextStream stream(&file);
-        stream.setCodec("UTF-8");
+        QFuture<QString> future = QtConcurrent::run([&]() -> QString{
+            file.open(QIODevice::ReadOnly);
+            QTextStream stream(&file);
+            stream.setCodec("UTF-8");
+            return stream.readAll();
+        });
 
-        AddNote((TreeWidgetItem*)noteTree->currentItem(), fi.fileName(), stream.readAll());
+        while(!future.isFinished() && future.isRunning()){
+            qApp->processEvents();
+        }
+
+        if(future.result().length() > 10e+5){
+            QMessageBox::warning(this, "Error", "File too big: " + path);
+            continue;
+        }
+
+        AddNote((TreeWidgetItem*)noteTree->currentItem(), fi.fileName(), future.result() );
 
         file.close();
     }
@@ -838,6 +860,7 @@ void TreeNotes::InitMacroVector(){
     macroVec.append(QPair<QString, std::function<QString()>>("{parent.title}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->text(0);}return "";}));
     macroVec.append(QPair<QString, std::function<QString()>>("{yes}", []() ->QString {return "✔";}));
     macroVec.append(QPair<QString, std::function<QString()>>("{no}", []() ->QString {return "✖";}));
+    macroVec.append(QPair<QString, std::function<QString()>>("{lambda}", []() ->QString {return "λ";}));
     //macroVec.append(QPair<QString, std::function<QString()>>("{title}", [&]() ->QString {return ui->titleEdit->text();}));
 }
 
@@ -1055,5 +1078,11 @@ void TreeNotes::on_titleEdit_textChanged(const QString &arg1)
 {
     if(!noteTree->currentItem()) return;
     noteTree->currentItem()->setText(0, arg1);
+}
+
+void TreeNotes::ApplyMacroVector(){
+    for(int i = 0; i < macroVec.count(); i++){
+        ui->messageEdit->setPlainText(ui->messageEdit->toPlainText().replace(macroVec.at(i).first, macroVec.at(i).second()));
+    }
 }
 

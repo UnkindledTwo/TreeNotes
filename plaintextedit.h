@@ -13,6 +13,8 @@
 #include <QRegularExpression>
 #include <tuple>
 #include <cmath>
+#include <QScrollBar>
+#include <QtConcurrent>
 
 #include "highlightitem.h"
 #include "Dialogs/searchdialog.h"
@@ -30,6 +32,7 @@ class PlainTextEdit : public QPlainTextEdit
     Q_PROPERTY(QBrush highlightBrush READ highlightBrush WRITE setHighlightBrush NOTIFY highlightBrushChanged)
 
 public:
+    void setPosition(int pos);
     void select(int start, int end);
     void paintEvent(QPaintEvent *e);
     void keyPressEvent(QKeyEvent *e);

@@ -1,4 +1,4 @@
-QT += core gui xml network
+QT += core gui xml network concurrent
 win32{
     QT += winextras
 }

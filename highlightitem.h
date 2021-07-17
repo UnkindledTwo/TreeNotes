@@ -28,6 +28,7 @@ public:
     QString regex;
     QColor background;
     QColor foreground;
+    HighlightFontSize fontSize;
 };
 
 #endif // HIGHLIGHTITEM_H
