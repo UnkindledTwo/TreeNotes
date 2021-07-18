@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1123</width>
-    <height>600</height>
+    <width>1209</width>
+    <height>643</height>
    </rect>
   </property>
   <property name="font">
@@ -127,7 +127,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1123</width>
+     <width>1209</width>
      <height>22</height>
     </rect>
    </property>
@@ -141,6 +141,7 @@
      </property>
      <addaction name="actionImport_Text_File"/>
      <addaction name="actionExport_Text_File"/>
+     <addaction name="actionExport_PDF"/>
     </widget>
     <addaction name="actionAdd"/>
     <addaction name="actionSave"/>
@@ -374,6 +375,11 @@
    </property>
    <property name="text">
     <string>Read Only</string>
+   </property>
+  </action>
+  <action name="actionExport_PDF">
+   <property name="text">
+    <string>Export PDF</string>
    </property>
   </action>
  </widget>

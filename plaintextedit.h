@@ -15,6 +15,7 @@
 #include <cmath>
 #include <QScrollBar>
 #include <QtConcurrent>
+#include <QTreeWidget>
 
 #include "highlightitem.h"
 #include "Dialogs/searchdialog.h"
@@ -29,9 +30,13 @@ class PlainTextEdit : public QPlainTextEdit
 
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
     Q_PROPERTY(bool lineHighlighting READ lineHighlighting WRITE setLineHighlighting NOTIFY lineHighlightingChanged)
+    Q_PROPERTY(bool symbolHighlighting READ symbolHighlighting WRITE setSymbolHighlighting NOTIFY symbolHighlightingChanged)
     Q_PROPERTY(QBrush highlightBrush READ highlightBrush WRITE setHighlightBrush NOTIFY highlightBrushChanged)
 
 public:
+    void fastSetPlainText(QString);
+    void fastAppend(QString);
+    void fastClear();
     void setPosition(int pos);
     void select(int start, int end);
     void paintEvent(QPaintEvent *e);
@@ -54,11 +59,15 @@ public:
     bool lineHighlighting();
     void setLineHighlighting(bool l);
 
+    bool symbolHighlighting();
+    void setSymbolHighlighting(bool);
+
 signals:
     void pairCompletionChanged();
 
     void highlightBrushChanged();
     void lineHighlightingChanged();
+    void symbolHighlightingChanged();
 private slots:
     void TextChanged();
 
@@ -73,6 +82,7 @@ private:
 
     bool m_pairCompletion = true;
     bool m_lineHighlighing = true;
+    bool m_symbolhighlighting = true;
 
     QMap<QString, QString> pairCompletionMap;
 

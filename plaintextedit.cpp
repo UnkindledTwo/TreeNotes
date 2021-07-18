@@ -97,6 +97,7 @@ void PlainTextEdit::paintEvent(QPaintEvent *e){
 }
 
 void PlainTextEdit::highlightCurrentLine(){
+    if(toPlainText().length() > 30000) return;
 
     int scrollbarpos = this->verticalScrollBar()->value();
 
@@ -132,7 +133,7 @@ void PlainTextEdit::highlightCurrentLine(){
     c.setPosition(pos);
     fmt.setBackground(this->palette().color(QPalette::Base));
 
-    if(toPlainText().length() > 10e+4) return;
+    if(!symbolHighlighting()) return;
 
     //Apply highlighting
     for(int i = 0; i < regexVector.count(); i++){
@@ -150,10 +151,10 @@ void PlainTextEdit::highlightCurrentLine(){
                     fmt.setForeground(regexVector.at(i).foreground);
 
                 /*
-                    if(regexVector.at(i).highlightFontFamily == HighlightFontFamily::Monospace){
-                        fmt.setFontFamily(monospaceFontFamily);
-                    }
-                    */
+                        if(regexVector.at(i).highlightFontFamily == HighlightFontFamily::Monospace){
+                            fmt.setFontFamily(monospaceFontFamily);
+                        }
+                        */
 
                 if(regexVector.at(i).isBold) fmt.setFontWeight(QFont::Bold);
                 if(regexVector.at(i).isItalic) fmt.setFontItalic(true);
@@ -169,6 +170,8 @@ void PlainTextEdit::highlightCurrentLine(){
             }
         }
     }
+
+
     fmt.merge(c.charFormat());
 
     this->verticalScrollBar()->setValue(scrollbarpos);
@@ -211,7 +214,7 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
 noPairCompletion:
     QPlainTextEdit::keyPressEvent(e);
 
-
+    //highlightCurrentLine();
 }
 
 void PlainTextEdit::TextChanged(){
@@ -320,6 +323,17 @@ void PlainTextEdit::setLineHighlighting(bool l){
     emit lineHighlightingChanged();
 }
 
+bool PlainTextEdit::symbolHighlighting()
+{
+    return m_symbolhighlighting;
+}
+
+void PlainTextEdit::setSymbolHighlighting(bool a)
+{
+    m_symbolhighlighting = a;
+    emit symbolHighlightingChanged();
+}
+
 void PlainTextEdit::select(int start, int end){
     QTextCursor c = this->textCursor();
     c.setPosition(start);
@@ -334,4 +348,22 @@ void PlainTextEdit::setPosition(int pos){
     }
     c.setPosition(pos);
     this->setTextCursor(c);
+}
+
+void PlainTextEdit::fastAppend(QString m){
+    QTextDocument *doc = this->document();
+    QTextCursor c(doc);
+    c.movePosition(QTextCursor::End);
+    //c.beginEditBlock();
+    //c.insertBlock();
+    c.insertText(m);
+    //c.endEditBlock();
+}
+
+void PlainTextEdit::fastClear(){
+    this->document()->setPlainText("");
+}
+
+void PlainTextEdit::fastSetPlainText(QString m){
+    this->document()->setPlainText(m);
 }

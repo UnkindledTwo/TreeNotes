@@ -26,6 +26,7 @@
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QtConcurrent>
+#include <QPrinter>
 
 //#include <QtXml>
 #include <QDomDocument>
@@ -121,6 +122,8 @@ private slots:
     void on_actionRead_Only_toggled(bool arg1);
 
     void on_titleEdit_textChanged(const QString &arg1);
+
+    void on_actionExport_PDF_triggered();
 
 private:
     Ui::TreeNotes *ui;

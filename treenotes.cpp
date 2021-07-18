@@ -57,14 +57,14 @@ TreeNotes::TreeNotes(QWidget *parent)
     // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
 #ifdef Q_OS_WIN
     QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
-    styleSheet += "border-radius: 4px;";
+    styleSheet += "border-radius: 2px;";
     styleSheet += "padding: 3px;";
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
     styleSheet += "selection-background-color:" + QtWin::colorizationColor().name() + ";";
 #else
     QString styleSheet = "border: 1.50px solid;";
-    styleSheet += "border-radius: 4px;";
+    styleSheet += "border-radius: 2px;";
     styleSheet += "padding: 3px;";
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
@@ -408,8 +408,8 @@ void TreeNotes::saveToFile(){
         stream.flush();
     });
 
+    this->setEnabled(false);
     while(!future.isFinished() && future.isRunning()){
-        this->setEnabled(false);
         qApp->processEvents();
     }
 
@@ -487,14 +487,25 @@ void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTree
 part2:
     TreeWidgetItem *currentItem = (TreeWidgetItem*)current;
     if(!currentItem){return;}
-    ui->messageEdit->setPlainText(currentItem->message);
-    ui->titleEdit->setText(currentItem->text(0));
-    ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollbarPos);
-    ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollbarPos);
 
-    ui->messageEdit->setReadOnly(currentItem->readOnly);
-    ui->titleEdit->setReadOnly(currentItem->readOnly);
-    ui->actionRead_Only->setChecked(currentItem->readOnly);
+    ui->messageEdit->setLineHighlighting(false);
+    ui->messageEdit->setSymbolHighlighting(false);
+    //ui->messageEdit->fastClear();
+    //ui->messageEdit->fastAppend(currentItem->message);
+    ui->messageEdit->fastSetPlainText(currentItem->message);
+    ui->titleEdit->setText(currentItem->text(0));
+
+    //ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollbarPos);
+    //ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollbarPos);
+
+    if(currentItem->readOnly != ui->messageEdit->isReadOnly()){
+        ui->messageEdit->setReadOnly(currentItem->readOnly);
+        ui->titleEdit->setReadOnly(currentItem->readOnly);
+        ui->actionRead_Only->setChecked(currentItem->readOnly);
+    }
+    ui->messageEdit->setLineHighlighting(!false);
+    ui->messageEdit->setSymbolHighlighting(!false);
+    ui->messageEdit->highlightCurrentLine();
 }
 
 
@@ -822,10 +833,8 @@ void TreeNotes::on_actionImport_Text_File_triggered()
 void TreeNotes::on_actionExport_Text_File_triggered()
 {
     if(!noteTree->currentItem()) return;
-    QString path = QFileDialog::getExistingDirectory(this, "Export Text File");
-    QDir dir(path);
-    if(!dir.exists()) return;
-    QFile file(path + "/" + noteTree->currentItem()->text(0));
+    QString path = QFileDialog::getSaveFileName(this, "Export Text File");
+    QFile file(path);
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
     stream.setCodec("UTF-8");
@@ -1084,5 +1093,17 @@ void TreeNotes::ApplyMacroVector(){
     for(int i = 0; i < macroVec.count(); i++){
         ui->messageEdit->setPlainText(ui->messageEdit->toPlainText().replace(macroVec.at(i).first, macroVec.at(i).second()));
     }
+}
+
+
+void TreeNotes::on_actionExport_PDF_triggered()
+{
+    QString filename = QFileDialog::getSaveFileName(this, "Export PDF");
+    if(((QFileInfo)filename).suffix().isEmpty()) filename += ".pdf";
+    QPrinter printer(QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setPaperSize(QPrinter::A4);
+    printer.setOutputFileName(filename);
+    ui->messageEdit->document()->print(&printer);
 }
 
