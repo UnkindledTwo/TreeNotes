@@ -87,6 +87,7 @@ TreeNotes::TreeNotes(QWidget *parent)
         QTextStream stream(&file);
         qApp->setStyleSheet(stream.readAll());
     }
+    qDebug() << ui->statusbar->font();
 
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
@@ -697,17 +698,17 @@ void TreeNotes::InitStatusLabels(){
     qDebug() << "Init status labels";
 
     QFrame *line;
-    line = new QFrame(this);
+    line = new QFrame(ui->statusbar);
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Plain);
     line->resize(this->width(), ui->statusbar->height());
 
-    noteCntLabel = new QLabel(this);
-    childrenCntLabel = new QLabel(this);
-    dateTimeLabel = new QLabel(this);
-    lineCountLabel = new QLabel(this);
-    lengthLabel = new QLabel(this);
-    currentPositionLabel = new QLabel(this);
+    noteCntLabel = new QLabel(ui->statusbar);
+    childrenCntLabel = new QLabel(ui->statusbar);
+    dateTimeLabel = new QLabel(ui->statusbar);
+    lineCountLabel = new QLabel(ui->statusbar);
+    lengthLabel = new QLabel(ui->statusbar);
+    currentPositionLabel = new QLabel(ui->statusbar);
 
     ui->statusbar->addWidget(noteCntLabel, 1);
     ui->statusbar->addWidget(line, 1);

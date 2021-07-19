@@ -51,6 +51,9 @@
           <pointsize>11</pointsize>
          </font>
         </property>
+        <property name="undoRedoEnabled">
+         <bool>false</bool>
+        </property>
         <property name="textInteractionFlags">
          <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::TextBrowserInteraction|Qt::TextEditable|Qt::TextEditorInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
         </property>
@@ -192,6 +195,12 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
    <property name="sizeGripEnabled">
     <bool>true</bool>
    </property>

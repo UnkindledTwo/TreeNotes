@@ -155,7 +155,7 @@ void PlainTextEdit::highlightCurrentLine(){
                 if(regexVector.at(i).foreground == Qt::black) fmt.setForeground(this->palette().color(QPalette::Foreground));
                 else
                     if(darkTheme)
-                        fmt.setForeground(regexVector.at(i).foreground.lighter(185));
+                        fmt.setForeground(regexVector.at(i).foreground.lighter(155));
                     else
                         fmt.setForeground(regexVector.at(i).foreground.darker(105));
 
