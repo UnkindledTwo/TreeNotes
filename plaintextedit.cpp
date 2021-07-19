@@ -98,32 +98,38 @@ void PlainTextEdit::paintEvent(QPaintEvent *e){
 
 void PlainTextEdit::highlightCurrentLine(){
     if(toPlainText().length() > 30000) return;
-
-    int scrollbarpos = this->verticalScrollBar()->value();
-
     if(!textCursor().selectedText().isEmpty())
         return;
 
-    QTextCharFormat fmt;
+    QColor backColor = this->palette().color(QPalette::Background);
+    bool darkTheme = backColor.lightness() < 150;
+    int scrollbarpos = this->verticalScrollBar()->value();
 
-    fmt.setBackground(this->palette().color(QPalette::Base));
 
     QTextCursor c = textCursor();
     int pos = c.position();
+    QTextCharFormat fmt;
+    if(!lineHighlighting())
+    goto noLineHighlight;
+
+    fmt.setBackground(this->palette().color(QPalette::Base));
+
+
 
     c.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     c.setCharFormat(fmt);
     if(lineHighlighting()){
-        QColor backColor = this->palette().color(QPalette::Background);
-        if(backColor.lightness() > 120){
+        if(!darkTheme){
             fmt.setBackground(backColor.darker(105));
         }
         else{
-            fmt.setBackground(backColor.lighter(105));
+            fmt.setBackground(backColor.lighter(165));
         }
         //fmt.setBackground(highlightBrush());
     }
+
+    noLineHighlight:
 
     c.setPosition(pos);
     c.movePosition(QTextCursor::StartOfBlock);
@@ -148,7 +154,10 @@ void PlainTextEdit::highlightCurrentLine(){
                 //fmt.setBackground(regexVector.at(i).background);
                 if(regexVector.at(i).foreground == Qt::black) fmt.setForeground(this->palette().color(QPalette::Foreground));
                 else
-                    fmt.setForeground(regexVector.at(i).foreground);
+                    if(darkTheme)
+                        fmt.setForeground(regexVector.at(i).foreground.lighter(185));
+                    else
+                        fmt.setForeground(regexVector.at(i).foreground.darker(105));
 
                 /*
                         if(regexVector.at(i).highlightFontFamily == HighlightFontFamily::Monospace){
@@ -304,11 +313,11 @@ void PlainTextEdit::initRegexVector(){
     regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}", Qt::black, Qt::white, true));
     regexVector.append(regexVectorItem("✔.*",  Qt::darkGreen, Qt::white));
     regexVector.append(regexVectorItem("✖.*", Qt::darkRed, Qt::white));
-    regexVector.append(regexVectorItem("λ.*", Qt::blue, Qt::white));
+    regexVector.append(regexVectorItem("λ.*", QColor(8, 129, 199), Qt::white));
     HighlightItem i = regexVectorItem("~.*~",  Qt::black, Qt::white);
     i.isStrikeThrough = true;
     regexVector.append(i);
-    HighlightItem heading = regexVectorItem("# .*",  Qt::darkBlue, Qt::white, true);
+    HighlightItem heading = regexVectorItem("# .*", Qt::darkBlue, Qt::white, true);
     regexVector.append(heading);
     //regexVector.append(regexVectorItem("\\`{1}.*\\`{1}", Qt::black, Qt::lightGray, false, false, false, true));
 }

@@ -69,6 +69,9 @@
         <pointsize>11</pointsize>
        </font>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -347,6 +350,9 @@
   <action name="actionSettings">
    <property name="text">
     <string>Settings</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+E</string>
    </property>
   </action>
   <action name="actionStar_Unstar">

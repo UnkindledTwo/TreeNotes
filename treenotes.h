@@ -147,7 +147,6 @@ private:
 };
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"
-#define SHORTCUT_JUMP_TREE "Ctrl+K"
 #define SHORTCUT_JUMP_TITLE "Ctrl+J"
 
 #endif // TREENOTES_H

@@ -6,6 +6,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     ui(new Ui::SettingsDialog)
 {
     ui->setupUi(this);
+    this->adjustSize();
+    this->setMaximumSize(this->size());
 }
 
 SettingsDialog::~SettingsDialog()

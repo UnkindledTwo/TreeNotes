@@ -24,13 +24,13 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.notetree_animated = true;
     appConfig.doubleClickToEditMessage = true;
     appConfig.layoutMargin = 5;
-    appConfig.splitter_handle_width = 6;
-    appConfig.confirm_delete = true;
+    appConfig.splitter_handle_width = 6; appConfig.confirm_delete = true;
     appConfig.line_wrapping = true;
     appConfig.pair_completion = true;
     appConfig.notetree_drag_drop = true;
     appConfig.maximum_backups = 10;
     appConfig.highlight_current_line = true;
+    appConfig.dark_mode = true;
     appConfig.highlightColor = QColor(238,238,238);
 
     //Init the splitter
@@ -56,7 +56,7 @@ TreeNotes::TreeNotes(QWidget *parent)
 
     // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
 #ifdef Q_OS_WIN
-    QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().name() + ";";
+    QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().light().name() + ";";
     styleSheet += "border-radius: 2px;";
     styleSheet += "padding: 3px;";
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
@@ -73,6 +73,21 @@ TreeNotes::TreeNotes(QWidget *parent)
     ui->titleEdit->setStyleSheet("QLineEdit{" + styleSheet + "}");
     ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
 
+    ReadQSettings();
+    ReadAppConfig(appConfig);
+    if(appConfig.dark_mode){
+        QFile file(":/dark/stylesheet.qss");
+        file.open(QFile::ReadOnly | QFile::Text);
+        QTextStream stream(&file);
+        qApp->setStyleSheet(stream.readAll());
+    }
+    else{
+        QFile file(":/light/stylesheet.qss");
+        file.open(QFile::ReadOnly | QFile::Text);
+        QTextStream stream(&file);
+        qApp->setStyleSheet(stream.readAll());
+    }
+
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
     connect(ui->actionLoad_From_Disk, &QAction::triggered, this, &TreeNotes::ReadFromFile);
@@ -86,9 +101,11 @@ TreeNotes::TreeNotes(QWidget *parent)
     InitStatusLabels();
     ReadFromFile();
     ReadQSettings();
+    ReadAppConfig(appConfig);
     InitMacroVector();
 
     ui->messageEdit->setCursorWidth(2);
+    ui->messageEdit->setSymbolHighlighting(true);
 
     noteTree->expandAll();
     noteTree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
@@ -164,6 +181,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
     appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
     appConfig.highlight_current_line = settings.value("highlight_current_line", appConfig.highlight_current_line).toBool();
+    appConfig.dark_mode = settings.value("dark_mode", appConfig.dark_mode).toBool();
     //appConfig.highlightColor = qvariant_cast<QColor>(settings.value("highlight_color", appConfig.highlightColor));
     settings.endGroup();
     ReadAppConfig(appConfig);
@@ -199,6 +217,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
     settings.setValue("maximum_backups", appConfig.maximum_backups);
     settings.setValue("highlight_current_line", appConfig.highlight_current_line);
+    settings.setValue("dark_mode", appConfig.dark_mode);
     //settings.setValue("highlight_color", appConfig.highlightColor);
     settings.endGroup();
 
@@ -446,9 +465,11 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
 }
 
 void TreeNotes::Save(TreeWidgetItem *target){
-    if(ui->messageEdit->toPlainText() != target->message || ui->titleEdit->text() != target->text(0)){
-        target->lastEdited = QDateTime::currentDateTime();
+    if(ui->messageEdit->toPlainText() == target->message && ui->titleEdit->text() == target->text(0)){
+        return;
     }
+
+    target->lastEdited = QDateTime::currentDateTime();
 
     int savedPos = ui->messageEdit->textCursor().position();
 
@@ -488,8 +509,6 @@ part2:
     TreeWidgetItem *currentItem = (TreeWidgetItem*)current;
     if(!currentItem){return;}
 
-    ui->messageEdit->setLineHighlighting(false);
-    ui->messageEdit->setSymbolHighlighting(false);
     //ui->messageEdit->fastClear();
     //ui->messageEdit->fastAppend(currentItem->message);
     ui->messageEdit->fastSetPlainText(currentItem->message);
@@ -503,9 +522,6 @@ part2:
         ui->titleEdit->setReadOnly(currentItem->readOnly);
         ui->actionRead_Only->setChecked(currentItem->readOnly);
     }
-    ui->messageEdit->setLineHighlighting(!false);
-    ui->messageEdit->setSymbolHighlighting(!false);
-    ui->messageEdit->highlightCurrentLine();
 }
 
 
@@ -675,13 +691,6 @@ void TreeNotes::InitShortcuts(){
 
     QShortcut *jumpToTitleBox = new QShortcut(QKeySequence(SHORTCUT_JUMP_TITLE), this);
     connect(jumpToTitleBox, &QShortcut::activated, this, [&](){ui->titleEdit->setFocus();});
-
-    QShortcut *jumpToNoteTree = new QShortcut(QKeySequence(SHORTCUT_JUMP_TREE), this);
-    connect(jumpToNoteTree, &QShortcut::activated, this, [&](){noteTree->setFocus();
-        if(noteTree->topLevelItemCount() > 0 && noteTree->selectedItems().count() == 0)
-            noteTree->topLevelItem(0)->setSelected(true);
-    }
-    );
 }
 
 void TreeNotes::InitStatusLabels(){
