@@ -193,7 +193,6 @@
      <string>Help</string>
     </property>
     <addaction name="actionMacros"/>
-    <addaction name="actionCheck_For_Updates"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuOther"/>
@@ -373,11 +372,6 @@
   <action name="actionStar_Unstar">
    <property name="text">
     <string>Star/Unstar</string>
-   </property>
-  </action>
-  <action name="actionCheck_For_Updates">
-   <property name="text">
-    <string>Check For Updates</string>
    </property>
   </action>
   <action name="actionExpand_All">

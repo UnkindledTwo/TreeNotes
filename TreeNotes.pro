@@ -1,4 +1,4 @@
-QT += core gui xml network concurrent printsupport
+QT += core gui xml concurrent printsupport
 win32{
     QT += winextras
 }

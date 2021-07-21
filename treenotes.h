@@ -21,10 +21,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QScrollBar>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QJsonDocument>
 #include <QtConcurrent>
 #include <QPushButton>
 #include <QPrinter>
@@ -90,7 +86,6 @@ private slots:
     void SetNoteTreeDragDrop(bool);
     void CleanBackups(int max, QString backupsDir);
     void setStar(TreeWidgetItem*, bool);
-    QString latestTag();
     void AddAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items);
     void ApplyMacroVector();
 
@@ -116,7 +111,6 @@ private slots:
     void on_actionUndo_Delete_triggered();
     void on_actionSettings_triggered();
     void on_actionStar_Unstar_triggered();
-    void on_actionCheck_For_Updates_triggered();
     void on_actionExpand_All_triggered();
     void on_actionCollapse_All_triggered();
 
