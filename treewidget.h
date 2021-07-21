@@ -19,6 +19,7 @@ public:
     void collapseChildren(TreeWidgetItem *i);
     void setDragDrop(bool);
     void addAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items);
+    void setStar(TreeWidgetItem*, bool);
     int noteCount();
     explicit TreeWidget(QWidget *parent = nullptr);
     ~TreeWidget();

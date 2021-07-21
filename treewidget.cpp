@@ -67,3 +67,21 @@ int TreeWidget::noteCount(){
     }
     return cnt;
 }
+
+void TreeWidget::setStar(TreeWidgetItem* i, bool s){
+    if(s){
+        //i->setText(1, "★");
+        i->setIcon(1, QIcon(":/Resources/Icons/star.png"));
+        i->setForeground(0, Qt::darkYellow);
+    }
+    else{
+        //i->setText(1, "");
+        i->setIcon(1, QIcon());
+        i->setForeground(0, Qt::black);
+    }
+
+    i->starred = s;
+
+    this->resizeColumnToContents(1);
+}
+

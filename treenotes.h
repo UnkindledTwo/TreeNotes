@@ -44,6 +44,7 @@
 #include "undoitem.h"
 #include "appconfig.h"
 #include "treewidget.h"
+#include "saver.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TreeNotes; }
@@ -75,16 +76,13 @@ private slots:
     void InitMacroVector();
     void saveQSettings();
     void InitIconVector();
-    void AddChildren(QDomDocument *doc ,QDomElement *elem, QTreeWidgetItem *parent);
     void saveToFile();
     void ReadFromFile();
-    void ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *parent);
     TreeWidgetItem* AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon(":/Resources/Icon.png"));
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
     void ShowContextMenu(const QPoint &pos);
     void CleanBackups(int max, QString backupsDir);
-    void setStar(TreeWidgetItem*, bool);
     void ApplyMacroVector();
 
     QString boolToString(bool a);
