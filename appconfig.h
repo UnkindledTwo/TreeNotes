@@ -18,6 +18,7 @@ struct app_config{
     bool notetree_drag_drop;
     int maximum_backups;
     bool highlight_current_line;
+    bool use_native_theme;
     bool dark_mode;
     QColor highlightColor;
 };

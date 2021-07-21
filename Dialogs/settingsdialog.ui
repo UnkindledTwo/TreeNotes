@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
+    <width>435</width>
     <height>600</height>
    </rect>
   </property>
@@ -129,6 +129,13 @@
         <widget class="QCheckBox" name="notetree_drag_drop">
          <property name="text">
           <string>Tree Drag And Drop</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="use_native_theme">
+         <property name="text">
+          <string>Use Native Theme</string>
          </property>
         </widget>
        </item>

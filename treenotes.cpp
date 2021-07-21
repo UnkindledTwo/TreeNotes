@@ -30,6 +30,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.notetree_drag_drop = true;
     appConfig.maximum_backups = 10;
     appConfig.highlight_current_line = true;
+    appConfig.use_native_theme = false;
     appConfig.dark_mode = true;
     appConfig.highlightColor = QColor(238,238,238);
 
@@ -75,20 +76,6 @@ TreeNotes::TreeNotes(QWidget *parent)
 
     ReadQSettings();
     ReadAppConfig(appConfig);
-    if(appConfig.dark_mode){
-        QFile file(":/dark-green/stylesheet.qss");
-        file.open(QFile::ReadOnly | QFile::Text);
-        QTextStream stream(&file);
-        qApp->setStyleSheet(stream.readAll());
-    }
-    else{
-        QFile file(":/light/stylesheet.qss");
-        file.open(QFile::ReadOnly | QFile::Text);
-        QTextStream stream(&file);
-        qApp->setStyleSheet(stream.readAll());
-    }
-    qDebug() << ui->statusbar->font();
-
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
     connect(ui->actionLoad_From_Disk, &QAction::triggered, this, &TreeNotes::ReadFromFile);
@@ -182,6 +169,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
     appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
     appConfig.highlight_current_line = settings.value("highlight_current_line", appConfig.highlight_current_line).toBool();
+    appConfig.use_native_theme = settings.value("use_native_theme", appConfig.use_native_theme).toBool();
     appConfig.dark_mode = settings.value("dark_mode", appConfig.dark_mode).toBool();
     //appConfig.highlightColor = qvariant_cast<QColor>(settings.value("highlight_color", appConfig.highlightColor));
     settings.endGroup();
@@ -218,6 +206,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
     settings.setValue("maximum_backups", appConfig.maximum_backups);
     settings.setValue("highlight_current_line", appConfig.highlight_current_line);
+    settings.setValue("use_native_theme", appConfig.use_native_theme);
     settings.setValue("dark_mode", appConfig.dark_mode);
     //settings.setValue("highlight_color", appConfig.highlightColor);
     settings.endGroup();
@@ -273,6 +262,24 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     noteTree->setDragDrop(appConfig.notetree_drag_drop);
     ui->messageEdit->setHighlightBrush(QBrush(appConfig.highlightColor));
     ui->messageEdit->setLineHighlighting(appConfig.highlight_current_line);
+
+    if(appConfig.use_native_theme){
+        qApp->setStyleSheet("");
+        goto nativeTheme;
+    }
+    if(appConfig.dark_mode){
+        QFile file(":/dark-green/stylesheet.qss");
+        file.open(QFile::ReadOnly | QFile::Text);
+        QTextStream stream(&file);
+        qApp->setStyleSheet(stream.readAll());
+    }
+    else{
+        QFile file(":/light/stylesheet.qss");
+        file.open(QFile::ReadOnly | QFile::Text);
+        QTextStream stream(&file);
+        qApp->setStyleSheet(stream.readAll());
+    }
+    nativeTheme:
 
     qDebug() << "App config read finished";
 }
