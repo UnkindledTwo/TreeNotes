@@ -17,4 +17,6 @@ You can change the values under [AppConfig].
 
 Or you can use the settings menu from `Other -> Settings`
 
-![screenshot](/Resources/Screenshot1.png)
+![screenshot(Dark)](/Resources/Screenshot1.png)
+![screenshot(Light)](/Resources/Screenshot2.png)
+
