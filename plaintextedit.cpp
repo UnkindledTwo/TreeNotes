@@ -49,7 +49,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     QShortcut *find = new QShortcut(QKeySequence("Ctrl+F"), this);
     connect(find, &QShortcut::activated, this, [&](){
         SearchDialog *d = new SearchDialog(this);
-        d->show();
+        d->exec();
     });
 
     QShortcut *makeHeading = new QShortcut(QKeySequence("Alt+H"), this);
@@ -121,10 +121,10 @@ void PlainTextEdit::highlightCurrentLine(){
     c.setCharFormat(fmt);
     if(lineHighlighting()){
         if(!darkTheme){
-            fmt.setBackground(backColor.darker(105));
+            fmt.setBackground(backColor.darker(115));
         }
         else{
-            fmt.setBackground(backColor.lighter(165));
+            fmt.setBackground(backColor.lighter(125));
         }
         //fmt.setBackground(highlightBrush());
     }

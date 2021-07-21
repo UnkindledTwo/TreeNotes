@@ -69,7 +69,7 @@
       <property name="font">
        <font>
         <family>Segoe UI</family>
-        <pointsize>11</pointsize>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="focusPolicy">
@@ -89,6 +89,12 @@
       </property>
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>20</width>
+        <height>20</height>
+       </size>
       </property>
       <property name="indentation">
        <number>10</number>

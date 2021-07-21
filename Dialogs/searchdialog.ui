@@ -6,56 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>196</width>
-    <height>144</height>
+    <width>230</width>
+    <height>113</height>
    </rect>
   </property>
   <property name="maximumSize">
    <size>
-    <width>196</width>
-    <height>166</height>
+    <width>16777215</width>
+    <height>16777215</height>
    </size>
-  </property>
-  <property name="font">
-   <font>
-    <family>Segoe UI</family>
-    <pointsize>14</pointsize>
-   </font>
   </property>
   <property name="windowTitle">
    <string>Search</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="1,1,1,0">
-   <item row="6" column="0">
-    <widget class="QPushButton" name="bSearch">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Search</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="0" colspan="3">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="6" column="1">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="1">
     <widget class="QPushButton" name="bCancel">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -65,7 +33,20 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="2" colspan="2">
+   <item row="1" column="0">
+    <widget class="QPushButton" name="bSearch">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Search</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -78,7 +59,7 @@
      </property>
     </spacer>
    </item>
-   <item row="3" column="0" colspan="4">
+   <item row="0" column="0" colspan="3">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -97,9 +78,9 @@
       <widget class="QLineEdit" name="searchBox"/>
      </item>
      <item>
-      <widget class="QCheckBox" name="caseSensitive">
+      <widget class="QCheckBox" name="caseInsensitive">
        <property name="text">
-        <string>Case Sensitive</string>
+        <string>Case Insensitive</string>
        </property>
       </widget>
      </item>

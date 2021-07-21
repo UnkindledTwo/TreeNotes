@@ -1399,6 +1399,7 @@ QListView
 {
     background-color: ^view:background^;
     border: 0em solid black;
+	show-decoration-selected: 0;
 }
 
 QTreeView:selected,
@@ -1704,6 +1705,7 @@ QAbstractItemView::item:pressed
 QAbstractItemView::item:selected:!active
 {
     background: ^view:hover^;
+	border-bottom: 3px solid ^highlight:dark^;
 }
 
 /* Use background with qlineargradient to avoid ugly border on widget. */
@@ -1712,8 +1714,8 @@ QAbstractItemView::item:selected:active
     background: qlineargradient(
         x1: 0.5, y1: 0.5
         x2: 0.5, y2: 1,
-        stop: 0 ^highlight:dark^,
-        stop: 1 ^highlight:dark^
+        stop: 0 ^highlight^,
+        stop: 1 ^highlight^
     );
     color: ^foreground^;
 }
@@ -1849,7 +1851,7 @@ QToolBox::tab:hover
 QSplitter::handle
 {
     border: 0.09em solid ^tab:background^;
-    background: -0.5em solid ^tab:background^;
+    /*background: -0.5em solid ^tab:background^;*/
     max-width: 0em;
     max-height: 0em;
 }

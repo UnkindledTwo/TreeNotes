@@ -26,6 +26,7 @@
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QtConcurrent>
+#include <QPushButton>
 #include <QPrinter>
 
 //#include <QtXml>

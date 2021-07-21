@@ -3,8 +3,9 @@
 {
     "foreground": "#31363b",
     "foreground:light": "#272b2f",
-    "background": "#eff0f1",
-    "background:alternate": "#eaebec",
+    "background": "#e6e6e6",
+    //"background:alternate": "#eaebec",
+	"background:alternate": "#e3e3e3",
     "highlight": "rgba(51, 164, 223, 0.5)",
     "highlight:dark": "rgba(45, 147, 200, 0.5)",
     "highlight:alternate": "rgba(71, 184, 243, 0.6)",

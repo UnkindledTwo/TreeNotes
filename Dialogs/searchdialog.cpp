@@ -7,8 +7,8 @@ SearchDialog::SearchDialog(QPlainTextEdit *parent) :
 {
     ui->setupUi(this);
     ui->searchBox->setFocus();
-    this->setStyleSheet("");
-    this->setStyleSheet("QLabel{border : 0px solid; } QCheckBox{border : 0px solid;} QLineEdit{font-size: 16px;} QPushButton:hover{background-color: white;}");
+    this->adjustSize();
+    this->setFixedSize(this->size());
 }
 
 SearchDialog::~SearchDialog()
@@ -25,12 +25,14 @@ void SearchDialog::on_bCancel_clicked()
 void SearchDialog::on_bSearch_clicked()
 {
     PlainTextEdit *parent = (PlainTextEdit*)this->parent();
+
     QRegularExpression r;
-    if(ui->caseSensitive->isChecked())
-        r.setPattern(ui->searchBox->text());
-    else{
-        r.setPattern("(?i)"+ui->searchBox->text());
+    r.setPattern(ui->searchBox->text());
+
+    if(ui->caseInsensitive->isChecked()){
+        r.setPatternOptions(r.patternOptions() | r.CaseInsensitiveOption);
     }
+
     QRegularExpressionMatch match = r.match(parent->toPlainText());
     if(match.hasMatch()){
         qDebug() << "Match";

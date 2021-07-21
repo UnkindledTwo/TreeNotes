@@ -39,8 +39,8 @@ QToolTip
 {
     /* 0.2ex is the smallest value that's not ignored on Windows. */
     border: 0.04em solid #31363b;
-    background-color: #eff0f1;
-    alternate-background-color: #eaebec;
+    background-color: #e6e6e6;
+    alternate-background-color: #e3e3e3;
     color: #31363b;
     padding: 0.1em;
     opacity: 200;
@@ -49,7 +49,7 @@ QToolTip
 QWidget
 {
     color: #31363b;
-    background-color: #eff0f1;
+    background-color: #e6e6e6;
     selection-background-color: rgba(51, 164, 223, 0.5);
     selection-color: #31363b;
     background-clip: border;
@@ -59,12 +59,12 @@ QWidget
 QWidget:disabled
 {
     color: #b4b4b4;
-    background-color: #eff0f1;
+    background-color: #e6e6e6;
 }
 
 QWidget:disabled:hover
 {
-    background-color: #eff0f1;
+    background-color: #e6e6e6;
 }
 
 QCheckBox
@@ -108,7 +108,7 @@ QGroupBox::title
     top: -1.6em;
     subcontrol-origin: content;
     subcontrol-position: top center;
-    background: #eff0f1;
+    background: #e6e6e6;
     padding-left: 0.2em;
     padding-right: 0.2em;
 }
@@ -260,7 +260,7 @@ QRadioButton::indicator:unchecked:disabled
 
 QMenuBar
 {
-    background-color: #eff0f1;
+    background-color: #e6e6e6;
     color: #31363b;
 }
 
@@ -314,7 +314,7 @@ QMenu::item:selected
 
 QMenu::item:selected:disabled
 {
-    background-color: #eff0f1;
+    background-color: #e6e6e6;
 }
 
 QMenu::item:disabled
@@ -383,8 +383,8 @@ QMenu::right-arrow:disabled
 
 QAbstractItemView
 {
-    alternate-background-color: #eaebec;
-	background-color: #eff0f1;
+    alternate-background-color: #e3e3e3;
+	background-color: #e6e6e6;
     color: #31363b;
     border: 0.09em solid #bab9b8;
     border-radius: 0.09em;
@@ -426,7 +426,7 @@ QAbstractScrollArea
  */
 QAbstractScrollArea::corner
 {
-    background: #eff0f1;
+    background: #e6e6e6;
 }
 
 /**
@@ -650,7 +650,7 @@ QFrame[frameShape="6"]  /* QFrame::StyledPanel == 0x0006 */
     border-width: 0.04em;
     padding: 0.09em;
     border-style: solid;
-    border-color: #eff0f1;
+    border-color: #e6e6e6;
     background-color: #bab9b8;
     border-radius: 0.23em;
 }
@@ -771,7 +771,7 @@ QPushButton:closed
 
 QPushButton:disabled
 {
-    background-color: #eff0f1;
+    background-color: #e6e6e6;
     border-width: 0.04em;
     border-color: #bab9b8;
     border-style: solid;
@@ -857,7 +857,7 @@ QPlainTextEdit:hover:pressed,
 QAbstractView:hover:pressed,
 QTreeView:hover:pressed
 {
-    background-color: #eff0f1;
+    background-color: #e6e6e6;
 }
 
 QComboBox:hover:pressed:editable
@@ -1399,6 +1399,7 @@ QListView
 {
     background-color: #eff0f1;
     border: 0em solid black;
+	show-decoration-selected: 0;
 }
 
 QTreeView:selected,
@@ -1526,7 +1527,7 @@ QSlider::groove:horizontal,
 QSlider::groove:vertical
 {
     background: #d9d8d7;
-    border: 0em solid #eff0f1;
+    border: 0em solid #e6e6e6;
     border-radius: 0.19em;
 }
 
@@ -1704,6 +1705,7 @@ QAbstractItemView::item:pressed
 QAbstractItemView::item:selected:!active
 {
     background: rgba(61, 173, 232, 0.2);
+	border-bottom: 3px solid rgba(45, 147, 200, 0.5);
 }
 
 /* Use background with qlineargradient to avoid ugly border on widget. */
@@ -1712,8 +1714,8 @@ QAbstractItemView::item:selected:active
     background: qlineargradient(
         x1: 0.5, y1: 0.5
         x2: 0.5, y2: 1,
-        stop: 0 rgba(45, 147, 200, 0.5),
-        stop: 1 rgba(45, 147, 200, 0.5)
+        stop: 0 rgba(51, 164, 223, 0.5),
+        stop: 1 rgba(51, 164, 223, 0.5)
     );
     color: #31363b;
 }
@@ -1849,7 +1851,7 @@ QToolBox::tab:hover
 QSplitter::handle
 {
     border: 0.09em solid #d9d8d7;
-    background: -0.5em solid #d9d8d7;
+    /*background: -0.5em solid #d9d8d7;*/
     max-width: 0em;
     max-height: 0em;
 }
@@ -1864,7 +1866,7 @@ QProgressBar:horizontal,
 QProgressBar:vertical
 {
     background-color: rgba(106, 105, 105, 0.7);
-    border: 0.9em solid #eff0f1;
+    border: 0.9em solid #e6e6e6;
     border-radius: 0.13em;
     padding: 0em;
 }

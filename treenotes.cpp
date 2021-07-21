@@ -76,7 +76,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     ReadQSettings();
     ReadAppConfig(appConfig);
     if(appConfig.dark_mode){
-        QFile file(":/dark/stylesheet.qss");
+        QFile file(":/dark-green/stylesheet.qss");
         file.open(QFile::ReadOnly | QFile::Text);
         QTextStream stream(&file);
         qApp->setStyleSheet(stream.readAll());
@@ -302,14 +302,14 @@ void TreeNotes::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *p
     QDomNodeList itemList = node.toElement().elementsByTagName("NoteItem");
     for(int i = 0; i < node.toElement().childNodes().count(); i++){
         QDomElement currentElement = node.toElement().childNodes().at(i).toElement();
-        TreeWidgetItem *newItem = new TreeWidgetItem();
+        TreeWidgetItem *newItem = AddNote(parent, "");
 
         newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
         newItem->iconVectorIndex = currentElement.attribute("icon").toInt();
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
         newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
         newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
-        parent->addChild(newItem);
+        //parent->addChild(newItem);
         setStar(newItem, newItem->starred);
         ReadChildren(doc, node.toElement().childNodes().at(i), newItem);
     }
@@ -351,13 +351,13 @@ void TreeNotes::ReadFromFile(){
             if(itemList.at(i).toElement().attribute("title") == "") continue;
 
             QDomElement currentElement = root.toElement().childNodes().at(i).toElement();
-            TreeWidgetItem *newItem = new TreeWidgetItem();
+            TreeWidgetItem *newItem = AddNote(NULL, "");
             newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
             newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
             newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
             newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
-            noteTree->addTopLevelItem(newItem);
+            //noteTree->addTopLevelItem(newItem);
             setStar(newItem, newItem->starred);
             ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
         }
@@ -453,11 +453,13 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
 
     if(parent == NULL){
         noteTree->addTopLevelItem(itemToAdd);
-        return itemToAdd;
+        goto topLevel;
     }
 
     parent->addChild(itemToAdd);
     parent->setExpanded(true);
+
+    topLevel:
 
     if(appConfig.notetree_select_new_items)
     noteTree->setCurrentItem(itemToAdd);

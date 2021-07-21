@@ -1,5 +1,61 @@
 <RCC>
   <qresource>
+    <file>dark-green/branch_closed.svg</file>
+    <file>dark-green/branch_closed_hover.svg</file>
+    <file>dark-green/branch_end.svg</file>
+    <file>dark-green/branch_end_arrow.svg</file>
+    <file>dark-green/branch_more.svg</file>
+    <file>dark-green/branch_more_arrow.svg</file>
+    <file>dark-green/branch_open.svg</file>
+    <file>dark-green/branch_open_hover.svg</file>
+    <file>dark-green/calendar_next.svg</file>
+    <file>dark-green/calendar_previous.svg</file>
+    <file>dark-green/checkbox_checked.svg</file>
+    <file>dark-green/checkbox_checked_disabled.svg</file>
+    <file>dark-green/checkbox_indeterminate.svg</file>
+    <file>dark-green/checkbox_indeterminate_disabled.svg</file>
+    <file>dark-green/checkbox_unchecked.svg</file>
+    <file>dark-green/checkbox_unchecked_disabled.svg</file>
+    <file>dark-green/close.svg</file>
+    <file>dark-green/close_hover.svg</file>
+    <file>dark-green/close_pressed.svg</file>
+    <file>dark-green/dialog-cancel.svg</file>
+    <file>dark-green/dialog-close.svg</file>
+    <file>dark-green/dialog-discard.svg</file>
+    <file>dark-green/dialog-help.svg</file>
+    <file>dark-green/dialog-no.svg</file>
+    <file>dark-green/dialog-ok.svg</file>
+    <file>dark-green/dialog-open.svg</file>
+    <file>dark-green/dialog-reset.svg</file>
+    <file>dark-green/dialog-save.svg</file>
+    <file>dark-green/down_arrow.svg</file>
+    <file>dark-green/down_arrow_disabled.svg</file>
+    <file>dark-green/down_arrow_hover.svg</file>
+    <file>dark-green/hmovetoolbar.svg</file>
+    <file>dark-green/hseptoolbar.svg</file>
+    <file>dark-green/left_arrow.svg</file>
+    <file>dark-green/left_arrow_disabled.svg</file>
+    <file>dark-green/message-critical.svg</file>
+    <file>dark-green/message-information.svg</file>
+    <file>dark-green/message-question.svg</file>
+    <file>dark-green/message-warning.svg</file>
+    <file>dark-green/radio_checked.svg</file>
+    <file>dark-green/radio_checked_disabled.svg</file>
+    <file>dark-green/radio_unchecked.svg</file>
+    <file>dark-green/radio_unchecked_disabled.svg</file>
+    <file>dark-green/right_arrow.svg</file>
+    <file>dark-green/right_arrow_disabled.svg</file>
+    <file>dark-green/sizegrip.svg</file>
+    <file>dark-green/stylesheet.qss</file>
+    <file>dark-green/transparent.svg</file>
+    <file>dark-green/undock.svg</file>
+    <file>dark-green/undock_hover.svg</file>
+    <file>dark-green/up_arrow.svg</file>
+    <file>dark-green/up_arrow_disabled.svg</file>
+    <file>dark-green/up_arrow_hover.svg</file>
+    <file>dark-green/vline.svg</file>
+    <file>dark-green/vmovetoolbar.svg</file>
+    <file>dark-green/vseptoolbar.svg</file>
     <file>dark/branch_closed.svg</file>
     <file>dark/branch_closed_hover.svg</file>
     <file>dark/branch_end.svg</file>
