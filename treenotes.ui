@@ -65,7 +65,7 @@
      </layout>
     </item>
     <item row="0" column="0">
-     <widget class="QTreeWidget" name="treeWidget">
+     <widget class="TreeWidget" name="treeWidget">
       <property name="font">
        <font>
         <family>Segoe UI</family>
@@ -399,6 +399,11 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">treewidget.h</header>
+  </customwidget>
   <customwidget>
    <class>PlainTextEdit</class>
    <extends>QPlainTextEdit</extends>

@@ -24,6 +24,7 @@ SOURCES += \
     main.cpp \
     plaintextedit.cpp \
     treenotes.cpp \
+    treewidget.cpp \
     treewidgetitem.cpp \
     undoitem.cpp
 
@@ -36,6 +37,7 @@ HEADERS += \
     highlightitem.h \
     plaintextedit.h \
     treenotes.h \
+    treewidget.h \
     treewidgetitem.h \
     undoitem.h
 
@@ -45,7 +47,8 @@ FORMS += \
     Dialogs/searchdialog.ui \
     Dialogs/settingsdialog.ui \
     plaintextedit.ui \
-    treenotes.ui
+    treenotes.ui \
+    treewidget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

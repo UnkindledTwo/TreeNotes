@@ -270,7 +270,7 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
         ui->messageEdit->setLineWrapMode(PlainTextEdit::NoWrap);
     }
     ui->messageEdit->setPairCompletion(appConfig.pair_completion);
-    SetNoteTreeDragDrop(appConfig.notetree_drag_drop);
+    noteTree->setDragDrop(appConfig.notetree_drag_drop);
     ui->messageEdit->setHighlightBrush(QBrush(appConfig.highlightColor));
     ui->messageEdit->setLineHighlighting(appConfig.highlight_current_line);
 
@@ -729,7 +729,7 @@ void TreeNotes::InitStatusLabels(){
 }
 
 void TreeNotes::RefreshLabels(){
-    noteCntLabel->setText("Notes : "+ QString::number(NoteCount()));
+    noteCntLabel->setText("Notes : "+ QString::number(noteTree->noteCount()));
     if(noteTree->currentItem()){
         childrenCntLabel->setText("Children: "+ QString::number(noteTree->currentItem()->childCount()));
         dateTimeLabel->setText("Last edited: "+((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString());
@@ -746,16 +746,6 @@ void TreeNotes::RefreshLabels(){
     }
     currentPositionLabel->setText("ln: " + QString::number(ui->messageEdit->currentLine()) + ", col: " + QString::number(ui->messageEdit->currentColumn()));
     lineCountLabel->setText("Lines: " + QString::number(ui->messageEdit->lineCount()));
-}
-
-int TreeNotes::NoteCount(){
-    int cnt = 0;
-    QTreeWidgetItemIterator it(noteTree);
-    while(*it){
-        cnt++;
-        *it++;
-    }
-    return cnt;
 }
 
 void TreeNotes::on_actionHide_Show_Note_Tree_triggered()
@@ -939,17 +929,6 @@ void TreeNotes::on_actionSettings_triggered()
     }
 }
 
-void TreeNotes::SetNoteTreeDragDrop(bool a){
-    noteTree->setDragEnabled(a);
-    noteTree->viewport()->setAcceptDrops(a);
-    noteTree->setDropIndicatorShown(a);
-    if(a)
-        noteTree->setDragDropMode(QAbstractItemView::InternalMove);
-    else
-        noteTree->setDragDropMode(QAbstractItemView::NoDragDrop);
-
-}
-
 void TreeNotes::CleanBackups(int max, QString backupsDir){
     qDebug() << "Cleaning backups, Backups dir:" << backupsDir << " Max backups:" << max;
 
@@ -1009,40 +988,14 @@ void TreeNotes::on_actionStar_Unstar_triggered()
 
 void TreeNotes::on_actionExpand_All_triggered()
 {
-    if(!noteTree->currentItem()){
-        noteTree->expandAll();
-        return;
-    }
-
-    QVector<QTreeWidgetItem*> items;
-    noteTree->currentItem()->setExpanded(true);
-    AddAllChildren(noteTree->currentItem(), &items);
-    for(int i = 0; i < items.count(); i++){
-        items[i]->setExpanded(true);
-    }
+    noteTree->expandChildren((TreeWidgetItem*)noteTree->currentItem());
 }
 
 void TreeNotes::on_actionCollapse_All_triggered()
 {
-    if(!noteTree->currentItem()){
-        noteTree->collapseAll();
-        return;
-    }
-
-    QVector<QTreeWidgetItem*> items;
-    noteTree->currentItem()->setExpanded(false);
-    AddAllChildren(noteTree->currentItem(), &items);
-    for(int i = 0; i < items.count(); i++){
-        items[i]->setExpanded(false);
-    }
+    noteTree->collapseChildren((TreeWidgetItem*)noteTree->currentItem());
 }
 
-void TreeNotes::AddAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items){
-    for(int i = 0; i < item->childCount(); i++){
-        items->append(item->child(i));
-        AddAllChildren(item->child(i), items);
-    }
-}
 void TreeNotes::on_actionRead_Only_toggled(bool arg1)
 {
     ui->titleEdit->setReadOnly(arg1);
@@ -1075,4 +1028,3 @@ void TreeNotes::on_actionExport_PDF_triggered()
     printer.setOutputFileName(filename);
     ui->messageEdit->document()->print(&printer);
 }
-

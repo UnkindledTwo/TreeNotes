@@ -4,15 +4,22 @@
 #include <QWidget>
 #include <QTreeWidget>
 
+#include "treewidgetitem.h"
+
 namespace Ui {
 class TreeWidget;
 }
 
-class TreeWidget : public QTreeWidgetItem
+class TreeWidget : public QTreeWidget
 {
     Q_OBJECT
 
 public:
+    void expandChildren(TreeWidgetItem *i);
+    void collapseChildren(TreeWidgetItem *i);
+    void setDragDrop(bool);
+    void addAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items);
+    int noteCount();
     explicit TreeWidget(QWidget *parent = nullptr);
     ~TreeWidget();
 

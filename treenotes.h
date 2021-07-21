@@ -2,7 +2,6 @@
 #define TREENOTES_H
 
 #include <QMainWindow>
-#include <QTreeWidget>
 #include <QDebug>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -36,13 +35,15 @@
 #include <QtWin>
 #endif
 
-#include "treewidgetitem.h"
+#include "Dialogs/settingsdialog.h"
 #include "Dialogs/iconselectordialog.h"
-#include "plaintextedit.h"
 #include "Dialogs/macrohelp.h"
+
+#include "plaintextedit.h"
+#include "treewidgetitem.h"
 #include "undoitem.h"
 #include "appconfig.h"
-#include "Dialogs/settingsdialog.h"
+#include "treewidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class TreeNotes; }
@@ -68,7 +69,6 @@ private slots:
     void Delete(QTreeWidgetItem *target);
     void ReadAppConfig(struct app_config appConfig);
     void ReadQSettings();
-    int NoteCount();
     void RefreshLabels();
     void InitStatusLabels();
     void InitShortcuts();
@@ -83,10 +83,8 @@ private slots:
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
     void ShowContextMenu(const QPoint &pos);
-    void SetNoteTreeDragDrop(bool);
     void CleanBackups(int max, QString backupsDir);
     void setStar(TreeWidgetItem*, bool);
-    void AddAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items);
     void ApplyMacroVector();
 
     QString boolToString(bool a);
@@ -113,11 +111,8 @@ private slots:
     void on_actionStar_Unstar_triggered();
     void on_actionExpand_All_triggered();
     void on_actionCollapse_All_triggered();
-
     void on_actionRead_Only_toggled(bool arg1);
-
     void on_titleEdit_textChanged(const QString &arg1);
-
     void on_actionExport_PDF_triggered();
 
 private:
@@ -125,7 +120,7 @@ private:
 
     app_config appConfig;
 
-    QTreeWidget *noteTree;
+    TreeWidget *noteTree;
     QSplitter *splitter;
 
     QLabel *noteCntLabel;
