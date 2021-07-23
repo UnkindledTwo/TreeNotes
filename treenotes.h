@@ -136,5 +136,6 @@ private:
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"
 #define SHORTCUT_JUMP_TITLE "Ctrl+J"
+#define SHORTCUT_JUMP_TREE "Ctrl+K"
 
 #endif // TREENOTES_H

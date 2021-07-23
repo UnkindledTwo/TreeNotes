@@ -73,7 +73,7 @@
        </font>
       </property>
       <property name="focusPolicy">
-       <enum>Qt::NoFocus</enum>
+       <enum>Qt::StrongFocus</enum>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -104,6 +104,9 @@
       </property>
       <property name="sortingEnabled">
        <bool>false</bool>
+      </property>
+      <property name="allColumnsShowFocus">
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>true</bool>

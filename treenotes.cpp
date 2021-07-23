@@ -355,6 +355,7 @@ void TreeNotes::Save(TreeWidgetItem *target){
 
     target->hScrollbarPos = ui->messageEdit->horizontalScrollBar()->value();
     target->vScrollbarPos = ui->messageEdit->verticalScrollBar()->value();
+    target->cursorpos = ui->messageEdit->textCursor().position();
 
     on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
 
@@ -389,8 +390,9 @@ part2:
     ui->messageEdit->fastSetPlainText(currentItem->message);
     ui->titleEdit->setText(currentItem->text(0));
 
-    //ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollbarPos);
-    //ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollbarPos);
+    ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollbarPos);
+    ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollbarPos);
+    ui->messageEdit->setPosition(currentItem->cursorpos);
 
     if(currentItem->readOnly != ui->messageEdit->isReadOnly()){
         ui->messageEdit->setReadOnly(currentItem->readOnly);
@@ -566,6 +568,16 @@ void TreeNotes::InitShortcuts(){
 
     QShortcut *jumpToTitleBox = new QShortcut(QKeySequence(SHORTCUT_JUMP_TITLE), this);
     connect(jumpToTitleBox, &QShortcut::activated, this, [&](){ui->titleEdit->setFocus();});
+
+    QShortcut *jumpToTree = new QShortcut(QKeySequence(SHORTCUT_JUMP_TREE), this);
+    connect(jumpToTree, &QShortcut::activated, this, [&](){
+        if(!noteTree->currentItem()){
+            if(noteTree->topLevelItem(0)){
+                noteTree->setCurrentItem(noteTree->topLevelItem(0));
+            }
+        }
+        noteTree->setFocus();
+    });
 }
 
 void TreeNotes::InitStatusLabels(){

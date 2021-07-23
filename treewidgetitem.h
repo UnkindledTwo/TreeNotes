@@ -24,6 +24,7 @@ public:
 
     int hScrollbarPos;
     int vScrollbarPos;
+    int cursorpos = 0;
 
     bool readOnly = false;
 };

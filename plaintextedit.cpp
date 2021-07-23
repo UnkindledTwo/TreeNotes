@@ -310,7 +310,11 @@ HighlightItem PlainTextEdit::regexVectorItem(
 void PlainTextEdit::initRegexVector(){
     //regexVector.append(regexVectorItem("(http|https)://[^\\n].*", Qt::blue, Qt::white));
     regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*",  Qt::blue, Qt::white,  false, false, true));
-    regexVector.append(regexVectorItem("\\*{2}.*?\\*{2}", Qt::black, Qt::white, true));
+
+    regexVector.append(regexVectorItem("\\*([^*].*?[^*])\\*", Qt::black, Qt::white, false, true));
+    regexVector.append(regexVectorItem("\\*{2}([^*].*?[^*])\\*{2}", Qt::black, Qt::white, true));
+    regexVector.append(regexVectorItem("\\*{3}([^*].*?[^*])\\*{3}", Qt::black, Qt::white, true, true));
+
     regexVector.append(regexVectorItem("✔.*",  Qt::darkGreen, Qt::white));
     regexVector.append(regexVectorItem("✖.*", Qt::darkRed, Qt::white));
     regexVector.append(regexVectorItem("λ.*", QColor(8, 129, 199), Qt::white));
