@@ -1400,6 +1400,7 @@ QListView
     background-color: ^view:background^;
     border: 0em solid black;
 	show-decoration-selected: 0;
+	outline: 0;
 }
 
 
@@ -1489,7 +1490,7 @@ QListView::item:!selected:hover,
 QTreeView::item:!selected:hover
 {
     background-color: ^view:hover^;
-    outline: none;
+    outline: 0;
     color: ^foreground^;
     padding: 0.13em;
 }

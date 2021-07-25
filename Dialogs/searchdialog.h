@@ -7,6 +7,7 @@
 #include <QKeyEvent>
 
 #include "plaintextedit.h"
+#include "searchresultdialog.h"
 
 namespace Ui {
 class SearchDialog;

@@ -19,6 +19,7 @@ SOURCES += \
     Dialogs/iconselectordialog.cpp \
     Dialogs/macrohelp.cpp \
     Dialogs/searchdialog.cpp \
+    Dialogs/searchresultdialog.cpp \
     Dialogs/settingsdialog.cpp \
     highlightitem.cpp \
     main.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     Dialogs/iconselectordialog.h \
     Dialogs/macrohelp.h \
     Dialogs/searchdialog.h \
+    Dialogs/searchresultdialog.h \
     Dialogs/settingsdialog.h \
     appconfig.h \
     highlightitem.h \
@@ -47,6 +49,7 @@ FORMS += \
     Dialogs/iconselectordialog.ui \
     Dialogs/macrohelp.ui \
     Dialogs/searchdialog.ui \
+    Dialogs/searchresultdialog.ui \
     Dialogs/settingsdialog.ui \
     plaintextedit.ui \
     treenotes.ui \

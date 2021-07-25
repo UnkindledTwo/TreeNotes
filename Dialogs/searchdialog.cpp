@@ -25,6 +25,7 @@ void SearchDialog::on_bCancel_clicked()
 void SearchDialog::on_bSearch_clicked()
 {
     PlainTextEdit *parent = (PlainTextEdit*)this->parent();
+    SearchResultDialog *srd = new SearchResultDialog(parent, parent);
 
     QRegularExpression r;
     r.setPattern(ui->searchBox->text());
@@ -33,13 +34,36 @@ void SearchDialog::on_bSearch_clicked()
         r.setPatternOptions(r.patternOptions() | r.CaseInsensitiveOption);
     }
 
-    QRegularExpressionMatch match = r.match(parent->toPlainText());
-    if(match.hasMatch()){
-        qDebug() << "Match";
-        parent->select(match.capturedStart(), match.capturedEnd());
-        this->close();
-        parent->setFocus();
+    int row = 0;
+    QRegularExpressionMatchIterator i(r.globalMatch(parent->toPlainText()));
+    while(i.hasNext()){
+        QRegularExpressionMatch match(i.next());
+        if(match.hasMatch()){
+            qDebug() << "Match";
+            srd->table()->setRowCount(srd->table()->rowCount()+1);
+            QTableWidgetItem *i = new QTableWidgetItem();
+            i->setText(match.captured());
+            srd->table()->setItem(row, 0, i);
+            QTextCursor c = parent->textCursor();
+            c.setPosition(match.capturedStart());
+            int a = c.blockNumber();
+            QTableWidgetItem *i1 = new QTableWidgetItem();
+            i1->setText(QString::number(a));
+            srd->table()->setItem(row, 1, i1);
+            QTableWidgetItem *i3 = new QTableWidgetItem();
+            i3->setText(QString::number(match.capturedStart()));
+            srd->table()->setItem(row, 2, i3);
+            QTableWidgetItem *i2 = new QTableWidgetItem();
+            c.select(QTextCursor::SelectionType::BlockUnderCursor);
+            i2->setText(c.selectedText());
+            srd->table()->setItem(row, 3, i2);
+            row++;
+        }
     }
+
+    this->close();
+    srd->setFont(this->font());
+    srd->exec();
 
 }
 

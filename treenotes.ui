@@ -405,6 +405,12 @@
    <property name="text">
     <string>Export PDF</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
   </action>
  </widget>
  <customwidgets>
