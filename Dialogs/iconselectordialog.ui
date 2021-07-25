@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>Select an Icon</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="1,2">
-   <item row="2" column="1">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="1,2,0">
+   <item row="2" column="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -30,7 +30,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="2" column="0" colspan="2">
     <widget class="QComboBox" name="iconBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -49,7 +49,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0" colspan="3">
     <widget class="QTreeWidget" name="treeWidget">
      <property name="animated">
       <bool>true</bool>
@@ -62,12 +62,51 @@
        <string>New Column</string>
       </property>
      </column>
+     <item>
+      <property name="text">
+       <string>Parent 1</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Child 1</string>
+       </property>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Parent 2</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Child 2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Child 3</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Child 4</string>
+        </property>
+       </item>
+      </item>
+     </item>
+     <item>
+      <property name="text">
+       <string>Parent 3</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Child 5</string>
+       </property>
+      </item>
+     </item>
     </widget>
    </item>
   </layout>
  </widget>
  <tabstops>
-  <tabstop>iconBox</tabstop>
   <tabstop>treeWidget</tabstop>
  </tabstops>
  <resources/>

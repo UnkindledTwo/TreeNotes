@@ -90,6 +90,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     connect(this, &PlainTextEdit::cursorPositionChanged, this, &PlainTextEdit::highlightCurrentLine);
 
 
+
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){

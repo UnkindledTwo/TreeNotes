@@ -1402,6 +1402,7 @@ QListView
 	show-decoration-selected: 0;
 }
 
+
 QTreeView:selected,
 QTreeView:!selected,
 QListView:selected,
@@ -1488,7 +1489,7 @@ QListView::item:!selected:hover,
 QTreeView::item:!selected:hover
 {
     background-color: ^view:hover^;
-    outline: 0;
+    outline: none;
     color: ^foreground^;
     padding: 0.13em;
 }
@@ -1707,6 +1708,7 @@ QAbstractItemView::item:selected:!active
     background: ^view:hover^;
 	border-bottom: 3px solid ^highlight:dark^;
 }
+
 
 /* Use background with qlineargradient to avoid ugly border on widget. */
 QAbstractItemView::item:selected:active

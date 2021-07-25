@@ -1402,6 +1402,7 @@ QListView
 	show-decoration-selected: 0;
 }
 
+
 QTreeView:selected,
 QTreeView:!selected,
 QListView:selected,
@@ -1488,7 +1489,7 @@ QListView::item:!selected:hover,
 QTreeView::item:!selected:hover
 {
     background-color: rgba(61, 173, 232, 0.3);
-    outline: 0;
+    outline: none;
     color: #eff0f1;
     padding: 0.13em;
 }
@@ -1707,6 +1708,7 @@ QAbstractItemView::item:selected:!active
     background: rgba(61, 173, 232, 0.3);
 	border-bottom: 3px solid #2a79a3;
 }
+
 
 /* Use background with qlineargradient to avoid ugly border on widget. */
 QAbstractItemView::item:selected:active

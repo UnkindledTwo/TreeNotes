@@ -23,11 +23,14 @@
 #include <QtConcurrent>
 #include <QPushButton>
 #include <QPrinter>
+#include <QVariantAnimation>
 
+/*
 //#include <QtXml>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomNode>
+*/
 
 //Win only
 //#include <QtWinExtras>

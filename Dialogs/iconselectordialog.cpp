@@ -7,17 +7,6 @@ IconSelectorDialog::IconSelectorDialog(QWidget *parent, QVector<QIcon> iconVecto
 {
     ui->setupUi(this);
 
-    i1 = new QTreeWidgetItem();
-    i1->setText(0, "Parent1");
-    i1->setExpanded(true);
-    i2 = new QTreeWidgetItem();
-    i2->setText(0, "Child1");
-    i3 = new QTreeWidgetItem();
-    i3->setText(0, "Parent2");
-    i1->addChild(i2);
-    ui->treeWidget->addTopLevelItem(i1);
-    ui->treeWidget->addTopLevelItem(i3);
-
     for(int i = 0; i < iconVector.count(); i++){
         icons.append(iconVector[i]);
     }
@@ -27,6 +16,7 @@ IconSelectorDialog::IconSelectorDialog(QWidget *parent, QVector<QIcon> iconVecto
     }
 
     ui->iconBox->setCurrentIndex(initialPosition);
+    ui->iconBox->setFixedSize(QSize(60,36));
 }
 
 IconSelectorDialog::~IconSelectorDialog()
@@ -36,11 +26,27 @@ IconSelectorDialog::~IconSelectorDialog()
 
 void IconSelectorDialog::on_iconBox_currentIndexChanged(const QString &arg1)
 {
+    QTreeWidgetItemIterator it(ui->treeWidget);
+    while(*it){
+        (*it)->setIcon(0, icons[ui->iconBox->currentIndex()]);
+        ++it;
+    }
     selectedIcon = icons[ui->iconBox->currentIndex()];
-    i1->setIcon(0, icons[ui->iconBox->currentIndex()]);
-    i2->setIcon(0, icons[ui->iconBox->currentIndex()]);
-    i3->setIcon(0, icons[ui->iconBox->currentIndex()]);
-
     index = ui->iconBox->currentIndex();
+}
+
+void IconSelectorDialog::copyFrom(TreeWidget *w){
+    auto mo = w->metaObject();
+    do{
+        for(int i = mo->propertyOffset(); i < mo->propertyCount(); i++){
+            ui->treeWidget->setProperty(mo->property(i).name(), mo->property(i).read(w));
+        }
+    }
+    while ((mo = mo->superClass()));
+    ui->treeWidget->resizeColumnToContents(1);
+    ui->treeWidget->expandAll();
+    ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->treeWidget->resizeColumnToContents(1);
+
 }
 

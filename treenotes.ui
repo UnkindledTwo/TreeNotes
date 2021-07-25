@@ -143,8 +143,14 @@
      <x>0</x>
      <y>0</y>
      <width>1209</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI</family>
+     <pointsize>9</pointsize>
+    </font>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">

@@ -5,6 +5,11 @@
 #include <QVector>
 #include <QStyle>
 #include <QTreeWidget>
+#include <QMetaObject>
+#include <QDebug>
+#include <QTreeWidgetItemIterator>
+#include <QMetaProperty>
+#include "treewidget.h"
 
 namespace Ui {
 class IconSelectorDialog;
@@ -16,6 +21,7 @@ class IconSelectorDialog : public QDialog
 
 public:
 
+    void copyFrom(TreeWidget *w);
     explicit IconSelectorDialog(QWidget *parent = nullptr, QVector<QIcon> iconVector = QVector<QIcon>(), int initialPosition = 0);
     ~IconSelectorDialog();
 
@@ -30,10 +36,6 @@ private:
     Ui::IconSelectorDialog *ui;
 
     QVector<QIcon> icons;
-
-    QTreeWidgetItem *i1;
-    QTreeWidgetItem *i2;
-    QTreeWidgetItem *i3;
 };
 
 #endif // ICONSELECTORDIALOG_H

@@ -355,7 +355,7 @@ void TreeNotes::Save(TreeWidgetItem *target){
 
     target->hScrollbarPos = ui->messageEdit->horizontalScrollBar()->value();
     target->vScrollbarPos = ui->messageEdit->verticalScrollBar()->value();
-    target->cursorpos = ui->messageEdit->textCursor().position();
+    target->cursorpos = savedPos;
 
     on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
 
@@ -523,6 +523,7 @@ void TreeNotes::on_actionSet_Icon_triggered()
     IconSelectorDialog *isd = new IconSelectorDialog(this, iconVector, ((TreeWidgetItem*)noteTree->currentItem())->iconVectorIndex);
 
     isd->setFont(this->font());
+    isd->copyFrom(noteTree);
     if(isd->exec()){
         noteTree->currentItem()->setIcon(0, isd->selectedIcon);
         ((TreeWidgetItem*)noteTree->currentItem())->iconVectorIndex = isd->index;
