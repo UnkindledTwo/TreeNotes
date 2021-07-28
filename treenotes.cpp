@@ -16,6 +16,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     this->setFocusPolicy(Qt::StrongFocus);
     this->setFocus();
 
+    /*
     //Make an app config, this is the default config used when the settings in file are not found.
     appConfig.notetree_select_new_items = false;
     appConfig.notetree_alternating_row_colors = true;
@@ -33,6 +34,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     appConfig.use_native_theme = false;
     appConfig.dark_mode = true;
     appConfig.highlightColor = QColor(238,238,238);
+*/
 
     //Init the splitter
     splitter = new QSplitter();
@@ -122,8 +124,12 @@ void TreeNotes::ShowContextMenu(const QPoint &pos){
     contextMenu.addAction(ui->actionMove_Up);
     contextMenu.addAction(ui->actionMove_Down);
     contextMenu.addAction(ui->actionFocus_Parent);
+    contextMenu.addAction(ui->actionStar_Unstar);
+    contextMenu.addAction(ui->actionRead_Only);
+    contextMenu.addAction(ui->actionCollapse_All);
+    contextMenu.addAction(ui->actionExpand_All);
 
-   contextMenu.exec(mapToGlobal(pos));
+    contextMenu.exec(mapToGlobal(pos));
 }
 
 void TreeNotes::ReadQSettings(){
@@ -260,7 +266,6 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     }
     ui->messageEdit->setPairCompletion(appConfig.pair_completion);
     noteTree->setDragDrop(appConfig.notetree_drag_drop);
-    ui->messageEdit->setHighlightBrush(QBrush(appConfig.highlightColor));
     ui->messageEdit->setLineHighlighting(appConfig.highlight_current_line);
 
     if(appConfig.use_native_theme){

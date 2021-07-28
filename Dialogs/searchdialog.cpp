@@ -7,8 +7,6 @@ SearchDialog::SearchDialog(QPlainTextEdit *parent) :
 {
     ui->setupUi(this);
     ui->searchBox->setFocus();
-    this->adjustSize();
-    this->setFixedSize(this->size());
 }
 
 SearchDialog::~SearchDialog()
@@ -36,10 +34,14 @@ void SearchDialog::on_bSearch_clicked()
 
     int row = 0;
     QRegularExpressionMatchIterator i(r.globalMatch(parent->toPlainText()));
+    if(!i.hasNext()){
+        QMessageBox::warning(this, "No Match", "No match found for:\n"+r.pattern());
+        srd->deleteLater();
+        return;
+    }
     while(i.hasNext()){
         QRegularExpressionMatch match(i.next());
         if(match.hasMatch()){
-            qDebug() << "Match";
             srd->table()->setRowCount(srd->table()->rowCount()+1);
             QTableWidgetItem *i = new QTableWidgetItem();
             i->setText(match.captured());
@@ -63,8 +65,7 @@ void SearchDialog::on_bSearch_clicked()
 
     this->close();
     srd->setFont(this->font());
-    srd->exec();
-
+    srd->show();
 }
 
 void SearchDialog::keyPressEvent(QKeyEvent *e){

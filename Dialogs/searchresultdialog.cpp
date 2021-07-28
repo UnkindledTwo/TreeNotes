@@ -1,7 +1,7 @@
 #include "searchresultdialog.h"
 #include "ui_searchresultdialog.h"
 
-SearchResultDialog::SearchResultDialog(PlainTextEdit *pte, QWidget *parent) :
+SearchResultDialog::SearchResultDialog(QPlainTextEdit *pte, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SearchResultDialog)
 {
@@ -25,7 +25,6 @@ void SearchResultDialog::on_tableWidget_cellDoubleClicked(int row, int column)
     c.setPosition(table()->item(row, 2)->text().toInt());
     c.setPosition(c.position() + table()->item(row, 0)->text().length(), QTextCursor::KeepAnchor);
     pte->setTextCursor(c);
-    this->close();
     pte->setFocus();
 }
 
@@ -33,5 +32,6 @@ void SearchResultDialog::on_tableWidget_cellDoubleClicked(int row, int column)
 void SearchResultDialog::on_tableWidget_cellChanged(int row, int column)
 {
     table()->resizeColumnsToContents();
+    ui->resLbl->setText(QString::number(table()->rowCount()) + ((table()->rowCount() > 1) ? " Results" : " Result"));
 }
 

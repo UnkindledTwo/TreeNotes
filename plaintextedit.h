@@ -31,7 +31,6 @@ class PlainTextEdit : public QPlainTextEdit
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
     Q_PROPERTY(bool lineHighlighting READ lineHighlighting WRITE setLineHighlighting NOTIFY lineHighlightingChanged)
     Q_PROPERTY(bool symbolHighlighting READ symbolHighlighting WRITE setSymbolHighlighting NOTIFY symbolHighlightingChanged)
-    Q_PROPERTY(QBrush highlightBrush READ highlightBrush WRITE setHighlightBrush NOTIFY highlightBrushChanged)
 
 public:
     void fastSetPlainText(QString);
@@ -53,9 +52,6 @@ public:
 
     void highlightCurrentLine();
 
-    QBrush highlightBrush();
-    void setHighlightBrush(QBrush b);
-
     bool lineHighlighting();
     void setLineHighlighting(bool l);
 
@@ -65,7 +61,6 @@ public:
 signals:
     void pairCompletionChanged();
 
-    void highlightBrushChanged();
     void lineHighlightingChanged();
     void symbolHighlightingChanged();
 private slots:

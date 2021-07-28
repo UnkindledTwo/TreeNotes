@@ -49,7 +49,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     QShortcut *find = new QShortcut(QKeySequence("Ctrl+F"), this);
     connect(find, &QShortcut::activated, this, [&](){
         SearchDialog *d = new SearchDialog(this);
-        d->exec();
+        d->show();
     });
 
     QShortcut *makeHeading = new QShortcut(QKeySequence("Alt+H"), this);
@@ -273,15 +273,6 @@ int PlainTextEdit::currentLine(){
 
 int PlainTextEdit::currentColumn(){
     return textCursor().columnNumber() + 1;
-}
-
-QBrush PlainTextEdit::highlightBrush(){
-    return m_highligtBrush;
-}
-
-void PlainTextEdit::setHighlightBrush(QBrush b){
-    this->m_highligtBrush = b;
-    emit highlightBrushChanged();
 }
 
 HighlightItem PlainTextEdit::regexVectorItem(

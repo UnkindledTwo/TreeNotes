@@ -96,6 +96,9 @@
         <height>20</height>
        </size>
       </property>
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
       <property name="indentation">
        <number>10</number>
       </property>
@@ -212,7 +215,7 @@
    <property name="font">
     <font>
      <family>Segoe UI</family>
-     <pointsize>9</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
    <property name="sizeGripEnabled">

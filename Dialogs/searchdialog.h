@@ -5,6 +5,7 @@
 #include <QPlainTextEdit>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QMessageBox>
 
 #include "plaintextedit.h"
 #include "searchresultdialog.h"
