@@ -41,6 +41,7 @@
 #include "Dialogs/settingsdialog.h"
 #include "Dialogs/iconselectordialog.h"
 #include "Dialogs/macrohelp.h"
+#include "Dialogs/searchinallnotesdialog.h"
 
 #include "plaintextedit.h"
 #include "treewidgetitem.h"
@@ -91,6 +92,7 @@ private slots:
     QString boolToString(bool a);
     bool stringToBool(QString a);
 
+    //UI events
     void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void on_actionAdd_triggered();
     void on_actionSave_triggered();
@@ -115,6 +117,14 @@ private slots:
     void on_actionRead_Only_toggled(bool arg1);
     void on_titleEdit_textChanged(const QString &arg1);
     void on_actionExport_PDF_triggered();
+    void on_actionSearch_In_Current_Note_triggered();
+    void on_actionReplace_All_In_Current_Note_triggered();
+    void on_actionSearch_In_All_Notes_triggered();
+    void on_actionHide_Show_Toolbar_triggered();
+    void on_actionFullscreen_On_Off_triggered();
+    void on_actionHide_Show_Title_2_triggered();
+
+    void on_actionClone_triggered();
 
 private:
     Ui::TreeNotes *ui;

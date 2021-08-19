@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <QTreeWidget>
 #include <QDateTime>
-
+#include <QDebug>
 
 class TreeWidgetItem : public QTreeWidgetItem
 {
@@ -18,7 +18,7 @@ public:
 
     QDateTime lastEdited = QDateTime::currentDateTime();
 
-    TreeWidgetItem *_clone();
+    TreeWidgetItem *clone();
 
     bool starred = false;
 
@@ -27,6 +27,8 @@ public:
     int cursorpos = 0;
 
     bool readOnly = false;
+
+    QString toString();
 };
 
 #endif // TREEWIDGETITEM_H

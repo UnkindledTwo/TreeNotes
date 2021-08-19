@@ -25,15 +25,6 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
         this->setTextCursor(textCursor);
     });
 
-    QShortcut *newLine = new QShortcut(QKeySequence("Ctrl+O"), this);
-    connect(newLine, &QShortcut::activated, this, [&](){    qDebug() << "Shortcut";
-        if(this->isReadOnly()) return;
-        QTextCursor textCursor = this->textCursor();
-        textCursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor, 1);
-        this->setTextCursor(textCursor);
-        this->insertPlainText("\n");
-    });
-
     QShortcut *selectLine = new QShortcut(QKeySequence("Ctrl+L"), this);
     connect(selectLine, &QShortcut::activated, this, [&](){
         qDebug() << "Shortcut";
@@ -46,11 +37,18 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
         this->setTextCursor(textCursor1);
     });
 
+    /*
     QShortcut *find = new QShortcut(QKeySequence("Ctrl+F"), this);
     connect(find, &QShortcut::activated, this, [&](){
-        SearchDialog *d = new SearchDialog(this);
-        d->show();
+        this->search();
     });
+
+    QShortcut *replaceAll = new QShortcut(QKeySequence("Ctrl+R"), this);
+    connect(replaceAll, &QShortcut::activated, this, [&](){
+       this->replaceAll();
+    });
+    */
+
 
     QShortcut *makeHeading = new QShortcut(QKeySequence("Alt+H"), this);
     connect(makeHeading, &QShortcut::activated, this, [&](){
@@ -80,17 +78,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
 
     initPairCompletionMap();
-/*
-    QTimer *t = new QTimer(this);
-    t->setInterval(10);
-    connect(t, &QTimer::timeout, this, [&](){
-       highlightCurrentLine();
-    });
-    t->start();*/
     connect(this, &PlainTextEdit::cursorPositionChanged, this, &PlainTextEdit::highlightCurrentLine);
-
-
-
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
@@ -111,7 +99,7 @@ void PlainTextEdit::highlightCurrentLine(){
     int pos = c.position();
     QTextCharFormat fmt;
     if(!lineHighlighting())
-    goto noLineHighlight;
+        goto noLineHighlight;
 
     fmt.setBackground(this->palette().color(QPalette::Base));
 
@@ -127,10 +115,9 @@ void PlainTextEdit::highlightCurrentLine(){
         else{
             fmt.setBackground(backColor.lighter(125));
         }
-        //fmt.setBackground(highlightBrush());
     }
 
-    noLineHighlight:
+noLineHighlight:
 
     c.setPosition(pos);
     c.movePosition(QTextCursor::StartOfBlock);
@@ -152,7 +139,6 @@ void PlainTextEdit::highlightCurrentLine(){
                 //qDebug() << "Match, capturedstart" << match.capturedStart() << "capturedend" << match.capturedEnd();
                 c.setPosition(match.capturedStart());
                 c.setPosition(match.capturedEnd(), QTextCursor::KeepAnchor);
-                //fmt.setBackground(regexVector.at(i).background);
                 if(regexVector.at(i).foreground == Qt::black) fmt.setForeground(this->palette().color(QPalette::Foreground));
                 else
                     if(darkTheme)
@@ -160,20 +146,11 @@ void PlainTextEdit::highlightCurrentLine(){
                     else
                         fmt.setForeground(regexVector.at(i).foreground.darker(105));
 
-                /*
-                        if(regexVector.at(i).highlightFontFamily == HighlightFontFamily::Monospace){
-                            fmt.setFontFamily(monospaceFontFamily);
-                        }
-                        */
-
                 if(regexVector.at(i).isBold) fmt.setFontWeight(QFont::Bold);
                 if(regexVector.at(i).isItalic) fmt.setFontItalic(true);
                 if(regexVector.at(i).isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
                 if(regexVector.at(i).isStrikeThrough) fmt.setFontStrikeOut(true);
                 else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
-
-                //if(regexVector.at(i).fontSize == HighlightFontSize::Double) fmt.setFontPointSize(trunc(this->font().pointSize() * 2));
-                //if(regexVector.at(i).highlightFontSize == HighlightFontSize::Half) fmt.setFontPointSize(trunc(this->font().pointSize() / 2));
 
                 c.setCharFormat(fmt);
                 fmt.setFont(this->font());
@@ -217,14 +194,30 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
         }
         */
 
-        insertPlainText(pairCompletionMap[e->text()]);
-        moveCursor(QTextCursor::Left, QTextCursor::MoveAnchor);
+        //Check if there is text selected
+        if(textCursor().selectedText().length() == 0){
+            insertPlainText(pairCompletionMap[e->text()]);
+            moveCursor(QTextCursor::Left, QTextCursor::MoveAnchor);
+        }
+        else{
+            QTextCursor c = this->textCursor();
+            //Save the end and start indices of selection
+            int selEnd = c.selectionEnd(), selStart = c.selectionStart();
+            QString selectedText = c.selectedText();
+            c.removeSelectedText();
+            c.setPosition(selStart);
+            c.insertText(e->text());
+            c.insertText(selectedText);
+            c.insertText(pairCompletionMap[e->text()]);
+            this->setTextCursor(c);
+            goto cancelKeyPress;
+        }
     }
 
 noPairCompletion:
     QPlainTextEdit::keyPressEvent(e);
-
-    //highlightCurrentLine();
+cancelKeyPress:
+    ;
 }
 
 void PlainTextEdit::TextChanged(){
@@ -290,13 +283,7 @@ HighlightItem PlainTextEdit::regexVectorItem(
     h.isUnderLine = isUnderLine;
     h.isBold = isBold;
     h.isItalic = isItalic;
-    /*
-    h.highlightFontSize = fs;
-    isMonospaced ? h.highlightFontFamily = HighlightFontFamily::Monospace :
-            h.highlightFontFamily = HighlightFontFamily::Regular;
-            */
     return h;
-    //    return QPair<QString, QPair<QColor, QColor>>(exp, QPair<QColor, QColor>(fore, back));
 }
 
 void PlainTextEdit::initRegexVector(){
@@ -359,14 +346,45 @@ void PlainTextEdit::fastAppend(QString m){
     QTextDocument *doc = this->document();
     QTextCursor c(doc);
     c.movePosition(QTextCursor::End);
-    //c.beginEditBlock();
-    //c.insertBlock();
     c.insertText(m);
-    //c.endEditBlock();
 }
 
 void PlainTextEdit::fastClear(){
     this->document()->setPlainText("");
+}
+
+void PlainTextEdit::search()
+{
+    SearchDialog *d = new SearchDialog(this);
+    d->show();
+}
+
+void PlainTextEdit::replaceAll()
+{
+    bool lookForOk;
+    QString lookFor = QInputDialog::getText(
+                this,
+                "Replace All",
+                "Look For:",
+                QLineEdit::Normal,
+                this->textCursor().selectedText(),
+                &lookForOk
+                );
+    if(!lookForOk) return;
+
+    bool replaceWithOk;
+    QString replaceWith = QInputDialog::getText(
+                this,
+                "Replace All",
+                "Replace With:",
+                QLineEdit::Normal,
+                "",
+                &replaceWithOk
+                );
+    if(lookFor.isEmpty() || !replaceWithOk) return;
+
+    setPlainText(toPlainText().replace(lookFor, replaceWith));
+
 }
 
 void PlainTextEdit::fastSetPlainText(QString m){

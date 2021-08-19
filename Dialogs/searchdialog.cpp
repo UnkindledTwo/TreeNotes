@@ -14,63 +14,35 @@ SearchDialog::~SearchDialog()
     delete ui;
 }
 
-void SearchDialog::on_bCancel_clicked()
-{
-    this->close();
+void SearchDialog::keyPressEvent(QKeyEvent *e){
+    if(e->key() == Qt::Key_Return){
+        on_buttonBox_accepted();
+    }
+    if(e->key() == Qt::Key_Escape){
+        on_buttonBox_rejected();
+    }
 }
 
 
-void SearchDialog::on_bSearch_clicked()
+void SearchDialog::on_buttonBox_accepted()
 {
-    PlainTextEdit *parent = (PlainTextEdit*)this->parent();
-    SearchResultDialog *srd = new SearchResultDialog(parent, parent);
-
-    QRegularExpression r;
-    r.setPattern(ui->searchBox->text());
-
-    if(ui->caseInsensitive->isChecked()){
-        r.setPatternOptions(r.patternOptions() | r.CaseInsensitiveOption);
-    }
-
-    int row = 0;
-    QRegularExpressionMatchIterator i(r.globalMatch(parent->toPlainText()));
-    if(!i.hasNext()){
-        QMessageBox::warning(this, "No Match", "No match found for:\n"+r.pattern());
-        srd->deleteLater();
+    if(ui->searchBox->text().isEmpty()) {
+        QMessageBox::warning(this, "Warning", "Search String <b>Can't</b> Be Empty");
         return;
     }
-    while(i.hasNext()){
-        QRegularExpressionMatch match(i.next());
-        if(match.hasMatch()){
-            srd->table()->setRowCount(srd->table()->rowCount()+1);
-            QTableWidgetItem *i = new QTableWidgetItem();
-            i->setText(match.captured());
-            srd->table()->setItem(row, 0, i);
-            QTextCursor c = parent->textCursor();
-            c.setPosition(match.capturedStart());
-            int a = c.blockNumber();
-            QTableWidgetItem *i1 = new QTableWidgetItem();
-            i1->setText(QString::number(a));
-            srd->table()->setItem(row, 1, i1);
-            QTableWidgetItem *i3 = new QTableWidgetItem();
-            i3->setText(QString::number(match.capturedStart()));
-            srd->table()->setItem(row, 2, i3);
-            QTableWidgetItem *i2 = new QTableWidgetItem();
-            c.select(QTextCursor::SelectionType::BlockUnderCursor);
-            i2->setText(c.selectedText());
-            srd->table()->setItem(row, 3, i2);
-            row++;
-        }
-    }
+    PlainTextEdit *parent = (PlainTextEdit*)this->parent();
+    SearchResultDialog *srd = new SearchResultDialog(parent,ui->searchBox->text() , !ui->caseInsensitive->isChecked() , parent);
 
     this->close();
     srd->setFont(this->font());
     srd->show();
+    this->accept();
 }
 
-void SearchDialog::keyPressEvent(QKeyEvent *e){
-    if(e->key() == Qt::Key_Return){
-        on_bSearch_clicked();
-    }
+
+void SearchDialog::on_buttonBox_rejected()
+{
+    this->reject();
+    this->close();
 }
 

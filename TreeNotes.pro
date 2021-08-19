@@ -1,5 +1,7 @@
 QT += core gui xml concurrent printsupport
-win32{
+
+win32
+{
     QT += winextras
 }
 
@@ -19,6 +21,8 @@ SOURCES += \
     Dialogs/iconselectordialog.cpp \
     Dialogs/macrohelp.cpp \
     Dialogs/searchdialog.cpp \
+    Dialogs/searchinallnotesdialog.cpp \
+    Dialogs/searchinallnotesresultdialog.cpp \
     Dialogs/searchresultdialog.cpp \
     Dialogs/settingsdialog.cpp \
     highlightitem.cpp \
@@ -34,6 +38,8 @@ HEADERS += \
     Dialogs/iconselectordialog.h \
     Dialogs/macrohelp.h \
     Dialogs/searchdialog.h \
+    Dialogs/searchinallnotesdialog.h \
+    Dialogs/searchinallnotesresultdialog.h \
     Dialogs/searchresultdialog.h \
     Dialogs/settingsdialog.h \
     appconfig.h \
@@ -49,6 +55,8 @@ FORMS += \
     Dialogs/iconselectordialog.ui \
     Dialogs/macrohelp.ui \
     Dialogs/searchdialog.ui \
+    Dialogs/searchinallnotesdialog.ui \
+    Dialogs/searchinallnotesresultdialog.ui \
     Dialogs/searchresultdialog.ui \
     Dialogs/settingsdialog.ui \
     plaintextedit.ui \

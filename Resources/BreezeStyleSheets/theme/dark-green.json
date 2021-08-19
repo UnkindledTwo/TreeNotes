@@ -6,7 +6,7 @@
     "background": "#31363b",
     "background:alternate": "#31363b",
     //"highlight": "#33b833",
-	"highlight": "rgba(41, 143, 41, 0.99)",
+	"highlight": "rgba(41, 143, 41, 1)",
     "highlight:dark": "#2b992b",
     "highlight:alternate": "#1f991f",
     "midtone": "#76797c",

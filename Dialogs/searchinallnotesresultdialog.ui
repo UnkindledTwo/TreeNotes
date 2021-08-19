@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SearchResultDialog</class>
- <widget class="QDialog" name="SearchResultDialog">
+ <class>SearchInAllNotesResultDialog</class>
+ <widget class="QDialog" name="SearchInAllNotesResultDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -44,7 +44,7 @@
       <number>0</number>
      </property>
      <property name="columnCount">
-      <number>4</number>
+      <number>5</number>
      </property>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>false</bool>
@@ -57,7 +57,7 @@
      </attribute>
      <column>
       <property name="text">
-       <string>Matched</string>
+       <string>Title</string>
       </property>
      </column>
      <column>
@@ -68,6 +68,18 @@
      <column>
       <property name="text">
        <string>Position</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="textAlignment">
+       <set>AlignCenter</set>
+      </property>
+      <property name="icon">
+       <iconset resource="../Resources.qrc">
+        <normaloff>:/Resources/Icons/star.png</normaloff>:/Resources/Icons/star.png</iconset>
       </property>
      </column>
      <column>
@@ -100,13 +112,6 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="bReplace">
-       <property name="text">
-        <string>Replace</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Double Click an Item to Select It</string>
@@ -117,6 +122,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

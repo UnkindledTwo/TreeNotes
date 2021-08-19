@@ -16,29 +16,10 @@ TreeNotes::TreeNotes(QWidget *parent)
     this->setFocusPolicy(Qt::StrongFocus);
     this->setFocus();
 
-    /*
-    //Make an app config, this is the default config used when the settings in file are not found.
-    appConfig.notetree_select_new_items = false;
-    appConfig.notetree_alternating_row_colors = true;
-    appConfig.notetree_indentation_size = 20;
-    appConfig.opacity = 100.0;
-    appConfig.notetree_animated = true;
-    appConfig.doubleClickToEditMessage = true;
-    appConfig.layoutMargin = 5;
-    appConfig.splitter_handle_width = 6; appConfig.confirm_delete = true;
-    appConfig.line_wrapping = true;
-    appConfig.pair_completion = true;
-    appConfig.notetree_drag_drop = true;
-    appConfig.maximum_backups = 10;
-    appConfig.highlight_current_line = true;
-    appConfig.use_native_theme = false;
-    appConfig.dark_mode = true;
-    appConfig.highlightColor = QColor(238,238,238);
-*/
-
-    //Init the splitter
+    //Initialize the splitter
     splitter = new QSplitter();
     splitter->addWidget(noteTree);
+
 
     QWidget* wrapper = new QWidget();
     ui->verticalLayout->setMargin(0);
@@ -57,7 +38,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     connect(timer, &QTimer::timeout, this,[&](){RefreshLabels();});
     timer->start();
 
-    // -{\(Windows only)|}- set borders of noteTree, messageEdit and titleEdit to the accent color of Windows 10
+    //Set borders of noteTree, messageEdit and titleEdit to the accent color of Windows
 #ifdef Q_OS_WIN
     QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().light().name() + ";";
     styleSheet += "border-radius: 2px;";
@@ -97,6 +78,7 @@ TreeNotes::TreeNotes(QWidget *parent)
     ui->messageEdit->setCursorWidth(2);
     ui->messageEdit->setSymbolHighlighting(true);
 
+    //Make sure the noteTree's column sizes are accurate, kinda hacky
     noteTree->expandAll();
     noteTree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     noteTree->resizeColumnToContents(1);
@@ -111,6 +93,7 @@ TreeNotes::~TreeNotes()
 }
 
 void TreeNotes::ShowContextMenu(const QPoint &pos){
+    //Context Menu Event
     if(!noteTree->rect().contains(pos)){
         return;
     }
@@ -137,13 +120,19 @@ void TreeNotes::ReadQSettings(){
 
     //QSettings settings("Unkindled", "NoteTree", this);
     QSettings settings("settings.ini", QSettings::IniFormat);
+
+    //Read the saved font
     QFont loadedFont = qvariant_cast<QFont>(settings.value("Text_Editor_Font", this->font()));
     ui->messageEdit->setFont(loadedFont);
     ui->titleEdit->setFont(loadedFont);
 
-
     ui->ToolBar->setHidden(settings.value("toolbar_hidden", false).toBool());
+    ui->titleEdit->setHidden(settings.value("title_hidden", false).toBool());
+
     //Set window size
+    if(settings.value("fullscreen", false).toBool()){
+        this->showFullScreen();
+    }
     if(settings.value("maximized", false).toBool()){
         this->showMaximized();
     }
@@ -160,7 +149,9 @@ void TreeNotes::ReadQSettings(){
         ((QSplitter*)noteTree->parent())->setSizes({settings.value("s1", this->width() / 2).toInt(), settings.value("s2", this->width() / 2).toInt()});
     }
 
+    //Appconfig section, these can be editable from settings.ini or from the application
     settings.beginGroup("AppConfig");
+
     appConfig.notetree_select_new_items = settings.value("notetree_select_new_items", appConfig.notetree_select_new_items).toBool();
     appConfig.notetree_alternating_row_colors = settings.value("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors).toBool();
     appConfig.notetree_indentation_size = settings.value("notetree_indentation_size", appConfig.notetree_indentation_size).toInt();
@@ -177,7 +168,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.highlight_current_line = settings.value("highlight_current_line", appConfig.highlight_current_line).toBool();
     appConfig.use_native_theme = settings.value("use_native_theme", appConfig.use_native_theme).toBool();
     appConfig.dark_mode = settings.value("dark_mode", appConfig.dark_mode).toBool();
-    //appConfig.highlightColor = qvariant_cast<QColor>(settings.value("highlight_color", appConfig.highlightColor));
+
     settings.endGroup();
     ReadAppConfig(appConfig);
 
@@ -195,9 +186,12 @@ void TreeNotes::saveQSettings(){
     settings.setValue("s1", ((QSplitter*)noteTree->parent())->sizes().at(0));
     settings.setValue("s2", ((QSplitter*)noteTree->parent())->sizes().at(1));
     settings.setValue("toolbar_hidden", ui->ToolBar->isHidden());
+    settings.setValue("title_hidden", ui->titleEdit->isHidden());
+    settings.setValue("fullscreen", this->isFullScreen());
 
 
     settings.beginGroup("AppConfig");
+
     settings.setValue("notetree_select_new_items", appConfig.notetree_select_new_items);
     settings.setValue("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors);
     settings.setValue("notetree_indentation_size", appConfig.notetree_indentation_size);
@@ -214,13 +208,14 @@ void TreeNotes::saveQSettings(){
     settings.setValue("highlight_current_line", appConfig.highlight_current_line);
     settings.setValue("use_native_theme", appConfig.use_native_theme);
     settings.setValue("dark_mode", appConfig.dark_mode);
-    //settings.setValue("highlight_color", appConfig.highlightColor);
+
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
 }
 
 QString TreeNotes::dateTimeNoSpace(){
+    //I don't know what I was thinkink with this, but it works
     QString res = "";
     res.append(QString::number(QDate::currentDate().year()));
     res.append("_");
@@ -242,9 +237,13 @@ void TreeNotes::AttemptSaveBackup(){
     QDir currentDir(qApp->applicationDirPath());
     QDir dir(qApp->applicationDirPath() + "/backup/");
     dir.mkdir(qApp->applicationDirPath() + "/backup/");
+
+    //Move the current save file to the backups directory and rename it to save{date}.xml
     currentDir.rename(qApp->applicationDirPath() + "/save.xml", qApp->applicationDirPath() + "/backup/save" + dateTimeNoSpace() + ".xml");
 
-    if(QFile(qApp->applicationDirPath() + "/save.xml").exists()) qCritical().noquote() << "\n!!!Backup Failed!!!\n";
+    //If the save can't be moved
+    if(QFile(qApp->applicationDirPath() + "/save.xml").exists())
+        qCritical().noquote() << "\n!!!Backup Failed!!!\n";
 
     CleanBackups(appConfig.maximum_backups, dir.absolutePath());
     qDebug() << "AttempSaveBackup() finished";
@@ -291,6 +290,7 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
 
 void TreeNotes::closeEvent(QCloseEvent *e){
     qDebug().noquote() << "\n\n--------------------\nClose Event" << e;
+    //Save the selected item
     if(noteTree->currentItem()){
         Save((TreeWidgetItem*)noteTree->currentItem());
     }
@@ -329,6 +329,7 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
     itemToAdd->message = message;
 
     if(parent == NULL){
+        //New Item has no parent
         noteTree->addTopLevelItem(itemToAdd);
         goto topLevel;
     }
@@ -337,7 +338,6 @@ TreeWidgetItem* TreeNotes::AddNote(TreeWidgetItem *parent, QString text,QString 
     parent->setExpanded(true);
 
     topLevel:
-
     if(appConfig.notetree_select_new_items)
     noteTree->setCurrentItem(itemToAdd);
 
@@ -390,8 +390,6 @@ part2:
     TreeWidgetItem *currentItem = (TreeWidgetItem*)current;
     if(!currentItem){return;}
 
-    //ui->messageEdit->fastClear();
-    //ui->messageEdit->fastAppend(currentItem->message);
     ui->messageEdit->fastSetPlainText(currentItem->message);
     ui->titleEdit->setText(currentItem->text(0));
 
@@ -901,3 +899,56 @@ void TreeNotes::on_actionExport_PDF_triggered()
     printer.setOutputFileName(filename);
     ui->messageEdit->document()->print(&printer);
 }
+
+void TreeNotes::on_actionSearch_In_Current_Note_triggered()
+{
+    ui->messageEdit->search();
+}
+
+
+void TreeNotes::on_actionReplace_All_In_Current_Note_triggered()
+{
+    ui->messageEdit->replaceAll();
+}
+
+
+void TreeNotes::on_actionSearch_In_All_Notes_triggered()
+{
+    SearchInAllNotesDialog *siand = new SearchInAllNotesDialog(this, ui->treeWidget);
+    siand->show();
+}
+
+
+void TreeNotes::on_actionHide_Show_Toolbar_triggered()
+{
+    ui->ToolBar->setHidden(!ui->ToolBar->isHidden());
+}
+
+void TreeNotes::on_actionFullscreen_On_Off_triggered()
+{
+    if(this->isFullScreen()){
+        this->showNormal();
+    }
+    else{
+        this->showFullScreen();
+    }
+}
+
+
+void TreeNotes::on_actionHide_Show_Title_2_triggered()
+{
+    ui->titleEdit->setHidden(!ui->titleEdit->isHidden());
+}
+
+
+void TreeNotes::on_actionClone_triggered()
+{
+    if(!noteTree->currentItem()) return;
+    TreeWidgetItem *item = (TreeWidgetItem*)noteTree->currentItem();
+    if(item->parent()){
+        item->parent()->addChild(item->clone());
+        return;
+    }
+    noteTree->addTopLevelItem(((TreeWidgetItem*)item)->clone());
+}
+

@@ -3,6 +3,8 @@
 #include <QApplication>
 #include <QSplashScreen>
 #include <QDateTime>
+#include <QDebug>
+#include <QLocale>
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +17,8 @@ int main(int argc, char *argv[])
     ss.show();
     w.show();
     ss.finish(&w);
+
+    qDebug() << QLocale().uiLanguages();
 
     return a.exec();
 }

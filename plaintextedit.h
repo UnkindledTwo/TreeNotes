@@ -33,6 +33,9 @@ class PlainTextEdit : public QPlainTextEdit
     Q_PROPERTY(bool symbolHighlighting READ symbolHighlighting WRITE setSymbolHighlighting NOTIFY symbolHighlightingChanged)
 
 public:
+    void search();
+    void replaceAll();
+
     void fastSetPlainText(QString);
     void fastAppend(QString);
     void fastClear();

@@ -24,9 +24,9 @@ public:
     ~SearchDialog();
 
 private slots:
-    void on_bCancel_clicked();
+    void on_buttonBox_accepted();
 
-    void on_bSearch_clicked();
+    void on_buttonBox_rejected();
 
 private:
     Ui::SearchDialog *ui;

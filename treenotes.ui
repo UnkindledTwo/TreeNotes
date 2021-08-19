@@ -181,6 +181,7 @@
     <addaction name="menuText"/>
     <addaction name="actionStar_Unstar"/>
     <addaction name="actionRead_Only"/>
+    <addaction name="actionClone"/>
    </widget>
    <widget class="QMenu" name="menuOther">
     <property name="title">
@@ -206,7 +207,27 @@
     </property>
     <addaction name="actionMacros"/>
    </widget>
+   <widget class="QMenu" name="menuSearch">
+    <property name="title">
+     <string>Search</string>
+    </property>
+    <addaction name="actionSearch_In_Current_Note"/>
+    <addaction name="actionReplace_All_In_Current_Note"/>
+    <addaction name="actionSearch_In_All_Notes"/>
+   </widget>
+   <widget class="QMenu" name="menuAppearance">
+    <property name="title">
+     <string>Appearance</string>
+    </property>
+    <addaction name="actionHide_Show_Note_Tree"/>
+    <addaction name="actionHide_Show_Toolbar"/>
+    <addaction name="actionHide_Show_Title_2"/>
+    <addaction name="separator"/>
+    <addaction name="actionFullscreen_On_Off"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuSearch"/>
+   <addaction name="menuAppearance"/>
    <addaction name="menuOther"/>
    <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
@@ -253,8 +274,6 @@
    <addaction name="actionMove_Down"/>
    <addaction name="actionFocus_Parent"/>
    <addaction name="actionHide_Show_Note_Tree"/>
-   <addaction name="separator"/>
-   <addaction name="actionSet_Font_Text_Editors"/>
    <addaction name="separator"/>
   </widget>
   <action name="actionAdd">
@@ -321,7 +340,7 @@
     <string>Hide/Show Note Tree</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+T</string>
+    <string>F9</string>
    </property>
   </action>
   <action name="actionSave_To_Disk">
@@ -413,6 +432,59 @@
      <family>Segoe UI</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionSearch_In_Current_Note">
+   <property name="text">
+    <string>Search/Replace In Current Note</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionReplace_All_In_Current_Note">
+   <property name="text">
+    <string>Replace All In Current Note</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionSearch_In_All_Notes">
+   <property name="text">
+    <string>Search In All Notes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F</string>
+   </property>
+  </action>
+  <action name="actionHide_Show_Toolbar">
+   <property name="text">
+    <string>Hide/Show Toolbar</string>
+   </property>
+  </action>
+  <action name="actionFullscreen_On_Off">
+   <property name="text">
+    <string>Fullscreen On/Off</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
+   </property>
+  </action>
+  <action name="actionHide_Show_Title_2">
+   <property name="text">
+    <string>Hide/Show Title</string>
+   </property>
+   <property name="shortcut">
+    <string>F10</string>
+   </property>
+  </action>
+  <action name="actionClone">
+   <property name="text">
+    <string>Clone</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+D</string>
    </property>
   </action>
  </widget>
