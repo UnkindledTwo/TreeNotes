@@ -2,7 +2,7 @@ QT += core gui xml concurrent printsupport
 
 win32
 {
-    QT += winextras
+    #QT += winextras
 }
 
 
@@ -63,6 +63,8 @@ FORMS += \
     treenotes.ui \
     treewidget.ui
 
+TRANSLATIONS += Resources/Translations/tr.ts
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
@@ -70,6 +72,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     Resources.qrc\
-    Resources/BreezeStyleSheets/custom.qrc
+    Resources/BreezeStyleSheets/custom.qrc \
+    Translations.qrc
 
 

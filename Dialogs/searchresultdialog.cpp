@@ -37,14 +37,14 @@ void SearchResultDialog::on_tableWidget_cellChanged(int row, int column)
 {
     if(column != table()->columnCount() -1)
         table()->resizeColumnToContents(column);
-    ui->resLbl->setText(QString::number(table()->rowCount()) + ((table()->rowCount() > 1) ? " Results" : " Result"));
+    ui->resLbl->setText(QString::number(table()->rowCount()) + ((table()->rowCount() > 1) ? tr(" Results Found") : tr(" Result Found")));
 }
 
 
 void SearchResultDialog::on_bReplace_clicked()
 {
     if(table()->currentRow() < 0) return;
-    QString replaceWith = QInputDialog::getText(this, "Replace With", "Replace With:");
+    QString replaceWith = QInputDialog::getText(this, tr("Replace With"), tr("Replace With:"));
     qDebug() << replaceWith;
 
     int row = table()->currentRow();
@@ -74,7 +74,7 @@ void SearchResultDialog::search()
     int row = 0;
     QRegularExpressionMatchIterator i(r.globalMatch(pte->toPlainText()));
     if(!i.hasNext()){
-        QMessageBox::warning(this, "No Match", "No match found for:\n"+r.pattern());
+        QMessageBox::warning(this, tr("No Match"), tr("No match found for:\n%1").arg(r.pattern()));
         this->deleteLater();
         return;
     }

@@ -46,16 +46,16 @@ TreeNotes::TreeNotes(QWidget *parent)
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
     styleSheet += "selection-background-color:" + QtWin::colorizationColor().name() + ";";
-#else
-    QString styleSheet = "border: 1.50px solid;";
-    styleSheet += "border-radius: 2px;";
-    styleSheet += "padding: 3px;";
-    ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
-    styleSheet += "selection-color: white;";
-    styleSheet += "selection-background-color: purple;";
-#endif
     ui->titleEdit->setStyleSheet("QLineEdit{" + styleSheet + "}");
     ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
+#else
+    QString styleSheet = "border: 1.50px solid black;";
+    styleSheet += "border-radius: 2px;";
+    styleSheet += "padding: 3px;";
+    //ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
+    //ui->titleEdit->setStyleSheet("QLineEdit{" + styleSheet + "}");
+    //ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
+#endif
 
     ReadQSettings();
     ReadAppConfig(appConfig);
@@ -266,9 +266,11 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     ui->messageEdit->setPairCompletion(appConfig.pair_completion);
     noteTree->setDragDrop(appConfig.notetree_drag_drop);
     ui->messageEdit->setLineHighlighting(appConfig.highlight_current_line);
-
     if(appConfig.use_native_theme){
         qApp->setStyleSheet("");
+        #ifdef Q_OS_LINUX
+            qApp->setStyle(QStyleFactory::create("gtk2"));
+        #endif
         goto nativeTheme;
     }
     if(appConfig.dark_mode){
@@ -283,6 +285,8 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
         QTextStream stream(&file);
         qApp->setStyleSheet(stream.readAll());
     }
+
+
     nativeTheme:
 
     qDebug() << "App config read finished";
@@ -617,23 +621,23 @@ void TreeNotes::InitStatusLabels(){
 }
 
 void TreeNotes::RefreshLabels(){
-    noteCntLabel->setText("Notes : "+ QString::number(noteTree->noteCount()));
+    noteCntLabel->setText(tr("Notes : %1").arg(QString::number(noteTree->noteCount())));
     if(noteTree->currentItem()){
-        childrenCntLabel->setText("Children: "+ QString::number(noteTree->currentItem()->childCount()));
-        dateTimeLabel->setText("Last edited: "+((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString());
+        childrenCntLabel->setText(tr("Children: %1").arg(QString::number(noteTree->currentItem()->childCount())));
+        dateTimeLabel->setText(tr("Last edited: %1").arg(((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString()));
     }
     else{
-        childrenCntLabel->setText("Children: 0");
-        dateTimeLabel->setText("Last edited: ");
+        childrenCntLabel->setText(tr("Children: %1").arg("0"));
+        dateTimeLabel->setText(tr("Last edited: %1").arg(""));
     }
     if(!ui->messageEdit->textCursor().selectedText().isEmpty()){
-        lengthLabel->setText("Length (Sel): " + QString::number(ui->messageEdit->textCursor().selectedText().length()));
+        lengthLabel->setText(tr("Length (Sel): %1").arg(QString::number(ui->messageEdit->textCursor().selectedText().length())));
     }
     else{
-        lengthLabel->setText("Length: "+ QString::number(ui->messageEdit->toPlainText().length()));
+        lengthLabel->setText(tr("Length: %1").arg(QString::number(ui->messageEdit->toPlainText().length())));
     }
-    currentPositionLabel->setText("ln: " + QString::number(ui->messageEdit->currentLine()) + ", col: " + QString::number(ui->messageEdit->currentColumn()));
-    lineCountLabel->setText("Lines: " + QString::number(ui->messageEdit->lineCount()));
+    currentPositionLabel->setText(tr("ln: %1").arg(QString::number(ui->messageEdit->currentLine())) + tr(", col: %1").arg(QString::number(ui->messageEdit->currentColumn())));
+    lineCountLabel->setText(tr("Lines: %1").arg(QString::number(ui->messageEdit->lineCount())));
 }
 
 void TreeNotes::on_actionHide_Show_Note_Tree_triggered()
@@ -669,7 +673,7 @@ void TreeNotes::on_actionQt_triggered()
 void TreeNotes::on_actionSet_Font_Text_Editors_triggered()
 {
     bool ok;
-    QFont font = QFontDialog::getFont(&ok, ui->messageEdit->font(), this, "Select a Text Editor Font");
+    QFont font = QFontDialog::getFont(&ok, ui->messageEdit->font(), this, tr("Select a Text Editor Font"));
     if(ok){
         ui->titleEdit->setFont(font);
         ui->messageEdit->setFont(font);
@@ -692,7 +696,7 @@ bool TreeNotes::stringToBool(QString a){
 
 void TreeNotes::on_actionImport_Text_File_triggered()
 {
-    QStringList paths = QFileDialog::getOpenFileNames(this, "Import Text Files");
+    QStringList paths = QFileDialog::getOpenFileNames(this, tr("Import Text Files"));
     foreach (QString path, paths) {
         QFile file(path);
         QFileInfo fi(file);
@@ -709,7 +713,7 @@ void TreeNotes::on_actionImport_Text_File_triggered()
         }
 
         if(future.result().length() > 10e+5){
-            QMessageBox::warning(this, "Error", "File too big: " + path);
+            QMessageBox::warning(this, tr("Error"), tr("File too big: ") + path);
             continue;
         }
 
@@ -723,7 +727,7 @@ void TreeNotes::on_actionImport_Text_File_triggered()
 void TreeNotes::on_actionExport_Text_File_triggered()
 {
     if(!noteTree->currentItem()) return;
-    QString path = QFileDialog::getSaveFileName(this, "Export Text File");
+    QString path = QFileDialog::getSaveFileName(this, tr("Export Text File"));
     QFile file(path);
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
@@ -891,7 +895,7 @@ void TreeNotes::ApplyMacroVector(){
 
 void TreeNotes::on_actionExport_PDF_triggered()
 {
-    QString filename = QFileDialog::getSaveFileName(this, "Export PDF");
+    QString filename = QFileDialog::getSaveFileName(this, tr("Export PDF"));
     if(((QFileInfo)filename).suffix().isEmpty()) filename += ".pdf";
     QPrinter printer(QPrinter::PrinterResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);

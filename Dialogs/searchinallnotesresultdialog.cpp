@@ -83,7 +83,7 @@ void SearchInAllNotesResultDialog::search()
 
     if(treeItemVector.isEmpty()){
         //No match found
-        QMessageBox::warning(this, "No Match", "No match found for:\n"+searchString);
+        QMessageBox::warning(this, tr("No Match"), tr("No match found for:\n%1").arg(searchString));
         this->deleteLater();
         return;
     }
@@ -95,7 +95,7 @@ void SearchInAllNotesResultDialog::on_tableWidget_cellChanged(int row, int colum
 {
     if(column != table()->columnCount() -1)
         table()->resizeColumnToContents(column);
-    ui->resLbl->setText(QString::number(table()->rowCount()) + ((table()->rowCount() > 1) ? " Results" : " Result"));
+    ui->resLbl->setText(QString::number(table()->rowCount()) + ((table()->rowCount() > 1) ? tr(" Results Found") : tr(" Result Found")));
 }
 
 

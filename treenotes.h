@@ -24,6 +24,7 @@
 #include <QPushButton>
 #include <QPrinter>
 #include <QVariantAnimation>
+#include <QStyleFactory>
 
 /*
 //#include <QtXml>

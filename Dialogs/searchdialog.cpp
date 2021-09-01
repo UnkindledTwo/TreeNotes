@@ -27,7 +27,7 @@ void SearchDialog::keyPressEvent(QKeyEvent *e){
 void SearchDialog::on_buttonBox_accepted()
 {
     if(ui->searchBox->text().isEmpty()) {
-        QMessageBox::warning(this, "Warning", "Search String <b>Can't</b> Be Empty");
+        QMessageBox::warning(this, tr("Warning"), tr("Search String <b>Can't</b> Be Empty"));
         return;
     }
     PlainTextEdit *parent = (PlainTextEdit*)this->parent();

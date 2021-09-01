@@ -24,8 +24,8 @@
     <normaloff>:/Resources/Icon.png</normaloff>:/Resources/Icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout" columnstretch="1,0">
-    <item row="0" column="1">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0">
+    <item row="0" column="2">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QLineEdit" name="titleEdit">
@@ -34,6 +34,9 @@
           <family>Segoe UI</family>
           <pointsize>11</pointsize>
          </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
         </property>
         <property name="frame">
          <bool>true</bool>
@@ -51,6 +54,9 @@
           <pointsize>11</pointsize>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
         </property>
@@ -64,7 +70,7 @@
       </item>
      </layout>
     </item>
-    <item row="0" column="0">
+    <item row="0" column="0" colspan="2">
      <widget class="TreeWidget" name="treeWidget">
       <property name="font">
        <font>
@@ -170,7 +176,6 @@
     <addaction name="actionAdd"/>
     <addaction name="actionSave"/>
     <addaction name="actionDelete"/>
-    <addaction name="actionUndo_Delete"/>
     <addaction name="actionSet_Icon"/>
     <addaction name="separator"/>
     <addaction name="actionLoad_From_Disk"/>
@@ -223,7 +228,6 @@
     <addaction name="actionHide_Show_Toolbar"/>
     <addaction name="actionHide_Show_Title_2"/>
     <addaction name="separator"/>
-    <addaction name="actionFullscreen_On_Off"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSearch"/>
@@ -262,21 +266,20 @@
    <addaction name="actionAdd"/>
    <addaction name="actionSave"/>
    <addaction name="actionDelete"/>
-   <addaction name="actionRead_Only"/>
    <addaction name="actionUndo_Delete"/>
    <addaction name="actionStar_Unstar"/>
    <addaction name="actionSet_Icon"/>
    <addaction name="separator"/>
-   <addaction name="actionExpand_All"/>
-   <addaction name="actionCollapse_All"/>
-   <addaction name="separator"/>
    <addaction name="actionMove_Up"/>
    <addaction name="actionMove_Down"/>
-   <addaction name="actionFocus_Parent"/>
-   <addaction name="actionHide_Show_Note_Tree"/>
    <addaction name="separator"/>
+   <addaction name="actionSearch_In_Current_Note"/>
+   <addaction name="actionFullscreen_On_Off"/>
   </widget>
   <action name="actionAdd">
+   <property name="icon">
+    <iconset theme="document-new"/>
+   </property>
    <property name="text">
     <string>Add</string>
    </property>
@@ -285,6 +288,9 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset theme="document-save"/>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -293,6 +299,9 @@
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset theme="edit-delete"/>
+   </property>
    <property name="text">
     <string>Delete</string>
    </property>
@@ -301,6 +310,9 @@
    </property>
   </action>
   <action name="actionMove_Up">
+   <property name="icon">
+    <iconset theme="go-up"/>
+   </property>
    <property name="text">
     <string>Move Up</string>
    </property>
@@ -309,6 +321,9 @@
    </property>
   </action>
   <action name="actionMove_Down">
+   <property name="icon">
+    <iconset theme="go-down"/>
+   </property>
    <property name="text">
     <string>Move Down</string>
    </property>
@@ -317,6 +332,10 @@
    </property>
   </action>
   <action name="actionSet_Icon">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/Resources/Icon.png</normaloff>:/Resources/Icon.png</iconset>
+   </property>
    <property name="text">
     <string>Set Icon</string>
    </property>
@@ -385,6 +404,9 @@
    </property>
   </action>
   <action name="actionUndo_Delete">
+   <property name="icon">
+    <iconset theme="edit-undo"/>
+   </property>
    <property name="text">
     <string>Undo Delete</string>
    </property>
@@ -401,6 +423,10 @@
    </property>
   </action>
   <action name="actionStar_Unstar">
+   <property name="icon">
+    <iconset resource="Resources.qrc">
+     <normaloff>:/Resources/Icons/star.png</normaloff>:/Resources/Icons/star.png</iconset>
+   </property>
    <property name="text">
     <string>Star/Unstar</string>
    </property>
@@ -435,6 +461,9 @@
    </property>
   </action>
   <action name="actionSearch_In_Current_Note">
+   <property name="icon">
+    <iconset theme="edit-find-replace"/>
+   </property>
    <property name="text">
     <string>Search/Replace In Current Note</string>
    </property>
@@ -451,6 +480,9 @@
    </property>
   </action>
   <action name="actionSearch_In_All_Notes">
+   <property name="icon">
+    <iconset theme="edit-find"/>
+   </property>
    <property name="text">
     <string>Search In All Notes</string>
    </property>
@@ -464,6 +496,9 @@
    </property>
   </action>
   <action name="actionFullscreen_On_Off">
+   <property name="icon">
+    <iconset theme="view-fullscreen"/>
+   </property>
    <property name="text">
     <string>Fullscreen On/Off</string>
    </property>
