@@ -112,7 +112,8 @@ void TreeNotes::ShowContextMenu(const QPoint &pos){
     contextMenu.addAction(ui->actionCollapse_All);
     contextMenu.addAction(ui->actionExpand_All);
 
-    contextMenu.exec(mapToGlobal(pos));
+    //contextMenu.exec(mapToGlobal(pos));
+    contextMenu.exec(QCursor().pos());
 }
 
 void TreeNotes::ReadQSettings(){

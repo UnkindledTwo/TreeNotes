@@ -228,6 +228,7 @@
     <addaction name="actionHide_Show_Toolbar"/>
     <addaction name="actionHide_Show_Title_2"/>
     <addaction name="separator"/>
+    <addaction name="actionFullscreen_On_Off"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSearch"/>

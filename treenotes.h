@@ -26,13 +26,6 @@
 #include <QVariantAnimation>
 #include <QStyleFactory>
 
-/*
-//#include <QtXml>
-#include <QDomDocument>
-#include <QDomElement>
-#include <QDomNode>
-*/
-
 //Win only
 //#include <QtWinExtras>
 #ifdef Q_OS_WIN
@@ -83,7 +76,12 @@ private slots:
     void InitIconVector();
     void saveToFile();
     void ReadFromFile();
-    TreeWidgetItem* AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon(":/Resources/Icon.png"));
+    TreeWidgetItem* AddNote(
+            TreeWidgetItem *parent,
+            QString text,
+            QString message = "",
+            QIcon icon = QIcon(":/Resources/Icon.png")
+            );
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
     void ShowContextMenu(const QPoint &pos);
@@ -124,7 +122,6 @@ private slots:
     void on_actionHide_Show_Toolbar_triggered();
     void on_actionFullscreen_On_Off_triggered();
     void on_actionHide_Show_Title_2_triggered();
-
     void on_actionClone_triggered();
 
 private:

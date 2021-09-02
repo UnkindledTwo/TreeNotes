@@ -660,7 +660,7 @@ Makrolarını yazdıktan sonra makroların işlenmesi için dökümanı kaydetme
     <message>
         <location filename="../../treenotes.cpp" line="624"/>
         <source>Notes : %1</source>
-        <translation>Not Sayıs ı: %1</translation>
+        <translation>Not Sayısı: %1</translation>
     </message>
     <message>
         <location filename="../../treenotes.cpp" line="626"/>

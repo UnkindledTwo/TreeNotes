@@ -1,8 +1,6 @@
 #ifndef APPCONFIG_H
 #define APPCONFIG_H
 
-#include <QColor>
-
 struct app_config{
     bool notetree_select_new_items = true;
     bool notetree_alternating_row_colors = true;

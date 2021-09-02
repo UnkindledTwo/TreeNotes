@@ -37,19 +37,6 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
         this->setTextCursor(textCursor1);
     });
 
-    /*
-    QShortcut *find = new QShortcut(QKeySequence("Ctrl+F"), this);
-    connect(find, &QShortcut::activated, this, [&](){
-        this->search();
-    });
-
-    QShortcut *replaceAll = new QShortcut(QKeySequence("Ctrl+R"), this);
-    connect(replaceAll, &QShortcut::activated, this, [&](){
-       this->replaceAll();
-    });
-    */
-
-
     QShortcut *makeHeading = new QShortcut(QKeySequence("Alt+H"), this);
     connect(makeHeading, &QShortcut::activated, this, [&](){
         if(this->isReadOnly()) return;
