@@ -145,9 +145,7 @@ noLineHighlight:
         }
     }
 
-
     fmt.merge(c.charFormat());
-
     this->verticalScrollBar()->setValue(scrollbarpos);
 }
 
@@ -208,7 +206,6 @@ cancelKeyPress:
 }
 
 void PlainTextEdit::TextChanged(){
-
 }
 
 bool PlainTextEdit::pairCompletion(){

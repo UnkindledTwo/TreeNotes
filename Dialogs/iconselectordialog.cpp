@@ -43,6 +43,10 @@ void IconSelectorDialog::copyFrom(TreeWidget *w){
         }
     }
     while ((mo = mo->superClass()));
+
+    //TreeWidget gets hidden when the tree widget in the main window is hidden.
+    ui->treeWidget->setHidden(false);
+
     ui->treeWidget->resizeColumnToContents(1);
     ui->treeWidget->expandAll();
     ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);

@@ -16,6 +16,7 @@
 #include <QScrollBar>
 #include <QtConcurrent>
 #include <QTreeWidget>
+#include <QStack>
 
 #include "highlightitem.h"
 #include "Dialogs/searchdialog.h"

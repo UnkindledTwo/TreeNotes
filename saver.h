@@ -11,6 +11,7 @@
 class Saver
 {
 public:
+    QString saveFileName;
     Saver(TreeWidget *noteTree, QVector<QIcon> iconVector);
     void SaveToFile();
     void ReadFromFile();

@@ -9,8 +9,8 @@ Saver::Saver(TreeWidget *noteTree, QVector<QIcon> iconVector)
 void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *parent){
     if(!node.isElement()) return;
     if(!node.toElement().hasAttribute("message")) return;
-    if(node.toElement().attribute("title") == "") return;
     if(node.toElement().tagName() == "") return;
+
     parent->message = node.toElement().attribute("message");
     parent->setText(0,node.toElement().attribute("title"));
 
@@ -74,13 +74,19 @@ void Saver::SaveToFile(){
     }
 
     QFuture<void> future = QtConcurrent::run([&](){
-        QFile file(qApp->applicationDirPath()+"/save.xml");
+        QString savePath = qApp->applicationDirPath()+ "/" + saveFileName;
+        QFileInfo saveFileInfo(savePath);
+        QDir savePathDir(saveFileInfo.absoluteDir());
+        if(!savePathDir.exists()) {
+            savePathDir.mkdir(savePathDir.absolutePath());
+        }
+        QFile file(savePath);
         file.open(QIODevice::WriteOnly);
         QTextStream stream(&file);
         stream.setCodec("UTF-8");
         stream << document.toString(4);
 
-        QFile fileB64(qApp->applicationDirPath()+"/save.xml.b64");
+        QFile fileB64(qApp->applicationDirPath() + "/" + saveFileName + ".b64");
         fileB64.open(QIODevice::WriteOnly);
         QTextStream streamB64(&fileB64);
         streamB64.setCodec("UTF-8");
@@ -110,7 +116,7 @@ void Saver::ReadFromFile(){
     int errColumn;
 
     QDomDocument document;
-    QFile file(qApp->applicationDirPath()+"/save.xml");
+    QFile file(qApp->applicationDirPath() + "/" + saveFileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         // Error while loading file

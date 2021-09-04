@@ -1,13 +1,14 @@
 #include "treenotes.h"
 #include "ui_treenotes.h"
 
-TreeNotes::TreeNotes(QWidget *parent)
+TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     : QMainWindow(parent)
     , ui(new Ui::TreeNotes)
 {
     qDebug() << "{";
     qDebug() << "--------------------";
     qDebug() << "Initializing window";
+    this->saveFileName = saveFileName;
     ui->setupUi(this);
 
     noteTree = ui->treeWidget;
@@ -235,18 +236,22 @@ QString TreeNotes::dateTimeNoSpace(){
 
 void TreeNotes::AttemptSaveBackup(){
     qDebug() << "AttempSaveBackup()";
-    QDir currentDir(qApp->applicationDirPath());
-    QDir dir(qApp->applicationDirPath() + "/backup/");
-    dir.mkdir(qApp->applicationDirPath() + "/backup/");
+    QFileInfo backupFileInfo(qApp->applicationDirPath() + "/backup/" + saveFileName + dateTimeNoSpace() + ".xml");
+    QDir backupDir(backupFileInfo.absoluteDir().path());
+    qDebug() << backupFileInfo.absoluteDir().path();
+    if(!backupDir.exists()) {
+        qDebug() << backupDir.absolutePath();
+        backupDir.mkpath(backupDir.absolutePath());
+    }
 
     //Move the current save file to the backups directory and rename it to save{date}.xml
-    currentDir.rename(qApp->applicationDirPath() + "/save.xml", qApp->applicationDirPath() + "/backup/save" + dateTimeNoSpace() + ".xml");
+    backupDir.rename(qApp->applicationDirPath() + "/" + saveFileName, backupFileInfo.absoluteFilePath());
 
     //If the save can't be moved
     if(QFile(qApp->applicationDirPath() + "/save.xml").exists())
         qCritical().noquote() << "\n!!!Backup Failed!!!\n";
 
-    CleanBackups(appConfig.maximum_backups, dir.absolutePath());
+    CleanBackups(appConfig.maximum_backups, backupDir.absolutePath());
     qDebug() << "AttempSaveBackup() finished";
 }
 
@@ -310,11 +315,13 @@ void TreeNotes::closeEvent(QCloseEvent *e){
 
 void TreeNotes::ReadFromFile(){
     Saver s(this->noteTree, this->iconVector);
+    s.saveFileName = this->saveFileName;
     s.ReadFromFile();
 }
 
 void TreeNotes::saveToFile(){
     Saver s(this->noteTree, this->iconVector);
+    s.saveFileName = this->saveFileName;
     s.SaveToFile();
 }
 
@@ -831,7 +838,10 @@ void TreeNotes::CleanBackups(int max, QString backupsDir){
         return;
     }
 
-    backups.setNameFilters({"*.xml"});
+    //backups.setNameFilters({"*.xml"});
+    QFileInfo saveFileInfo(saveFileName);
+    //"save.xml" for example gets saved as save.xml{datetime}.xml
+    backups.setNameFilters({saveFileInfo.baseName() + "*"});
     QStringList entries = backups.entryList(QDir::Files, QDir::Time);
 
     if(max > entries.length()){

@@ -57,6 +57,9 @@
         <property name="focusPolicy">
          <enum>Qt::StrongFocus</enum>
         </property>
+        <property name="contextMenuPolicy">
+         <enum>Qt::DefaultContextMenu</enum>
+        </property>
         <property name="undoRedoEnabled">
          <bool>false</bool>
         </property>
@@ -278,9 +281,6 @@
    <addaction name="actionFullscreen_On_Off"/>
   </widget>
   <action name="actionAdd">
-   <property name="icon">
-    <iconset theme="document-new"/>
-   </property>
    <property name="text">
     <string>Add</string>
    </property>
@@ -289,9 +289,6 @@
    </property>
   </action>
   <action name="actionSave">
-   <property name="icon">
-    <iconset theme="document-save"/>
-   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -300,9 +297,6 @@
    </property>
   </action>
   <action name="actionDelete">
-   <property name="icon">
-    <iconset theme="edit-delete"/>
-   </property>
    <property name="text">
     <string>Delete</string>
    </property>
@@ -311,9 +305,6 @@
    </property>
   </action>
   <action name="actionMove_Up">
-   <property name="icon">
-    <iconset theme="go-up"/>
-   </property>
    <property name="text">
     <string>Move Up</string>
    </property>
@@ -322,9 +313,6 @@
    </property>
   </action>
   <action name="actionMove_Down">
-   <property name="icon">
-    <iconset theme="go-down"/>
-   </property>
    <property name="text">
     <string>Move Down</string>
    </property>
@@ -405,9 +393,6 @@
    </property>
   </action>
   <action name="actionUndo_Delete">
-   <property name="icon">
-    <iconset theme="edit-undo"/>
-   </property>
    <property name="text">
     <string>Undo Delete</string>
    </property>
@@ -462,9 +447,6 @@
    </property>
   </action>
   <action name="actionSearch_In_Current_Note">
-   <property name="icon">
-    <iconset theme="edit-find-replace"/>
-   </property>
    <property name="text">
     <string>Search/Replace In Current Note</string>
    </property>
@@ -482,7 +464,8 @@
   </action>
   <action name="actionSearch_In_All_Notes">
    <property name="icon">
-    <iconset theme="edit-find"/>
+    <iconset theme="edit-find">
+     <normaloff>.</normaloff>.</iconset>
    </property>
    <property name="text">
     <string>Search In All Notes</string>
@@ -497,9 +480,6 @@
    </property>
   </action>
   <action name="actionFullscreen_On_Off">
-   <property name="icon">
-    <iconset theme="view-fullscreen"/>
-   </property>
    <property name="text">
     <string>Fullscreen On/Off</string>
    </property>

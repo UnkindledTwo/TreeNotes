@@ -10,7 +10,6 @@
 #include <QShortcut>
 #include <QMessageBox>
 #include <QKeyEvent>
-#include <QTextStream>
 #include <QLabel>
 #include <QTimer>
 #include <QSplitter>
@@ -22,9 +21,8 @@
 #include <QScrollBar>
 #include <QtConcurrent>
 #include <QPushButton>
-#include <QPrinter>
-#include <QVariantAnimation>
 #include <QStyleFactory>
+#include <QPrinter>
 
 //Win only
 //#include <QtWinExtras>
@@ -53,12 +51,13 @@ class TreeNotes : public QMainWindow
     Q_OBJECT
 
 public:
+    QString saveFileName = "save.xml";
     QVector <QIcon> iconVector;
 
     void closeEvent(QCloseEvent *e);
     void keyPressEvent(QKeyEvent *e);
 
-    TreeNotes(QWidget *parent = nullptr);
+    TreeNotes(QWidget *parent = nullptr, QString saveFileName = "save.xml");
     ~TreeNotes();
 
 private slots:

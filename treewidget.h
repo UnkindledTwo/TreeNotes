@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTreeWidget>
+#include <QKeyEvent>
 
 #include "treewidgetitem.h"
 
