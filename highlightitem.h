@@ -25,6 +25,7 @@ public:
     bool isItalic = false;
     bool isUnderLine = false;
     bool isStrikeThrough = false;
+    bool isMonospace = false;
     QString regex;
     QColor background;
     QColor foreground;

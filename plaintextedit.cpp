@@ -160,8 +160,11 @@ noLineHighlight:
 
                 if(regexVector.at(i).isBold) fmt.setFontWeight(QFont::Bold);
                 if(regexVector.at(i).isItalic) fmt.setFontItalic(true);
-                if(regexVector.at(i).isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
                 if(regexVector.at(i).isStrikeThrough) fmt.setFontStrikeOut(true);
+                if(regexVector.at(i).isMonospace) {
+                    fmt.setFontFamily(monospaceFontFamily);
+                }
+                if(regexVector.at(i).isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
                 else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
 
                 c.setCharFormat(fmt);
@@ -290,7 +293,8 @@ HighlightItem PlainTextEdit::regexVectorItem(
         QColor back,
         bool isBold,
         bool isItalic,
-        bool isUnderLine
+        bool isUnderLine,
+        bool isMonospace
         ){
     HighlightItem h;
     h.regex = exp;
@@ -299,20 +303,13 @@ HighlightItem PlainTextEdit::regexVectorItem(
     h.isUnderLine = isUnderLine;
     h.isBold = isBold;
     h.isItalic = isItalic;
+    h.isMonospace = isMonospace;
     return h;
 }
 
 void PlainTextEdit::initRegexVector(){
-    //regexVector.append(regexVectorItem("(http|https)://[^\\n].*", Qt::blue, Qt::white));
     //Links
     regexVector.append(regexVectorItem("(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?",  Qt::blue, Qt::white,  false, false, true));
-
-    //Italic
-    //regexVector.append(regexVectorItem("\\*([^*].*?[^*])\\*", Qt::black, Qt::white, false, true));
-    //Bold
-    //regexVector.append(regexVectorItem("\\*{2}([^*].*?[^*])\\*{2}", Qt::black, Qt::white, true));
-    //BoldItalic
-    //regexVector.append(regexVectorItem("\\*{3}([^*].*?[^*])\\*{3}", Qt::black, Qt::white, true, true));
 
     //Italic
     regexVector.append(regexVectorItem("\\*[A-z0-9]+\\*", Qt::black, Qt::white, false, true));
@@ -321,21 +318,21 @@ void PlainTextEdit::initRegexVector(){
     //BoldItalic
     regexVector.append(regexVectorItem("\\*\\*\\*[A-z0-9]+\\*\\*\\*", Qt::black, Qt::white, true, true));
 
+    //Monospace
+    regexVector.append(regexVectorItem("`.*`", Qt::black, Qt::white, false, false, false, true));
 
     regexVector.append(regexVectorItem("✔((?!✖).)*",  Qt::darkGreen, Qt::white));
     regexVector.append(regexVectorItem("✖((?!✔).)*", Qt::darkRed, Qt::white));
     //Lambda is broken
     regexVector.append(regexVectorItem("λ.*", QColor(8, 129, 199), Qt::white));
-    HighlightItem i = regexVectorItem("~.*~",  Qt::black, Qt::white);
+    HighlightItem i = regexVectorItem("\\~[A-z0-9]+\\~",  Qt::black, Qt::white);
     i.isStrikeThrough = true;
     regexVector.append(i);
-    //HighlightItem heading = regexVectorItem("# .*", Qt::darkBlue, Qt::white, true);
     //Headings through 1 to 6
     for(int i = 1; i < 7; i++) {
         HighlightItem heading = regexVectorItem(QString("(?m)^#{%1}(?!#)(.*)").arg(QString::number(i)), Qt::darkBlue, Qt::white, true);
         regexVector.append(heading);
     }
-    //regexVector.append(regexVectorItem("\\`{1}.*\\`{1}", Qt::black, Qt::lightGray, false, false, false, true));
 }
 
 bool PlainTextEdit::lineHighlighting(){

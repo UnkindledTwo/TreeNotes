@@ -78,7 +78,6 @@ protected:
 private:
     Ui::PlainTextEdit *ui;
 
-
     bool m_pairCompletion = true;
     bool m_lineHighlighing = true;
     bool m_symbolhighlighting = true;
@@ -90,7 +89,13 @@ private:
     //QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
     QVector<HighlightItem> regexVector;
 
-    HighlightItem regexVectorItem(QString exp, QColor fore, QColor back = Qt::white, bool isBold = false, bool isItalic = false, bool isUnderLine = false);
+    HighlightItem regexVectorItem(QString exp,
+                                  QColor fore,
+                                  QColor back = Qt::white,
+                                  bool isBold = false,
+                                  bool isItalic = false,
+                                  bool isUnderLine = false,
+                                  bool isMonospace = false);
 
     int monospaceFontId = QFontDatabase::addApplicationFont(":/Resources/Fonts/SourceCodePro-Regular.ttf");
     QString monospaceFontFamily = QFontDatabase::applicationFontFamilies(monospaceFontId).at(0);
