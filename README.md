@@ -12,7 +12,7 @@ You can build this application like you would a Qt app normally,
 To run this app on linux, you need to install `libxkbcommon-x11-0`. 
 
 ## Multiple Save Files
-To have another save file. Run TreeNotes {Save File Name}. Make sure the save file name is reachable by the app and is a legal file name.
+To have another save file. Run `TreeNotes {Save File Name}`. Make sure the save file name is reachable by the app and is a legal file name.
 
 ## Configuring
 After you launch the app the first time, edit the settings.ini that is created in the directory of the app. 
