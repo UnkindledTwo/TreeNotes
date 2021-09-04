@@ -133,6 +133,31 @@ noLineHighlight:
                     else
                         fmt.setForeground(regexVector.at(i).foreground.darker(105));
 
+                //h1
+                if(regexVector.at(i).regex == "(?m)^#{1}(?!#)(.*)") {
+                    fmt.setFontPointSize(this->font().pointSizeF() * 1.72);
+                }
+                //h2
+                if(regexVector.at(i).regex == "(?m)^#{2}(?!#)(.*)") {
+                    fmt.setFontPointSize(this->font().pointSizeF() * 1.44);
+                }
+                //h3
+                if(regexVector.at(i).regex == "(?m)^#{3}(?!#)(.*)") {
+                    fmt.setFontPointSize(this->font().pointSizeF() * 1.20);
+                }
+                //h4
+                if(regexVector.at(i).regex == "(?m)^#{4}(?!#)(.*)") {
+                    fmt.setFontPointSize(this->font().pointSizeF() * 1.15);
+                }
+                //h5
+                if(regexVector.at(i).regex == "(?m)^#{5}(?!#)(.*)") {
+                    fmt.setFontPointSize(this->font().pointSizeF() * 1.10);
+                }
+                //h6
+                if(regexVector.at(i).regex == "(?m)^#{6}(?!#)(.*)") {
+                    fmt.setFontPointSize(this->font().pointSizeF() * 1.05);
+                }
+
                 if(regexVector.at(i).isBold) fmt.setFontWeight(QFont::Bold);
                 if(regexVector.at(i).isItalic) fmt.setFontItalic(true);
                 if(regexVector.at(i).isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
@@ -147,6 +172,13 @@ noLineHighlight:
 
     fmt.merge(c.charFormat());
     this->verticalScrollBar()->setValue(scrollbarpos);
+
+    //Fix for scrollbars
+    //When something with a different font size is added to the bottom of the document.
+    //Scrolling with the arrow keys will break this widget
+    //Not sure if this fixes it. But here you go.
+    c.setPosition(pos);
+    this->setTextCursor(c);
 }
 
 PlainTextEdit::~PlainTextEdit()
@@ -272,20 +304,37 @@ HighlightItem PlainTextEdit::regexVectorItem(
 
 void PlainTextEdit::initRegexVector(){
     //regexVector.append(regexVectorItem("(http|https)://[^\\n].*", Qt::blue, Qt::white));
-    regexVector.append(regexVectorItem("(http|https)://(\\S|\\t)*",  Qt::blue, Qt::white,  false, false, true));
+    //Links
+    regexVector.append(regexVectorItem("(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?",  Qt::blue, Qt::white,  false, false, true));
 
-    regexVector.append(regexVectorItem("\\*([^*].*?[^*])\\*", Qt::black, Qt::white, false, true));
-    regexVector.append(regexVectorItem("\\*{2}([^*].*?[^*])\\*{2}", Qt::black, Qt::white, true));
-    regexVector.append(regexVectorItem("\\*{3}([^*].*?[^*])\\*{3}", Qt::black, Qt::white, true, true));
+    //Italic
+    //regexVector.append(regexVectorItem("\\*([^*].*?[^*])\\*", Qt::black, Qt::white, false, true));
+    //Bold
+    //regexVector.append(regexVectorItem("\\*{2}([^*].*?[^*])\\*{2}", Qt::black, Qt::white, true));
+    //BoldItalic
+    //regexVector.append(regexVectorItem("\\*{3}([^*].*?[^*])\\*{3}", Qt::black, Qt::white, true, true));
 
-    regexVector.append(regexVectorItem("✔.*",  Qt::darkGreen, Qt::white));
-    regexVector.append(regexVectorItem("✖.*", Qt::darkRed, Qt::white));
+    //Italic
+    regexVector.append(regexVectorItem("\\*[A-z0-9]+\\*", Qt::black, Qt::white, false, true));
+    //Bold
+    regexVector.append(regexVectorItem("\\*\\*[A-z0-9]+\\*\\*", Qt::black, Qt::white, true));
+    //BoldItalic
+    regexVector.append(regexVectorItem("\\*\\*\\*[A-z0-9]+\\*\\*\\*", Qt::black, Qt::white, true, true));
+
+
+    regexVector.append(regexVectorItem("✔((?!✖).)*",  Qt::darkGreen, Qt::white));
+    regexVector.append(regexVectorItem("✖((?!✔).)*", Qt::darkRed, Qt::white));
+    //Lambda is broken
     regexVector.append(regexVectorItem("λ.*", QColor(8, 129, 199), Qt::white));
     HighlightItem i = regexVectorItem("~.*~",  Qt::black, Qt::white);
     i.isStrikeThrough = true;
     regexVector.append(i);
-    HighlightItem heading = regexVectorItem("# .*", Qt::darkBlue, Qt::white, true);
-    regexVector.append(heading);
+    //HighlightItem heading = regexVectorItem("# .*", Qt::darkBlue, Qt::white, true);
+    //Headings through 1 to 6
+    for(int i = 1; i < 7; i++) {
+        HighlightItem heading = regexVectorItem(QString("(?m)^#{%1}(?!#)(.*)").arg(QString::number(i)), Qt::darkBlue, Qt::white, true);
+        regexVector.append(heading);
+    }
     //regexVector.append(regexVectorItem("\\`{1}.*\\`{1}", Qt::black, Qt::lightGray, false, false, false, true));
 }
 
