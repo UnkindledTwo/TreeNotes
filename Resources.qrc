@@ -19,5 +19,7 @@
         <file>Resources/Fonts/SourceCodePro-SemiboldIt.ttf</file>
         <file>Resources/Icons/star.png</file>
         <file>Resources/Screenshot1.png</file>
+        <file>Resources/Icons/tux.png</file>
+        <file>Resources/Icons/windows.png</file>
     </qresource>
 </RCC>

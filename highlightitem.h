@@ -19,7 +19,7 @@ enum class HighlightFontFamily{
 class HighlightItem
 {
 public:
-    HighlightItem();
+    //HighlightItem();
 
     bool isBold = false;
     bool isItalic = false;

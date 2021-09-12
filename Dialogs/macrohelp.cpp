@@ -10,6 +10,7 @@ MacroHelp::MacroHelp(QWidget *parent, QVector<QPair<QString, std::function<QStri
         ui->macrolist->addItem(macroVec.at(i).first);
     }
 
+    //Put the list widget and text into a QSplitter
     QSplitter *splitter = new QSplitter();
     QVBoxLayout *vbox = new QVBoxLayout();
     vbox->setSpacing(0);

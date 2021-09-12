@@ -16,7 +16,10 @@ SettingsDialog::~SettingsDialog()
 }
 
 void SettingsDialog::setAppConfig(app_config appConfig){
+    //Load appConfig into the ui.
+
     this->m_appConfig = appConfig;
+    ui->notetree_icon_size->setValue(appConfig.notetree_icon_size);
     ui->notetree_select_new_items->setChecked(appConfig.notetree_select_new_items);
     ui->notetree_alternating_row_colors->setChecked(appConfig.notetree_alternating_row_colors);
     ui->notetree_indentation_size->setValue(appConfig.notetree_indentation_size);
@@ -35,6 +38,9 @@ void SettingsDialog::setAppConfig(app_config appConfig){
 }
 
 struct app_config SettingsDialog::appConfig(){
+    //Construct an appConfig
+
+    m_appConfig.notetree_icon_size = ui->notetree_icon_size->value();
     m_appConfig.notetree_select_new_items = ui->notetree_select_new_items->isChecked();
     m_appConfig.notetree_alternating_row_colors = ui->notetree_alternating_row_colors->isChecked();
     m_appConfig.notetree_indentation_size = ui->notetree_indentation_size->value();

@@ -16,7 +16,13 @@ SearchInAllNotesDialog::~SearchInAllNotesDialog()
 
 void SearchInAllNotesDialog::on_buttonBox_accepted()
 {
-    SearchInAllNotesResultDialog *sianrd = new SearchInAllNotesResultDialog(ui->lineEdit->text(), this->m_treeWidget ,ui->checkBox->isChecked(), (QWidget*)this->parent());
+    SearchInAllNotesResultDialog *sianrd =
+            new SearchInAllNotesResultDialog(
+                ui->lineEdit->text(), 		//Search string
+                this->m_treeWidget, 		//Tree Widget
+                ui->checkBox->isChecked(), 	//Case insensitive
+                (QWidget*)this->parent() 	//Parent
+                );
     sianrd->setFont(this->font());
     sianrd->show();
     this->close();

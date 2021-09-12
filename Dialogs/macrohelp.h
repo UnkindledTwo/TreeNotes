@@ -6,8 +6,8 @@
 #include <functional>
 #include <QListWidget>
 #include <QTextEdit>
-#include <QPlainTextEdit>
 #include <QSplitter>
+#include <QPlainTextEdit>
 
 namespace Ui {
 class MacroHelp;

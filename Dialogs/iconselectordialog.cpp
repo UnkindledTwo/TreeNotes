@@ -26,6 +26,7 @@ IconSelectorDialog::~IconSelectorDialog()
 
 void IconSelectorDialog::on_iconBox_currentIndexChanged(const QString &arg1)
 {
+    //Set example treeWidget icons
     QTreeWidgetItemIterator it(ui->treeWidget);
     while(*it){
         (*it)->setIcon(0, icons[ui->iconBox->currentIndex()]);
@@ -36,6 +37,7 @@ void IconSelectorDialog::on_iconBox_currentIndexChanged(const QString &arg1)
 }
 
 void IconSelectorDialog::copyFrom(TreeWidget *w){
+    //Copy all properties of TreeWidget w into ui->treeWidget
     auto mo = w->metaObject();
     do{
         for(int i = mo->propertyOffset(); i < mo->propertyCount(); i++){
@@ -47,6 +49,7 @@ void IconSelectorDialog::copyFrom(TreeWidget *w){
     //TreeWidget gets hidden when the tree widget in the main window is hidden.
     ui->treeWidget->setHidden(false);
 
+    //Adjust column size
     ui->treeWidget->resizeColumnToContents(1);
     ui->treeWidget->expandAll();
     ui->treeWidget->header()->setSectionResizeMode(0, QHeaderView::Stretch);

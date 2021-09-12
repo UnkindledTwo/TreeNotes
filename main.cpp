@@ -12,13 +12,14 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QTranslator t;
-    qDebug() << "Locale: " << QLocale().name().left(2);
+    qDebug() << "Locale:" << QLocale().name().left(2);
     if(t.load(":/Resources/Translations/" + QLocale().name().left(2) + ".qm")){
-        qDebug() << "Translator";
+        qDebug() << "Translator loaded successfully";
     }
     a.installTranslator(&t);
 
     //Load another save file if specified
+        //The default save name is save.xml
     QString saveFileName = "save.xml";
     if(argc > 1) {
         qDebug() << "Save File Name Specified:" << QString(argv[1]);
@@ -27,28 +28,35 @@ int main(int argc, char *argv[])
         //Check if file name if valid
         bool fileNameIsValid = true;
         #ifdef Q_OS_WIN
-        QString illegalChars[7] = {"<", ">", ":", "\"", "|", "?", "\\*"};
+        //For windows, check this link
+        //https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
+
+        QString illegalChars[7] = {"<", ">", ":", "\"", "|", "?", "*"};
         for(int i = 0; i < 7;i++) {
             if(saveFileName.toLower().indexOf(illegalChars[i].toLower()) != -1) {
                 fileNameIsValid = false;
-                qDebug() << i;
-                qDebug() << illegalChars[i];
+                qDebug() << "Illegal character" << illegalChars[i] << "detected.";
+
                 break;
             }
         }
 
         QFileInfo saveFileInfo(saveFileName);
         QVector<QString> illegalNames = {"CON", "PRN", "AUX", "NUL"};
+        //Add COM0 through COM9
         for(int i = 0; i < 10; i++) {
             illegalNames.append("COM" + QString::number(i));
         }
+        //Add LPT0 through LPT9
         for(int i = 0; i < 10; i++) {
             illegalNames.append("LPT" + QString::number(i));
         }
+
         for(int i = 0; i < illegalNames.length(); i++) {
             if(saveFileInfo.completeBaseName().toLower() == illegalNames[i].toLower()) {
                 fileNameIsValid = false;
-                qDebug() << illegalNames[i];
+                qDebug() << "Illegal name" << illegalNames[i] << "detected";
+
                 break;
             }
         }
@@ -76,13 +84,11 @@ int main(int argc, char *argv[])
         }
     }
     TreeNotes w(NULL, saveFileName);
-    QSplashScreen ss(QPixmap(":/Resources/Icon.png").scaled(w.size()));
 
+    //Splash screen
+    QSplashScreen ss(QPixmap(":/Resources/Icon.png").scaled(w.size()));
     ss.move(w.pos());
     ss.show();
-
-
-
     w.show();
     ss.finish(&w);
 

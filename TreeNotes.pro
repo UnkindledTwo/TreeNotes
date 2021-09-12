@@ -25,7 +25,6 @@ SOURCES += \
     Dialogs/searchinallnotesresultdialog.cpp \
     Dialogs/searchresultdialog.cpp \
     Dialogs/settingsdialog.cpp \
-    highlightitem.cpp \
     main.cpp \
     plaintextedit.cpp \
     saver.cpp \

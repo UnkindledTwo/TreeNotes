@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1209</width>
-    <height>643</height>
+    <width>860</width>
+    <height>378</height>
    </rect>
   </property>
   <property name="font">
@@ -101,8 +101,8 @@
       </property>
       <property name="iconSize">
        <size>
-        <width>20</width>
-        <height>20</height>
+        <width>24</width>
+        <height>24</height>
        </size>
       </property>
       <property name="verticalScrollMode">
@@ -154,7 +154,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1209</width>
+     <width>860</width>
      <height>20</height>
     </rect>
    </property>
@@ -203,16 +203,11 @@
     <addaction name="actionCollapse_All"/>
     <addaction name="actionSettings"/>
    </widget>
-   <widget class="QMenu" name="menuAbout">
-    <property name="title">
-     <string>About</string>
-    </property>
-    <addaction name="actionQt"/>
-   </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionQt"/>
     <addaction name="actionMacros"/>
    </widget>
    <widget class="QMenu" name="menuSearch">
@@ -237,7 +232,6 @@
    <addaction name="menuSearch"/>
    <addaction name="menuAppearance"/>
    <addaction name="menuOther"/>
-   <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">

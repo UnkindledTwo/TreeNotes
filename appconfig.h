@@ -4,6 +4,7 @@
 struct app_config{
     bool notetree_select_new_items = true;
     bool notetree_alternating_row_colors = true;
+    unsigned short notetree_icon_size = 20;
     int notetree_indentation_size = 20;
     int opacity = 100; //100 for solid, 0 for transparent
     bool notetree_animated = false;

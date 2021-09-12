@@ -32,8 +32,10 @@ class PlainTextEdit : public QPlainTextEdit
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
     Q_PROPERTY(bool lineHighlighting READ lineHighlighting WRITE setLineHighlighting NOTIFY lineHighlightingChanged)
     Q_PROPERTY(bool symbolHighlighting READ symbolHighlighting WRITE setSymbolHighlighting NOTIFY symbolHighlightingChanged)
-
 public:
+    void setZoomingEnabled(bool);
+    bool zoomingEnabled();
+
     void search();
     void replaceAll();
 
@@ -42,7 +44,8 @@ public:
     void fastClear();
     void setPosition(int pos);
     void select(int start, int end);
-    void paintEvent(QPaintEvent *e);
+
+    void wheelEvent(QWheelEvent *e);
     void keyPressEvent(QKeyEvent *e);
     explicit PlainTextEdit(QWidget *parent = nullptr);
     ~PlainTextEdit();
@@ -62,7 +65,11 @@ public:
     bool symbolHighlighting();
     void setSymbolHighlighting(bool);
 
+protected:
+    void paintEvent(QPaintEvent *e);
 signals:
+    void zoomChanged();
+
     void pairCompletionChanged();
 
     void lineHighlightingChanged();
@@ -81,6 +88,7 @@ private:
     bool m_pairCompletion = true;
     bool m_lineHighlighing = true;
     bool m_symbolhighlighting = true;
+    bool m_zooming_enabled = false;
 
     QMap<QString, QString> pairCompletionMap;
 

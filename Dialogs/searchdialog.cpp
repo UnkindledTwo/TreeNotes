@@ -16,9 +16,11 @@ SearchDialog::~SearchDialog()
 
 void SearchDialog::keyPressEvent(QKeyEvent *e){
     if(e->key() == Qt::Key_Return){
+        //Accept
         on_buttonBox_accepted();
     }
     if(e->key() == Qt::Key_Escape){
+        //Reject
         on_buttonBox_rejected();
     }
 }

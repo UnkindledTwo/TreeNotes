@@ -6,7 +6,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     , ui(new Ui::TreeNotes)
 {
     qDebug() << "{";
-    qDebug() << "--------------------";
+        qDebug() << "--------------------";
     qDebug() << "Initializing window";
     this->saveFileName = saveFileName;
     ui->setupUi(this);
@@ -78,6 +78,10 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
 
     ui->messageEdit->setCursorWidth(2);
     ui->messageEdit->setSymbolHighlighting(true);
+    ui->messageEdit->setZoomingEnabled(true);
+    connect(ui->messageEdit, &PlainTextEdit::zoomChanged, this, [&](){
+        ui->titleEdit->setFont(ui->messageEdit->font());
+    });
 
     //Make sure the noteTree's column sizes are accurate, kinda hacky
     noteTree->expandAll();
@@ -154,6 +158,7 @@ void TreeNotes::ReadQSettings(){
     //Appconfig section, these can be editable from settings.ini or from the application
     settings.beginGroup("AppConfig");
 
+    appConfig.notetree_icon_size = settings.value("notetree_icon_size", appConfig.notetree_icon_size).toInt();
     appConfig.notetree_select_new_items = settings.value("notetree_select_new_items", appConfig.notetree_select_new_items).toBool();
     appConfig.notetree_alternating_row_colors = settings.value("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors).toBool();
     appConfig.notetree_indentation_size = settings.value("notetree_indentation_size", appConfig.notetree_indentation_size).toInt();
@@ -194,6 +199,7 @@ void TreeNotes::saveQSettings(){
 
     settings.beginGroup("AppConfig");
 
+    settings.setValue("notetree_icon_size", appConfig.notetree_icon_size);
     settings.setValue("notetree_select_new_items", appConfig.notetree_select_new_items);
     settings.setValue("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors);
     settings.setValue("notetree_indentation_size", appConfig.notetree_indentation_size);
@@ -256,6 +262,7 @@ void TreeNotes::AttemptSaveBackup(){
 }
 
 void TreeNotes::ReadAppConfig(app_config appConfig){
+    noteTree->setIconSize(QSize(appConfig.notetree_icon_size, appConfig.notetree_icon_size));
     noteTree->setIndentation(appConfig.notetree_indentation_size);
     noteTree->setAlternatingRowColors(appConfig.notetree_alternating_row_colors);
     this->setWindowOpacity(qreal(appConfig.opacity)/100);
@@ -576,6 +583,8 @@ void TreeNotes::InitIconVector(){
     iconVector.append(style()->standardIcon(QStyle::SP_VistaShield));
     iconVector.append(style()->standardIcon(QStyle::SP_ArrowBack));
     iconVector.append(QIcon(":/Resources/Icons/star.png"));
+    iconVector.append(QIcon(":/Resources/Icons/tux.png"));
+    iconVector.append(QIcon(":/Resources/Icons/windows.png"));
 }
 
 void TreeNotes::InitShortcuts(){

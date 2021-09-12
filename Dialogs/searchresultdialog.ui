@@ -57,7 +57,7 @@
      </attribute>
      <column>
       <property name="text">
-       <string>Matched</string>
+       <string comment="SearchResultsDialog" extracomment="Indicates the matched text in SearchResultsDialog">Matched</string>
       </property>
      </column>
      <column>

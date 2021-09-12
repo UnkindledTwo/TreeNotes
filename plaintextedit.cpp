@@ -69,6 +69,9 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
+    //You NEED to call painter on viewport or it doesn't work
+    //QPainter painter(this->viewport());
+
     QPlainTextEdit::paintEvent(e);
 }
 
@@ -89,8 +92,6 @@ void PlainTextEdit::highlightCurrentLine(){
         goto noLineHighlight;
 
     fmt.setBackground(this->palette().color(QPalette::Base));
-
-
 
     c.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -363,6 +364,7 @@ void PlainTextEdit::select(int start, int end){
     this->setTextCursor(c);
 }
 
+
 void PlainTextEdit::setPosition(int pos){
     QTextCursor c = this->textCursor();
     if(pos > toPlainText().length() -1){
@@ -381,6 +383,32 @@ void PlainTextEdit::fastAppend(QString m){
 
 void PlainTextEdit::fastClear(){
     this->document()->setPlainText("");
+}
+
+void PlainTextEdit::setZoomingEnabled(bool)
+{
+    this->m_zooming_enabled = this;
+}
+
+bool PlainTextEdit::zoomingEnabled()
+{
+    return this->m_zooming_enabled;
+}
+
+void PlainTextEdit::wheelEvent(QWheelEvent *e)
+{
+    if(e->modifiers() == Qt::ControlModifier && this->zoomingEnabled()) {
+        if(e->delta() > 0) {
+            this->zoomIn();
+            emit this->zoomChanged();
+        }
+        else if(e->delta() < 0) {
+            this->zoomOut();
+            emit this->zoomChanged();
+        }
+    }
+
+    QPlainTextEdit::wheelEvent(e);
 }
 
 void PlainTextEdit::search()
