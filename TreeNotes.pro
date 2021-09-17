@@ -28,6 +28,7 @@ SOURCES += \
     main.cpp \
     plaintextedit.cpp \
     saver.cpp \
+    syntaxhighlighter.cpp \
     treenotes.cpp \
     treewidget.cpp \
     treewidgetitem.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     highlightitem.h \
     plaintextedit.h \
     saver.h \
+    syntaxhighlighter.h \
     treenotes.h \
     treewidget.h \
     treewidgetitem.h \

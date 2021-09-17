@@ -77,7 +77,6 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     InitMacroVector();
 
     ui->messageEdit->setCursorWidth(2);
-    ui->messageEdit->setSymbolHighlighting(true);
     ui->messageEdit->setZoomingEnabled(true);
     connect(ui->messageEdit, &PlainTextEdit::zoomChanged, this, [&](){
         ui->titleEdit->setFont(ui->messageEdit->font());
@@ -172,7 +171,6 @@ void TreeNotes::ReadQSettings(){
     appConfig.pair_completion = settings.value("pair_completion", appConfig.pair_completion).toBool();
     appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
     appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
-    appConfig.highlight_current_line = settings.value("highlight_current_line", appConfig.highlight_current_line).toBool();
     appConfig.use_native_theme = settings.value("use_native_theme", appConfig.use_native_theme).toBool();
     appConfig.dark_mode = settings.value("dark_mode", appConfig.dark_mode).toBool();
 
@@ -213,7 +211,6 @@ void TreeNotes::saveQSettings(){
     settings.setValue("pair_completion", appConfig.pair_completion);
     settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
     settings.setValue("maximum_backups", appConfig.maximum_backups);
-    settings.setValue("highlight_current_line", appConfig.highlight_current_line);
     settings.setValue("use_native_theme", appConfig.use_native_theme);
     settings.setValue("dark_mode", appConfig.dark_mode);
 
@@ -278,7 +275,6 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
     }
     ui->messageEdit->setPairCompletion(appConfig.pair_completion);
     noteTree->setDragDrop(appConfig.notetree_drag_drop);
-    ui->messageEdit->setLineHighlighting(appConfig.highlight_current_line);
     if(appConfig.use_native_theme){
         qApp->setStyleSheet("");
         #ifdef Q_OS_LINUX
@@ -895,7 +891,6 @@ void TreeNotes::on_actionRead_Only_toggled(bool arg1)
 {
     ui->titleEdit->setReadOnly(arg1);
     ui->messageEdit->setReadOnly(arg1);
-    ui->messageEdit->highlightCurrentLine();
     if(noteTree->currentItem()) ((TreeWidgetItem*)noteTree->currentItem())->readOnly = arg1;
 }
 

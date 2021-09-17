@@ -33,7 +33,6 @@ void SettingsDialog::setAppConfig(app_config appConfig){
     ui->pair_completion->setChecked(appConfig.pair_completion);
     ui->notetree_drag_drop->setChecked(appConfig.notetree_drag_drop);
     ui->maximum_backups->setValue(appConfig.maximum_backups);
-    ui->highlight_current_line->setChecked(appConfig.highlight_current_line);
     ui->use_native_theme->setChecked(appConfig.use_native_theme);
 }
 
@@ -54,7 +53,6 @@ struct app_config SettingsDialog::appConfig(){
     m_appConfig.pair_completion = ui->pair_completion->isChecked();
     m_appConfig.notetree_drag_drop = ui->notetree_drag_drop->isChecked();
     m_appConfig.maximum_backups = ui->maximum_backups->value();
-    m_appConfig.highlight_current_line = ui->highlight_current_line->isChecked();
     m_appConfig.use_native_theme = ui->use_native_theme->isChecked();
 
     return m_appConfig;

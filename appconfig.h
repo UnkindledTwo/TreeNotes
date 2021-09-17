@@ -16,7 +16,6 @@ struct app_config{
     bool pair_completion = true;
     bool notetree_drag_drop = false;
     int maximum_backups = 20;
-    bool highlight_current_line = true;
     bool use_native_theme = false;
     bool dark_mode = true;
 };

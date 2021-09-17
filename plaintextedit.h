@@ -20,6 +20,7 @@
 
 #include "highlightitem.h"
 #include "Dialogs/searchdialog.h"
+#include "syntaxhighlighter.h"
 
 namespace Ui {
 class PlainTextEdit;
@@ -30,9 +31,9 @@ class PlainTextEdit : public QPlainTextEdit
     Q_OBJECT
 
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
-    Q_PROPERTY(bool lineHighlighting READ lineHighlighting WRITE setLineHighlighting NOTIFY lineHighlightingChanged)
-    Q_PROPERTY(bool symbolHighlighting READ symbolHighlighting WRITE setSymbolHighlighting NOTIFY symbolHighlightingChanged)
 public:
+    void setFont(const QFont &);
+
     void setZoomingEnabled(bool);
     bool zoomingEnabled();
 
@@ -57,14 +58,6 @@ public:
     int currentLine();
     int currentColumn();
 
-    void highlightCurrentLine();
-
-    bool lineHighlighting();
-    void setLineHighlighting(bool l);
-
-    bool symbolHighlighting();
-    void setSymbolHighlighting(bool);
-
 protected:
     void paintEvent(QPaintEvent *e);
 signals:
@@ -72,41 +65,21 @@ signals:
 
     void pairCompletionChanged();
 
-    void lineHighlightingChanged();
-    void symbolHighlightingChanged();
 private slots:
     void TextChanged();
 
     void initPairCompletionMap();
-    void initRegexVector();
-
 protected:
 
 private:
     Ui::PlainTextEdit *ui;
 
+    SyntaxHighlighter *high;
+
     bool m_pairCompletion = true;
-    bool m_lineHighlighing = true;
-    bool m_symbolhighlighting = true;
     bool m_zooming_enabled = false;
 
     QMap<QString, QString> pairCompletionMap;
-
-    QBrush m_highligtBrush;
-
-    //QVector<QPair<QString, QPair<QColor, QColor>>> regexVector;
-    QVector<HighlightItem> regexVector;
-
-    HighlightItem regexVectorItem(QString exp,
-                                  QColor fore,
-                                  QColor back = Qt::white,
-                                  bool isBold = false,
-                                  bool isItalic = false,
-                                  bool isUnderLine = false,
-                                  bool isMonospace = false);
-
-    int monospaceFontId = QFontDatabase::addApplicationFont(":/Resources/Fonts/SourceCodePro-Regular.ttf");
-    QString monospaceFontFamily = QFontDatabase::applicationFontFamilies(monospaceFontId).at(0);
 };
 
 #endif // PLAINTEXTEDIT_H

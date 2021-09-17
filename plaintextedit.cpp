@@ -6,7 +6,6 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     ui(new Ui::PlainTextEdit)
 {
     ui->setupUi(this);
-    initRegexVector();
     connect(this, &PlainTextEdit::textChanged, this, &PlainTextEdit::TextChanged);
 
     QShortcut *moveToStart = new QShortcut(QKeySequence("Ctrl+Shift+G"), this);
@@ -65,7 +64,13 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
 
     initPairCompletionMap();
-    connect(this, &PlainTextEdit::cursorPositionChanged, this, &PlainTextEdit::highlightCurrentLine);
+    high = new SyntaxHighlighter(this->document(), this /*Text Editor (QPlainTextEdit)*/);
+
+    /*
+    QTextOption op;
+    op.setFlags(QTextOption::ShowTabsAndSpaces);
+    this->document()->setDefaultTextOption(op);
+    */
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
@@ -73,128 +78,6 @@ void PlainTextEdit::paintEvent(QPaintEvent *e){
     //QPainter painter(this->viewport());
 
     QPlainTextEdit::paintEvent(e);
-}
-
-void PlainTextEdit::highlightCurrentLine(){
-    if(toPlainText().length() > 30000) return;
-    if(!textCursor().selectedText().isEmpty())
-        return;
-
-    QColor backColor = this->palette().color(QPalette::Background);
-    bool darkTheme = backColor.lightness() < 150;
-    int scrollbarpos = this->verticalScrollBar()->value();
-
-    QColor highlightColor;
-    if(!darkTheme){
-        highlightColor = QColor(backColor.darker(115));
-    }
-    else{
-        highlightColor = QColor(backColor.lighter(125));
-    }
-
-    QTextCursor c = textCursor();
-    int pos = c.position();
-    QTextCharFormat fmt;
-    if(!lineHighlighting())
-        goto noLineHighlight;
-
-    fmt.setBackground(this->palette().color(QPalette::Base));
-
-    c.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-    c.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-    c.setCharFormat(fmt);
-    if(lineHighlighting()){
-        fmt.setBackground(highlightColor);
-        /*
-        if(!darkTheme){
-            fmt.setBackground(backColor.darker(115));
-        }
-        else{
-            fmt.setBackground(backColor.lighter(125));
-        }
-        */
-    }
-
-noLineHighlight:
-
-    c.setPosition(pos);
-    c.movePosition(QTextCursor::StartOfBlock);
-    c.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-    c.setCharFormat(fmt);
-    c.setPosition(pos);
-    fmt.setBackground(this->palette().color(QPalette::Base));
-
-    if(!symbolHighlighting()) return;
-
-    //Apply highlighting
-    for(int i = 0; i < regexVector.count(); i++){
-        QRegularExpression reA(regexVector.at(i).regex);
-        QRegularExpressionMatchIterator it = reA.globalMatch(toPlainText());
-        while (it.hasNext()) {
-            QRegularExpressionMatch match = it.next();
-            if (match.hasMatch()) {
-                //qDebug() << "Match, capturedstart" << match.capturedStart() << "capturedend" << match.capturedEnd();
-                c.setPosition(match.capturedStart());
-                c.setPosition(match.capturedEnd(), QTextCursor::KeepAnchor);
-                if(regexVector.at(i).foreground == Qt::black) fmt.setForeground(this->palette().color(QPalette::Foreground));
-                else
-                    if(darkTheme)
-                        fmt.setForeground(regexVector.at(i).foreground.lighter(155));
-                    else
-                        fmt.setForeground(regexVector.at(i).foreground.darker(105));
-
-                //h1
-                if(regexVector.at(i).regex == "(?m)^#{1}(?!#)(.*)") {
-                    fmt.setFontPointSize(this->font().pointSizeF() * 1.72);
-                }
-                //h2
-                if(regexVector.at(i).regex == "(?m)^#{2}(?!#)(.*)") {
-                    fmt.setFontPointSize(this->font().pointSizeF() * 1.44);
-                }
-                //h3
-                if(regexVector.at(i).regex == "(?m)^#{3}(?!#)(.*)") {
-                    fmt.setFontPointSize(this->font().pointSizeF() * 1.20);
-                }
-                //h4
-                if(regexVector.at(i).regex == "(?m)^#{4}(?!#)(.*)") {
-                    fmt.setFontPointSize(this->font().pointSizeF() * 1.15);
-                }
-                //h5
-                if(regexVector.at(i).regex == "(?m)^#{5}(?!#)(.*)") {
-                    fmt.setFontPointSize(this->font().pointSizeF() * 1.10);
-                }
-                //h6
-                if(regexVector.at(i).regex == "(?m)^#{6}(?!#)(.*)") {
-                    fmt.setFontPointSize(this->font().pointSizeF() * 1.05);
-                }
-
-                if(regexVector.at(i).isBold) fmt.setFontWeight(QFont::Bold);
-                if(regexVector.at(i).isItalic) fmt.setFontItalic(true);
-                if(regexVector.at(i).isStrikeThrough) fmt.setFontStrikeOut(true);
-                if(regexVector.at(i).isMonospace) {
-                    fmt.setFontFamily(monospaceFontFamily);
-                    fmt.setBackground(highlightColor);
-                }
-                if(regexVector.at(i).isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-                else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
-
-                c.setCharFormat(fmt);
-                fmt.setFont(this->font());
-                fmt.setBackground(backColor);
-            }
-        }
-    }
-
-    fmt.merge(c.charFormat());
-    this->verticalScrollBar()->setValue(scrollbarpos);
-
-    //Fix for scrollbars
-    //When something with a different font size is added to the bottom of the document.
-    //Scrolling with the arrow keys will break this widget
-    //Not sure if this fixes it. But here you go.
-    c.setPosition(pos);
-    this->setTextCursor(c);
 }
 
 PlainTextEdit::~PlainTextEdit()
@@ -300,76 +183,10 @@ int PlainTextEdit::currentColumn(){
     return textCursor().columnNumber() + 1;
 }
 
-HighlightItem PlainTextEdit::regexVectorItem(
-        QString exp,
-        QColor fore,
-        QColor back,
-        bool isBold,
-        bool isItalic,
-        bool isUnderLine,
-        bool isMonospace
-        ){
-    HighlightItem h;
-    h.regex = exp;
-    h.background = back;
-    h.foreground = fore;
-    h.isUnderLine = isUnderLine;
-    h.isBold = isBold;
-    h.isItalic = isItalic;
-    h.isMonospace = isMonospace;
-    return h;
-}
-
-void PlainTextEdit::initRegexVector(){
-    //Links
-    regexVector.append(regexVectorItem("(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?",  Qt::blue, Qt::white,  false, false, true));
-
-    //Italic
-    //regexVector.append(regexVectorItem("\\*[A-z0-9]+\\*", Qt::black, Qt::white, false, true));
-    regexVector.append(regexVectorItem("\\*{1}.+\\*{1}", Qt::black, Qt::white, false, true));
-    //Bold
-    //regexVector.append(regexVectorItem("\\*\\*[A-z0-9]+\\*\\*", Qt::black, Qt::white, true));
-    regexVector.append(regexVectorItem("\\*{2}.+\\*{2}", Qt::black, Qt::white, true));
-    //BoldItalic
-    //regexVector.append(regexVectorItem("\\*\\*\\*[A-z0-9]+\\*\\*\\*", Qt::black, Qt::white, true, true));
-    regexVector.append(regexVectorItem("\\*{3}.+\\*{3}", Qt::black, Qt::white, true, true));
-
-    //Monospace
-    regexVector.append(regexVectorItem("`.*`", Qt::black, Qt::white, false, false, false, true));
-
-    regexVector.append(regexVectorItem("✔((?!✖).)*",  Qt::darkGreen, Qt::white));
-    regexVector.append(regexVectorItem("✖((?!✔).)*", Qt::darkRed, Qt::white));
-    //Lambda is broken, let it be
-    regexVector.append(regexVectorItem("λ.*", QColor(8, 129, 199), Qt::white));
-    HighlightItem i = regexVectorItem("\\~[A-z0-9]+\\~",  Qt::black, Qt::white);
-    i.isStrikeThrough = true;
-    regexVector.append(i);
-    //Headings through 1 to 6
-    for(int i = 1; i < 7; i++) {
-        HighlightItem heading = regexVectorItem(QString("(?m)^#{%1}(?!#)(.*)").arg(QString::number(i)), Qt::darkBlue, Qt::white, true);
-        regexVector.append(heading);
-    }
-}
-
-bool PlainTextEdit::lineHighlighting(){
-    return m_lineHighlighing;
-}
-
-void PlainTextEdit::setLineHighlighting(bool l){
-    m_lineHighlighing = l;
-    highlightCurrentLine();
-    emit lineHighlightingChanged();
-}
-
-bool PlainTextEdit::symbolHighlighting()
+void PlainTextEdit::setFont(const QFont &font)
 {
-    return m_symbolhighlighting;
-}
-
-void PlainTextEdit::setSymbolHighlighting(bool a)
-{
-    m_symbolhighlighting = a;
-    emit symbolHighlightingChanged();
+    QPlainTextEdit::setFont(font);
+    high->rehighlight();
 }
 
 void PlainTextEdit::select(int start, int end){
@@ -378,7 +195,6 @@ void PlainTextEdit::select(int start, int end){
     c.setPosition(end, QTextCursor::KeepAnchor);
     this->setTextCursor(c);
 }
-
 
 void PlainTextEdit::setPosition(int pos){
     QTextCursor c = this->textCursor();
