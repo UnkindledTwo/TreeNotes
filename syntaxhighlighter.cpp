@@ -84,7 +84,10 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
 void SyntaxHighlighter::initRegexVector()
 {
     //Quotes
-    regexVector.append(regexVectorItem("\"(.*?)\"", Qt::darkGreen, Qt::white));
+    regexVector.append(regexVectorItem("\"(.*?)\"", QColor::fromRgb(152,166,74), Qt::white));
+
+    //Blockquote
+    regexVector.append(regexVectorItem("^>.*", QColor::fromRgb(68,131,93), Qt::white));
 
     //Links
     regexVector.append(regexVectorItem("(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?",  Qt::blue, Qt::white,  false, false, true));
@@ -109,6 +112,7 @@ void SyntaxHighlighter::initRegexVector()
 
     //Monospace
     regexVector.append(regexVectorItem("`.+`", Qt::black, Qt::white, false, false, false, true));
+
 
     regexVector.append(regexVectorItem("✔((?!✖).)*",  Qt::darkGreen, Qt::white));
     regexVector.append(regexVectorItem("✖((?!✔).)*", Qt::darkRed, Qt::white));
