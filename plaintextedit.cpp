@@ -63,14 +63,25 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
         this->setTextCursor(c);
     });
 
+    QShortcut *showTabsAndSpaces = new QShortcut(QKeySequence("Alt+T"), this);
+    connect(showTabsAndSpaces, &QShortcut::activated, this, [&](){
+        QTextOption op;
+        op.setFlags(QTextOption::ShowTabsAndSpaces);
+        if(this->document()->defaultTextOption().flags() == QTextOption::ShowTabsAndSpaces) {
+            this->document()->setDefaultTextOption(QTextOption());
+        }
+        else {
+            this->document()->setDefaultTextOption(op);
+        }
+    });
+
     initPairCompletionMap();
+
+    //Create the syntax highlighter
     high = new SyntaxHighlighter(this->document(), this /*Text Editor (QPlainTextEdit)*/);
 
-    /*
-    QTextOption op;
-    op.setFlags(QTextOption::ShowTabsAndSpaces);
-    this->document()->setDefaultTextOption(op);
-    */
+    //Resize headings when zoom changes
+    connect(this, &PlainTextEdit::zoomChanged, high, &SyntaxHighlighter::rehighlight);
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
@@ -80,13 +91,22 @@ void PlainTextEdit::paintEvent(QPaintEvent *e){
     QPlainTextEdit::paintEvent(e);
 }
 
+void PlainTextEdit::changeEvent(QEvent *e)
+{
+    //Handle style and font change
+    switch(e->type()) {
+    case QEvent::StyleChange:
+    case QEvent::FontChange:
+        high->rehighlight();
+        break;
+    }
+
+    QPlainTextEdit::changeEvent(e);
+}
+
 PlainTextEdit::~PlainTextEdit()
 {
     delete ui;
-}
-
-int PlainTextEdit::lineCount(){
-    return this->blockCount();
 }
 
 void PlainTextEdit::keyPressEvent(QKeyEvent *e){
@@ -118,7 +138,7 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
         else{
             QTextCursor c = this->textCursor();
             //Save the end and start indices of selection
-            int selEnd = c.selectionEnd(), selStart = c.selectionStart();
+            int selStart = c.selectionStart();
             QString selectedText = c.selectedText();
             c.removeSelectedText();
             c.setPosition(selStart);
@@ -156,23 +176,7 @@ void PlainTextEdit::initPairCompletionMap(){
 }
 
 QString PlainTextEdit::lineAt(int line){
-    qDebug() << "Calculating line at" << line;
-    QString returnVal = "";
-    int currentLine = 1;
-
-    for(int i = 0; i < this->toPlainText().length(); i++){
-        if(currentLine == line){
-            returnVal += this->toPlainText().at(i);
-            if(this->toPlainText().at(i) == '\n') currentLine++;
-
-            //Stop the loop if the line interpreted by the loop is higher than the desired line.
-            if(currentLine > line) break;
-        }
-        if(toPlainText().at(i) == '\n') currentLine++;
-    }
-
-    qDebug() << "Calculating line at" << line << "finished";
-    return returnVal;
+    return this->document()->findBlockByNumber(line).text();
 }
 
 int PlainTextEdit::currentLine(){
@@ -181,12 +185,6 @@ int PlainTextEdit::currentLine(){
 
 int PlainTextEdit::currentColumn(){
     return textCursor().columnNumber() + 1;
-}
-
-void PlainTextEdit::setFont(const QFont &font)
-{
-    QPlainTextEdit::setFont(font);
-    high->rehighlight();
 }
 
 void PlainTextEdit::select(int start, int end){
@@ -238,8 +236,8 @@ void PlainTextEdit::wheelEvent(QWheelEvent *e)
             emit this->zoomChanged();
         }
     }
-
-    QPlainTextEdit::wheelEvent(e);
+    else
+        QPlainTextEdit::wheelEvent(e);
 }
 
 void PlainTextEdit::search()

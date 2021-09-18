@@ -21,7 +21,6 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     splitter = new QSplitter();
     splitter->addWidget(noteTree);
 
-
     QWidget* wrapper = new QWidget();
     ui->verticalLayout->setMargin(0);
     ui->verticalLayout->setParent(NULL);
@@ -650,7 +649,7 @@ void TreeNotes::RefreshLabels(){
         lengthLabel->setText(tr("Length: %1").arg(QString::number(ui->messageEdit->toPlainText().length())));
     }
     currentPositionLabel->setText(tr("ln: %1").arg(QString::number(ui->messageEdit->currentLine())) + tr(", col: %1").arg(QString::number(ui->messageEdit->currentColumn())));
-    lineCountLabel->setText(tr("Lines: %1").arg(QString::number(ui->messageEdit->lineCount())));
+    lineCountLabel->setText(tr("Lines: %1").arg(QString::number(ui->messageEdit->blockCount())));
 }
 
 void TreeNotes::on_actionHide_Show_Note_Tree_triggered()

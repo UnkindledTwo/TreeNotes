@@ -2,7 +2,7 @@ QT += core gui xml concurrent printsupport
 
 win32
 {
-	QT += winextras
+QT += winextras
 }
 
 

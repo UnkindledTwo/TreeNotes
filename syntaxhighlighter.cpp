@@ -11,6 +11,8 @@ SyntaxHighlighter::SyntaxHighlighter(QTextDocument *parent, QPlainTextEdit *text
 void SyntaxHighlighter::highlightBlock(const QString &text)
 {
     QColor backColor = this->textEdit->palette().color(QPalette::Background);
+
+    //Decide if the user is using the dark theme
     bool darkTheme = backColor.lightness() < 150;
 
     QColor highlightColor;
@@ -26,61 +28,64 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
         QRegularExpressionMatchIterator it = reA.globalMatch(text);
         while (it.hasNext()) {
             QRegularExpressionMatch match = it.next();
-            if (match.hasMatch()) {
-                QTextCharFormat fmt;
+            //if(match.hasMatch()){
+            QTextCharFormat fmt;
 
-                //qDebug() << "Match, capturedstart" << match.capturedStart() << "capturedend" << match.capturedEnd();
-                if(highlightItem.foreground == Qt::black) fmt.setForeground(this->textEdit->palette().color(QPalette::Foreground));
+            //qDebug() << "Match, capturedstart" << match.capturedStart() << "capturedend" << match.capturedEnd();
+            if(highlightItem.foreground == Qt::black) fmt.setForeground(this->textEdit->palette().color(QPalette::Foreground));
+            else
+                if(darkTheme)
+                    //155
+                    fmt.setForeground(highlightItem.foreground.lighter(185));
                 else
-                    if(darkTheme)
-                        //155
-                        fmt.setForeground(highlightItem.foreground.lighter(185));
-                    else
-                        fmt.setForeground(highlightItem.foreground.darker(105));
+                    fmt.setForeground(highlightItem.foreground.darker(105));
 
-                //h1
-                if(highlightItem.regex == "(?m)^#{1} (?!#)(.*)") {
-                    fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.72);
-                }
-                //h2
-                if(highlightItem.regex == "(?m)^#{2} (?!#)(.*)") {
-                    fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.44);
-                }
-                //h3
-                if(highlightItem.regex == "(?m)^#{3} (?!#)(.*)") {
-                    fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.20);
-                }
-                //h4
-                if(highlightItem.regex == "(?m)^#{4} (?!#)(.*)") {
-                    fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.15);
-                }
-                //h5
-                if(highlightItem.regex == "(?m)^#{5} (?!#)(.*)") {
-                    fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.10);
-                }
-                //h6
-                if(highlightItem.regex == "(?m)^#{6} (?!#)(.*)") {
-                    fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.05);
-                }
-
-                if(highlightItem.isBold) fmt.setFontWeight(QFont::Bold);
-                if(highlightItem.isItalic) fmt.setFontItalic(true);
-                if(highlightItem.isStrikeThrough) fmt.setFontStrikeOut(true);
-                if(highlightItem.isMonospace) {
-                    fmt.setFontFamily(monospaceFontFamily);
-                    fmt.setBackground(highlightColor);
-                }
-                if(highlightItem.isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-                else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
-
-                setFormat(match.capturedStart(), match.capturedLength(), fmt);
+            //h1
+            if(highlightItem.regex == "(?m)^#{1} (?!#)(.*)") {
+                fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.72);
             }
+            //h2
+            if(highlightItem.regex == "(?m)^#{2} (?!#)(.*)") {
+                fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.44);
+            }
+            //h3
+            if(highlightItem.regex == "(?m)^#{3} (?!#)(.*)") {
+                fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.20);
+            }
+            //h4
+            if(highlightItem.regex == "(?m)^#{4} (?!#)(.*)") {
+                fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.15);
+            }
+            //h5
+            if(highlightItem.regex == "(?m)^#{5} (?!#)(.*)") {
+                fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.10);
+            }
+            //h6
+            if(highlightItem.regex == "(?m)^#{6} (?!#)(.*)") {
+                fmt.setFontPointSize(this->textEdit->font().pointSizeF() * 1.05);
+            }
+
+            if(highlightItem.isBold) fmt.setFontWeight(QFont::Bold);
+            if(highlightItem.isItalic) fmt.setFontItalic(true);
+            if(highlightItem.isStrikeThrough) fmt.setFontStrikeOut(true);
+            if(highlightItem.isMonospace) {
+                fmt.setFontFamily(monospaceFontFamily);
+                fmt.setBackground(highlightColor);
+            }
+            if(highlightItem.isUnderLine) fmt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+            else fmt.setUnderlineStyle(QTextCharFormat::NoUnderline);
+
+            setFormat(match.capturedStart(), match.capturedLength(), fmt);
         }
+        //}
     }
 }
 
 void SyntaxHighlighter::initRegexVector()
 {
+    //Quotes
+    regexVector.append(regexVectorItem("\"(.*?)\"", Qt::darkGreen, Qt::white));
+
     //Links
     regexVector.append(regexVectorItem("(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?",  Qt::blue, Qt::white,  false, false, true));
 

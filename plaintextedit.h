@@ -32,8 +32,6 @@ class PlainTextEdit : public QPlainTextEdit
 
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
 public:
-    void setFont(const QFont &);
-
     void setZoomingEnabled(bool);
     bool zoomingEnabled();
 
@@ -60,6 +58,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e);
+    void changeEvent(QEvent *e);
 signals:
     void zoomChanged();
 
