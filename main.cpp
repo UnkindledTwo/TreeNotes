@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     if(t.load(":/Resources/Translations/" + QLocale().name().left(2) + ".qm")){
         qDebug() << "Translator loaded successfully";
     }
-    a.installTranslator(&t);
+    //a.installTranslator(&t);
 
     //Load another save file if specified
         //The default save name is save.xml

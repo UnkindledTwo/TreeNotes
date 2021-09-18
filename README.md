@@ -20,6 +20,7 @@ You can change the values under [AppConfig].
 
 Or you can use the settings menu from `Other -> Settings`
 
-![screenshot(Dark)](/Resources/Screenshot1.png)
-![screenshot(Light)](/Resources/Screenshot2.png)
+![screenshot(Dark)](/Resources/screenshot_light.PNG)
+![screenshot(Light)](/Resources/screenshot_dark.PNG)
+![screenshot(Windows Native)](/Resources/screenshot_native_windows.PNG)
 
