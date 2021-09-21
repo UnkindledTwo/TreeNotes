@@ -104,7 +104,7 @@ void Saver::SaveToFile(){
     }
 
     noteTree->setEnabled(true);
-    qDebug() << "Saving to file finished";
+    qDebug() << "Saving to file finished" << qApp->applicationDirPath()+ "/" + saveFileName;
 }
 
 void Saver::ReadFromFile(){

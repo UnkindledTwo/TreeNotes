@@ -94,16 +94,16 @@ void SyntaxHighlighter::initRegexVector()
 
     //Italic
     //regexVector.append(regexVectorItem("\\*[A-z0-9]+\\*", Qt::black, Qt::white, false, true));
-    regexVector.append(regexVectorItem("\\*{1}.+\\*{1}", Qt::black, Qt::white, false, true));
-    regexVector.append(regexVectorItem("\\_{1}.+\\_{1}", Qt::black, Qt::white, false, true));
+    regexVector.append(regexVectorItem("\\*{1}[^*.]+\\*{1}", Qt::black, Qt::white, false, true));
+    regexVector.append(regexVectorItem("\\_{1}[^_.]+\\_{1}", Qt::black, Qt::white, false, true));
     //Bold
     //regexVector.append(regexVectorItem("\\*\\*[A-z0-9]+\\*\\*", Qt::black, Qt::white, true));
-    regexVector.append(regexVectorItem("\\*{2}.+\\*{2}", Qt::black, Qt::white, true));
-    regexVector.append(regexVectorItem("\\_{2}.+\\_{2}", Qt::black, Qt::white, true));
+    regexVector.append(regexVectorItem("\\*{2}[^*.]+\\*{2}", Qt::black, Qt::white, true));
+    regexVector.append(regexVectorItem("\\_{2}[^_.]+\\_{2}", Qt::black, Qt::white, true));
     //BoldItalic
     //regexVector.append(regexVectorItem("\\*\\*\\*[A-z0-9]+\\*\\*\\*", Qt::black, Qt::white, true, true));
-    regexVector.append(regexVectorItem("\\*{3}.+\\*{3}", Qt::black, Qt::white, true, true));
-    regexVector.append(regexVectorItem("\\_{3}.+\\_{3}", Qt::black, Qt::white, true, true));
+    regexVector.append(regexVectorItem("\\*{3}[^*.]+\\*{3}", Qt::black, Qt::white, true, true));
+    regexVector.append(regexVectorItem("\\_{3}[^_.]+\\_{3}", Qt::black, Qt::white, true, true));
 
     //Strikethrough
     HighlightItem strikeThrough = regexVectorItem("\\~[A-z0-9]+\\~",  Qt::black, Qt::white);

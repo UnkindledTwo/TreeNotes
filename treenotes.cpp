@@ -583,20 +583,34 @@ void TreeNotes::InitIconVector(){
 }
 
 void TreeNotes::InitShortcuts(){
+#define JUMPMESSAGE ui->messageEdit->setFocus();
+#define JUMPTREE if(!noteTree->currentItem()){ \
+    if(noteTree->topLevelItem(0)){ \
+    noteTree->setCurrentItem(noteTree->topLevelItem(0)); \
+}\
+}\
+    noteTree->setFocus();
+#define JUMPTITLE ui->titleEdit->setFocus();
+
     QShortcut *jumpToMessageBox = new QShortcut(QKeySequence(SHORTCUT_JUMP_MSG), this);
-    connect(jumpToMessageBox, &QShortcut::activated, this, [&](){ui->messageEdit->setFocus();});
+    connect(jumpToMessageBox, &QShortcut::activated, this, [&](){
+        if(ui->messageEdit->hasFocus()) {
+            JUMPTREE
+        }
+        else
+            JUMPMESSAGE
+    });
 
     QShortcut *jumpToTitleBox = new QShortcut(QKeySequence(SHORTCUT_JUMP_TITLE), this);
-    connect(jumpToTitleBox, &QShortcut::activated, this, [&](){ui->titleEdit->setFocus();});
+    connect(jumpToTitleBox, &QShortcut::activated, this, [&](){JUMPTITLE});
 
     QShortcut *jumpToTree = new QShortcut(QKeySequence(SHORTCUT_JUMP_TREE), this);
     connect(jumpToTree, &QShortcut::activated, this, [&](){
-        if(!noteTree->currentItem()){
-            if(noteTree->topLevelItem(0)){
-                noteTree->setCurrentItem(noteTree->topLevelItem(0));
-            }
+        if(!noteTree->hasFocus()) {
+            JUMPTREE
         }
-        noteTree->setFocus();
+        else
+            JUMPMESSAGE
     });
 }
 
