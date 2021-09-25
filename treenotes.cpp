@@ -86,12 +86,29 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     noteTree->resizeColumnToContents(1);
     noteTree->collapseAll();
 
+    latestVersion();
     qDebug() << "Initilization of the main window is finished";
 }
 
 TreeNotes::~TreeNotes()
 {
     delete ui;
+}
+
+QString TreeNotes::latestVersion()
+{
+    QString string;
+    QUrl url = QUrl("https://api.github.com/repos/UnkindledTwo/TreeNotes/releases/latest");
+    QNetworkAccessManager *mgr = new QNetworkAccessManager(this);
+    QEventLoop loop;
+    QNetworkReply *reply = mgr->get(QNetworkRequest(url));
+    connect(mgr, &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QJsonDocument doc = QJsonDocument::fromJson(((QString)reply->readAll()).toUtf8());
+    QJsonObject obj = doc.object();
+    return obj["tag_name"].toString();
+    return string;
 }
 
 void TreeNotes::updateWindowTitle()
@@ -1027,3 +1044,17 @@ void TreeNotes::on_actionChange_Layout_triggered()
 
     splitter->setSizes(sizes);
 }
+
+void TreeNotes::on_actionCheck_For_The_Latest_Version_triggered()
+{
+    QString v = latestVersion();
+    QString version = v.right(v.length() - 1);
+    qDebug() << qApp->applicationVersion();
+    if(version == qApp->applicationVersion().left(3)) {
+        QMessageBox::information(this, "Check For Updates", "TreeNotes is up to date");
+    }
+    else {
+        QMessageBox::warning(this, "Check For Updates", "TreeNotes is not up to date");
+    }
+}
+

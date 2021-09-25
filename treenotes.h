@@ -24,6 +24,11 @@
 #include <QPushButton>
 #include <QStyleFactory>
 #include <QPrinter>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 
 //Win only
 //#include <QtWinExtras>
@@ -62,6 +67,7 @@ public:
     ~TreeNotes();
 
 private slots:
+    QString latestVersion();
     void updateWindowTitle();
     bool hasUnsavedChanges();
     QString dateTimeNoSpace();
@@ -127,6 +133,8 @@ private slots:
     void on_actionClone_triggered();
 
     void on_actionChange_Layout_triggered();
+
+    void on_actionCheck_For_The_Latest_Version_triggered();
 
 private:
     Ui::TreeNotes *ui;

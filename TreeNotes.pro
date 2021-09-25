@@ -1,4 +1,6 @@
-QT += core gui xml concurrent printsupport
+VERSION = 8.1
+
+QT += core gui xml concurrent printsupport network
 
 win32
 {

@@ -212,6 +212,7 @@
     </property>
     <addaction name="actionQt"/>
     <addaction name="actionMacros"/>
+    <addaction name="actionCheck_For_The_Latest_Version"/>
    </widget>
    <widget class="QMenu" name="menuSearch">
     <property name="title">
@@ -505,6 +506,11 @@
   <action name="actionChange_Layout">
    <property name="text">
     <string>Change Layout</string>
+   </property>
+  </action>
+  <action name="actionCheck_For_The_Latest_Version">
+   <property name="text">
+    <string>Check For The Latest Version</string>
    </property>
   </action>
  </widget>
