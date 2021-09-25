@@ -10,6 +10,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setApplicationVersion("8.1");
 
     QTranslator t;
     qDebug() << "Locale:" << QLocale().name().left(2);

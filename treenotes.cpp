@@ -107,8 +107,8 @@ QString TreeNotes::latestVersion()
 
     QJsonDocument doc = QJsonDocument::fromJson(((QString)reply->readAll()).toUtf8());
     QJsonObject obj = doc.object();
+    qDebug() << obj["tag_name"].toString();
     return obj["tag_name"].toString();
-    return string;
 }
 
 void TreeNotes::updateWindowTitle()
