@@ -9,6 +9,9 @@ You can build this application like you would a Qt app normally,
 * [Mac](https://doc.qt.io/qt-5/macos.html#deploying-applications-on-macos)
 
 ### Note
+You need to put `libcrypto-1_1-x64.dll` and `libssl-1_1-x64.dll` in the .exe's directory when deploying for windows.
+You need openssl to be installed for linux
+
 To run this app on linux, you need to install `libxkbcommon-x11-0`. 
 
 ## Multiple Save Files
