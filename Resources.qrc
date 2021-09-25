@@ -35,62 +35,6 @@
         <file>Resources/BreezeStyleSheets/assets/breeze_light_windows.png</file>
         <file>Resources/BreezeStyleSheets/assets/gallery.md</file>
         <file>Resources/BreezeStyleSheets/assets/Yellowstone.jpg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_closed.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_closed_hover.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_end.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_end_arrow.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_more.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_more_arrow.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_open.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/branch_open_hover.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/calendar_next.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/calendar_previous.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/checkbox_checked.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/checkbox_checked_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/checkbox_indeterminate.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/checkbox_indeterminate_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/checkbox_unchecked.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/checkbox_unchecked_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/close.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/close_hover.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/close_pressed.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-cancel.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-close.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-discard.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-help.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-no.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-ok.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-open.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-reset.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/dialog-save.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/down_arrow.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/down_arrow_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/down_arrow_hover.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/hmovetoolbar.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/hseptoolbar.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/left_arrow.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/left_arrow_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/message-critical.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/message-information.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/message-question.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/message-warning.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/radio_checked.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/radio_checked_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/radio_unchecked.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/radio_unchecked_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/right_arrow.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/right_arrow_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/sizegrip.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/stylesheet.qss</file>
-        <file>Resources/BreezeStyleSheets/dark/transparent.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/undock.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/undock_hover.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/up_arrow.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/up_arrow_disabled.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/up_arrow_hover.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/vline.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/vmovetoolbar.svg</file>
-        <file>Resources/BreezeStyleSheets/dark/vseptoolbar.svg</file>
         <file>Resources/BreezeStyleSheets/dark-green/branch_closed.svg</file>
         <file>Resources/BreezeStyleSheets/dark-green/branch_closed_hover.svg</file>
         <file>Resources/BreezeStyleSheets/dark-green/branch_end.svg</file>
@@ -252,7 +196,6 @@
         <file>Resources/BreezeStyleSheets/theme/light-green.json</file>
         <file>Resources/BreezeStyleSheets/theme/light-purple.json</file>
         <file>Resources/BreezeStyleSheets/theme/light.json</file>
-        <file>Resources/BreezeStyleSheets/.gitignore</file>
         <file>Resources/BreezeStyleSheets/breeze_resources.py</file>
         <file>Resources/BreezeStyleSheets/configure.py</file>
         <file>Resources/BreezeStyleSheets/custom.qrc</file>
