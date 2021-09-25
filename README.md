@@ -8,11 +8,12 @@ You can build this application like you would a Qt app normally,
 * [Linux (x11)](https://doc.qt.io/qt-5/linux-deployment.html)
 * [Mac](https://doc.qt.io/qt-5/macos.html#deploying-applications-on-macos)
 
-### Note
-You need to put `libcrypto-1_1-x64.dll` and `libssl-1_1-x64.dll` in the .exe's directory when deploying for windows.
-You need openssl to be installed for linux
+### Notes For Deployment
+* You need to put `libcrypto-1_1-x64.dll` and `libssl-1_1-x64.dll` in the .exe's directory when deploying for windows.
 
-To run this app on linux, you need to install `libxkbcommon-x11-0`. 
+* You need openssl to be installed for linux
+
+* To run this app on linux, you need to install `libxkbcommon-x11-0`. 
 
 ## Multiple Save Files
 To have another save file. Run `TreeNotes {Save File Name}`. Make sure the save file name is reachable by the app and is a legal file name.
