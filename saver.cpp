@@ -73,7 +73,6 @@ void Saver::SaveToFile(){
         it++;
     }
 
-    QFuture<void> future = QtConcurrent::run([&](){
         QString savePath = qApp->applicationDirPath()+ "/" + saveFileName;
         QFileInfo saveFileInfo(savePath);
         QDir savePathDir(saveFileInfo.absoluteDir());
@@ -96,12 +95,8 @@ void Saver::SaveToFile(){
 
         file.close();
         stream.flush();
-    });
 
     noteTree->setEnabled(false);
-    while(!future.isFinished() && future.isRunning()){
-        qApp->processEvents();
-    }
 
     noteTree->setEnabled(true);
     qDebug() << "Saving to file finished" << qApp->applicationDirPath()+ "/" + saveFileName;
@@ -124,12 +119,7 @@ void Saver::ReadFromFile(){
         return;
     }
 
-    QFuture<QString> future = QtConcurrent::run([&]() ->QString{return file.readAll();});
-    while(!future.isFinished() && future.isRunning()){
-        qApp->processEvents();
-    }
-
-    if(!document.setContent(future.result(), false, &errMsg, &errLine, &errColumn)){
+    if(!document.setContent(file.readAll(), false, &errMsg, &errLine, &errColumn)){
         qDebug() << "Error while setting xmldoc content: " << errMsg << QString::number(errLine) << QString::number(errColumn);
     }
     file.close();
@@ -155,5 +145,5 @@ void Saver::ReadFromFile(){
         }
     }
 
-    qDebug() << "Reading from file finished";
+    qDebug() << "Reading from file finished" << file.fileName();
 }

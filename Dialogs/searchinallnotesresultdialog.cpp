@@ -42,8 +42,9 @@ void SearchInAllNotesResultDialog::search()
     while(*it){
         TreeWidgetItem *item = (TreeWidgetItem*)(*it);
         //Search the note messages
-        QRegularExpressionMatch match = r.match(item->message);
-        if(match.hasMatch()){
+        QRegularExpressionMatchIterator iter = r.globalMatch(item->message);
+        if(iter.hasNext()){
+            QRegularExpressionMatch match = iter.next();
             table()->setRowCount(table()->rowCount()+1);
 
             //Item title

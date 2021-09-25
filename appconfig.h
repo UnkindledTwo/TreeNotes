@@ -2,6 +2,7 @@
 #define APPCONFIG_H
 
 struct app_config{
+    unsigned short tab_width = 4;
     bool notetree_select_new_items = true;
     bool notetree_alternating_row_colors = true;
     unsigned short notetree_icon_size = 20;

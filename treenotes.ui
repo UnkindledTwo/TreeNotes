@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
-    <height>378</height>
+    <width>840</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="font">
@@ -22,6 +22,9 @@
   <property name="windowIcon">
    <iconset resource="Resources.qrc">
     <normaloff>:/Resources/Icon.png</normaloff>:/Resources/Icon.png</iconset>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonIconOnly</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout" columnstretch="1,0,0">
@@ -154,7 +157,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>860</width>
+     <width>840</width>
      <height>20</height>
     </rect>
    </property>
@@ -227,6 +230,8 @@
     <addaction name="actionHide_Show_Title_2"/>
     <addaction name="separator"/>
     <addaction name="actionFullscreen_On_Off"/>
+    <addaction name="separator"/>
+    <addaction name="actionChange_Layout"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuSearch"/>
@@ -495,6 +500,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+D</string>
+   </property>
+  </action>
+  <action name="actionChange_Layout">
+   <property name="text">
+    <string>Change Layout</string>
    </property>
   </action>
  </widget>

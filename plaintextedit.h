@@ -32,6 +32,8 @@ class PlainTextEdit : public QPlainTextEdit
 
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
 public:
+    void setTabStopWidth(int width);
+
     void setZoomingEnabled(bool);
     bool zoomingEnabled();
 
@@ -71,6 +73,7 @@ private slots:
 protected:
 
 private:
+    int tabWidth = 4;
     Ui::PlainTextEdit *ui;
 
     SyntaxHighlighter *high;

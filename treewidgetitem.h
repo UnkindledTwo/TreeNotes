@@ -10,6 +10,9 @@
 class TreeWidgetItem : public QTreeWidgetItem
 {
 public:
+    TreeWidgetItem* parent() const;
+    TreeWidgetItem* takeChild(int index);
+
     TreeWidgetItem();
 
     QString message = "";
@@ -21,10 +24,6 @@ public:
     TreeWidgetItem *clone();
 
     bool starred = false;
-
-    int hScrollbarPos;
-    int vScrollbarPos;
-    int cursorpos = 0;
 
     bool readOnly = false;
 

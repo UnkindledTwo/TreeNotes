@@ -75,7 +75,7 @@ To use macros, you need to write {macroname}.
 eg. {title} {datetime}
 
 After you write your macros, you need to save the document for them to take effect.</source>
-        <translation type="unfinished">Makrolar Nasıl Kullanılır:
+        <translation>Makrolar Nasıl Kullanılır:
 ----------------------------
 
 Makroları Kullanmak İçin {makroadı} yazmalısınız.
@@ -198,24 +198,24 @@ Makrolarını yazdıktan sonra makroların işlenmesi için dökümanı kaydetme
         <translation>Bir Eşyayı Seçmek İçin Çift Tıklayın</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="92"/>
+        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="93"/>
         <source>No Match</source>
         <translation>Eşleşme Bulunamadı</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="92"/>
+        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="93"/>
         <source>No match found for:
 %1</source>
         <translation>%1
 İçin Eşleşme Bulunamadı</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="109"/>
+        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="110"/>
         <source> Results Found</source>
         <translation> Sonuç Bulundu</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="109"/>
+        <location filename="../../Dialogs/searchinallnotesresultdialog.cpp" line="110"/>
         <source> Result Found</source>
         <translation> Sonuç Bulundu</translation>
     </message>
@@ -315,74 +315,85 @@ Makrolarını yazdıktan sonra makroların işlenmesi için dökümanı kaydetme
         <translation>Başlık Kutusuna Atlamak İçin Çift Tıklayın</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="82"/>
         <source>Highlight Current Line</source>
-        <translation>Seçili Sırayı Vurgula</translation>
+        <translation type="vanished">Seçili Sırayı Vurgula</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="89"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="82"/>
         <source>Select New Items Automatically</source>
         <translation>Yeni Eşyaları Otomatik Seç</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="96"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="89"/>
         <source>Alternating Row Colors</source>
         <translation>Değişken Sıra Renkleri</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="103"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="96"/>
         <source>Tree Animated</source>
         <translation>Ağaç Animasyonları</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="110"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="103"/>
         <source>Complete Bracket Pairs</source>
         <translation>Parantezleri Tamamla</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="117"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="110"/>
         <source>Line Wrapping</source>
         <translation>Satır Sarma</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="124"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="117"/>
         <source>Confirm Delete</source>
         <translation>Silmeyi Onayla</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="131"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="124"/>
         <source>Tree Drag And Drop</source>
         <translation>Ağaç Tut ve Sürükle</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="138"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="131"/>
         <source>Use Native Theme</source>
         <translation>Yerli Temayi Kullan</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="168"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="161"/>
         <source>Splitter Handle Width</source>
         <translation>Ayırıcı Tutacak Genişliği</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="208"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="171"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="260"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="309"/>
+        <source>px</source>
+        <translation>px</translation>
+    </message>
+    <message>
+        <location filename="../../Dialogs/settingsdialog.ui" line="207"/>
         <source>Opacity</source>
         <translation>Opaklık</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="251"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="250"/>
         <source>Tree Indentation Size</source>
         <translation>Ağaç Girinti Boyutu</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="294"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="299"/>
         <source>Layout Margin</source>
         <translation>Kenar Boşluğu</translation>
     </message>
     <message>
-        <location filename="../../Dialogs/settingsdialog.ui" line="334"/>
+        <location filename="../../Dialogs/settingsdialog.ui" line="345"/>
         <source>Maximum Backups</source>
         <translation>Maximum Yedek Sayısı</translation>
+    </message>
+    <message>
+        <location filename="../../Dialogs/settingsdialog.ui" line="373"/>
+        <source>Tree Icon Size</source>
+        <translation>Ağaç İkon Boyutu</translation>
     </message>
 </context>
 <context>
@@ -428,327 +439,331 @@ Makrolarını yazdıktan sonra makroların işlenmesi için dökümanı kaydetme
         <translation>Diğer</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="208"/>
         <source>About</source>
-        <translation>Hakkında</translation>
+        <translation type="vanished">Hakkında</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="214"/>
+        <location filename="../../treenotes.ui" line="208"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="220"/>
+        <location filename="../../treenotes.ui" line="215"/>
         <source>Search</source>
         <translation>Ara</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="228"/>
+        <location filename="../../treenotes.ui" line="223"/>
         <source>Appearance</source>
         <translation>Görünüş</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="256"/>
+        <location filename="../../treenotes.ui" line="252"/>
         <source>toolBar</source>
         <translation>Araç Çubuğu</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="285"/>
+        <location filename="../../treenotes.ui" line="281"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="288"/>
+        <location filename="../../treenotes.ui" line="284"/>
         <source>Ctrl+N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="293"/>
+        <location filename="../../treenotes.ui" line="289"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="296"/>
+        <location filename="../../treenotes.ui" line="292"/>
         <source>Ctrl+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="301"/>
+        <location filename="../../treenotes.ui" line="297"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="304"/>
+        <location filename="../../treenotes.ui" line="300"/>
         <source>Ctrl+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="309"/>
+        <location filename="../../treenotes.ui" line="305"/>
         <source>Move Up</source>
         <translation>Yukarı Taşı</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="312"/>
+        <location filename="../../treenotes.ui" line="308"/>
         <source>Ctrl+Up</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="317"/>
+        <location filename="../../treenotes.ui" line="313"/>
         <source>Move Down</source>
         <translation>Aşağı Taşı</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="320"/>
+        <location filename="../../treenotes.ui" line="316"/>
         <source>Ctrl+Down</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="329"/>
+        <location filename="../../treenotes.ui" line="325"/>
         <source>Set Icon</source>
         <translation>İkon Ayarla</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="332"/>
+        <location filename="../../treenotes.ui" line="328"/>
         <source>Ctrl+I</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="337"/>
+        <location filename="../../treenotes.ui" line="333"/>
         <source>Focus Parent</source>
         <translation>Ebeveyn&apos;i Seç</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="340"/>
+        <location filename="../../treenotes.ui" line="336"/>
         <source>Ctrl+P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="348"/>
+        <location filename="../../treenotes.ui" line="344"/>
         <source>Hide/Show Note Tree</source>
         <translation>Ağacı Göster/Gizle</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="351"/>
+        <location filename="../../treenotes.ui" line="347"/>
         <source>F9</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="356"/>
+        <location filename="../../treenotes.ui" line="352"/>
         <source>Save To Disk</source>
         <translation>Diske Kaydet</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="359"/>
+        <location filename="../../treenotes.ui" line="355"/>
         <source>Ctrl+Shift+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="364"/>
-        <location filename="../../treenotes.ui" line="367"/>
+        <location filename="../../treenotes.ui" line="360"/>
+        <location filename="../../treenotes.ui" line="363"/>
         <source>Load From Disk</source>
         <translation>Diskten Yükle</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="372"/>
+        <location filename="../../treenotes.ui" line="368"/>
         <source>About Qt</source>
         <translation>Qt Hakkında</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="377"/>
+        <location filename="../../treenotes.ui" line="373"/>
         <source>Set Font (Text Editors)</source>
         <translation>Yazı Tipi Ayarla (Yazı Düzenleyiciler)</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="382"/>
+        <location filename="../../treenotes.ui" line="378"/>
         <source>Import Text File</source>
         <translation>Metin Dosyasını İçeri Aktar</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="387"/>
-        <location filename="../../treenotes.cpp" line="742"/>
+        <location filename="../../treenotes.ui" line="383"/>
+        <location filename="../../treenotes.cpp" line="767"/>
         <source>Export Text File</source>
         <translation>Metin Dosyasını Dışarı Aktar</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="392"/>
+        <location filename="../../treenotes.ui" line="388"/>
         <source>Macros</source>
         <translation>Makrolar</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="397"/>
+        <location filename="../../treenotes.ui" line="393"/>
         <source>Undo Delete</source>
         <translation>Silmeyi Geri Al</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="400"/>
+        <location filename="../../treenotes.ui" line="396"/>
         <source>Ctrl+Z</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="405"/>
+        <location filename="../../treenotes.ui" line="401"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="408"/>
+        <location filename="../../treenotes.ui" line="404"/>
         <source>Alt+E</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="417"/>
+        <location filename="../../treenotes.ui" line="413"/>
         <source>Star/Unstar</source>
         <translation>Yıldızla/Yıldızı Kaldır</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="422"/>
+        <location filename="../../treenotes.ui" line="418"/>
         <source>Expand All</source>
         <translation>Hepsini Genişlet</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="427"/>
+        <location filename="../../treenotes.ui" line="423"/>
         <source>Collapse All</source>
         <translation>Hepsini Daralt</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="435"/>
+        <location filename="../../treenotes.ui" line="431"/>
         <source>Read Only</source>
         <translation>Salt Okunur</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="440"/>
-        <location filename="../../treenotes.cpp" line="913"/>
+        <location filename="../../treenotes.ui" line="436"/>
+        <location filename="../../treenotes.cpp" line="933"/>
         <source>Export PDF</source>
         <translation>PDF Dosyasını Dışarı Aktar</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="451"/>
+        <location filename="../../treenotes.ui" line="447"/>
         <source>Search/Replace In Current Note</source>
         <translation>Seçili Notta Ara/Değiştir</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="454"/>
+        <location filename="../../treenotes.ui" line="450"/>
         <source>Ctrl+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="459"/>
+        <location filename="../../treenotes.ui" line="455"/>
         <source>Replace All In Current Note</source>
         <translation>Seçili Notta Hepsini Değiştir</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="462"/>
+        <location filename="../../treenotes.ui" line="458"/>
         <source>Ctrl+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="471"/>
+        <location filename="../../treenotes.ui" line="467"/>
         <source>Search In All Notes</source>
         <translation>Tüm Notlarda Ara</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="474"/>
+        <location filename="../../treenotes.ui" line="470"/>
         <source>Ctrl+Shift+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="479"/>
+        <location filename="../../treenotes.ui" line="475"/>
         <source>Hide/Show Toolbar</source>
         <translation>Araç Çubuğunu Göster/Gizle</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="484"/>
+        <location filename="../../treenotes.ui" line="480"/>
         <source>Fullscreen On/Off</source>
         <translation>Tam Ekran Açık/Kapalı</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="487"/>
+        <location filename="../../treenotes.ui" line="483"/>
         <source>F11</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="492"/>
+        <location filename="../../treenotes.ui" line="488"/>
         <source>Hide/Show Title</source>
         <translation>Başlığı Göster/Gizle</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="495"/>
+        <location filename="../../treenotes.ui" line="491"/>
         <source>F10</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="500"/>
+        <location filename="../../treenotes.ui" line="496"/>
         <source>Clone</source>
         <translation>Klonla</translation>
     </message>
     <message>
-        <location filename="../../treenotes.ui" line="503"/>
+        <location filename="../../treenotes.ui" line="499"/>
         <source>Ctrl+Shift+D</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="105"/>
+        <location filename="../../treenotes.ui" line="504"/>
+        <source>Change Layout</source>
+        <translation>Düzeni Değiştir</translation>
+    </message>
+    <message>
+        <location filename="../../treenotes.cpp" line="121"/>
         <source>Context Menu</source>
         <translation>Bağlam Menüsü</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="636"/>
+        <location filename="../../treenotes.cpp" line="661"/>
         <source>Notes : %1</source>
         <translation>Not Sayısı: %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="638"/>
-        <location filename="../../treenotes.cpp" line="642"/>
+        <location filename="../../treenotes.cpp" line="663"/>
+        <location filename="../../treenotes.cpp" line="667"/>
         <source>Children: %1</source>
         <translation>Çocuk Sayısı : %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="639"/>
-        <location filename="../../treenotes.cpp" line="643"/>
+        <location filename="../../treenotes.cpp" line="664"/>
+        <location filename="../../treenotes.cpp" line="668"/>
         <source>Last edited: %1</source>
         <translation>Son Düzenleme: %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="646"/>
+        <location filename="../../treenotes.cpp" line="671"/>
         <source>Length (Sel): %1</source>
         <translation>Uzunluk (Seç) : %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="649"/>
+        <location filename="../../treenotes.cpp" line="674"/>
         <source>Length: %1</source>
         <translation>Uzunluk: %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="651"/>
+        <location filename="../../treenotes.cpp" line="676"/>
         <source>ln: %1</source>
         <translation>st: %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="651"/>
+        <location filename="../../treenotes.cpp" line="676"/>
         <source>, col: %1</source>
         <translation>, stn: %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="652"/>
+        <location filename="../../treenotes.cpp" line="677"/>
         <source>Lines: %1</source>
         <translation>Satır Sayısı: %1</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="688"/>
+        <location filename="../../treenotes.cpp" line="713"/>
         <source>Select a Text Editor Font</source>
         <translation>Yazı Düzenleyeicisi Yazı Tipi Seç</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="711"/>
+        <location filename="../../treenotes.cpp" line="736"/>
         <source>Import Text Files</source>
         <translation>Yazı Dosyalarını İçe Aktar</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="728"/>
+        <location filename="../../treenotes.cpp" line="753"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../../treenotes.cpp" line="728"/>
+        <location filename="../../treenotes.cpp" line="753"/>
         <source>File too big: </source>
         <translation>Dosya Çok Büyük: </translation>
     </message>

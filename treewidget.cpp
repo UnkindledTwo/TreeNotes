@@ -20,6 +20,16 @@ void TreeWidget::addAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>
     }
 }
 
+TreeWidgetItem *TreeWidget::currentItem()
+{
+    return (TreeWidgetItem*)(QTreeWidget::currentItem());
+}
+
+TreeWidgetItem *TreeWidget::takeTopLevelItem(int index)
+{
+    return (TreeWidgetItem*)(QTreeWidget::takeTopLevelItem(index));
+}
+
 void TreeWidget::expandChildren(TreeWidgetItem *i){
     if(!i){
         this->expandAll();

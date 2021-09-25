@@ -1,5 +1,6 @@
 #include "treewidgetitem.h"
 
+
 TreeWidgetItem::TreeWidgetItem()
 {
 
@@ -39,4 +40,14 @@ QString TreeWidgetItem::toString()
             .arg(QString::number(this->readOnly))
             ;
     return res;
+}
+
+TreeWidgetItem *TreeWidgetItem::parent() const
+{
+    return (TreeWidgetItem*)(QTreeWidgetItem::parent());
+}
+
+TreeWidgetItem *TreeWidgetItem::takeChild(int index)
+{
+    return (TreeWidgetItem*)(QTreeWidgetItem::takeChild(index));
 }

@@ -73,6 +73,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
         else {
             this->document()->setDefaultTextOption(op);
         }
+        this->setTabStopWidth(tabWidth);
     });
 
     initPairCompletionMap();
@@ -82,6 +83,8 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
 
     //Resize headings when zoom changes
     connect(this, &PlainTextEdit::zoomChanged, high, &SyntaxHighlighter::rehighlight);
+
+    this->setTabStopWidth(tabWidth);
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e){
@@ -97,6 +100,7 @@ void PlainTextEdit::changeEvent(QEvent *e)
     switch(e->type()) {
     case QEvent::StyleChange:
     case QEvent::FontChange:
+        this->setTabStopWidth(tabWidth);
         high->rehighlight();
         break;
     }
@@ -212,6 +216,13 @@ void PlainTextEdit::fastAppend(QString m){
 
 void PlainTextEdit::fastClear(){
     this->document()->setPlainText("");
+}
+
+void PlainTextEdit::setTabStopWidth(int width)
+{
+    tabWidth = width;
+    QFontMetrics fontMetrics(font());
+    QPlainTextEdit::setTabStopWidth(fontMetrics.width(' ') * width);
 }
 
 void PlainTextEdit::setZoomingEnabled(bool)

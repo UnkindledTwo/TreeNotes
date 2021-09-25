@@ -34,6 +34,7 @@ void SettingsDialog::setAppConfig(app_config appConfig){
     ui->notetree_drag_drop->setChecked(appConfig.notetree_drag_drop);
     ui->maximum_backups->setValue(appConfig.maximum_backups);
     ui->use_native_theme->setChecked(appConfig.use_native_theme);
+    ui->tab_width->setValue(appConfig.tab_width);
 }
 
 struct app_config SettingsDialog::appConfig(){
@@ -54,6 +55,7 @@ struct app_config SettingsDialog::appConfig(){
     m_appConfig.notetree_drag_drop = ui->notetree_drag_drop->isChecked();
     m_appConfig.maximum_backups = ui->maximum_backups->value();
     m_appConfig.use_native_theme = ui->use_native_theme->isChecked();
+    m_appConfig.tab_width = ui->tab_width->value();
 
     return m_appConfig;
 }

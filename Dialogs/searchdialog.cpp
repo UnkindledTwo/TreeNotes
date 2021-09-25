@@ -47,4 +47,3 @@ void SearchDialog::on_buttonBox_rejected()
     this->reject();
     this->close();
 }
-

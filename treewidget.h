@@ -16,6 +16,9 @@ class TreeWidget : public QTreeWidget
     Q_OBJECT
 
 public:
+    TreeWidgetItem *currentItem();
+    TreeWidgetItem *takeTopLevelItem(int index);
+
     void expandChildren(TreeWidgetItem *i);
     void collapseChildren(TreeWidgetItem *i);
     void setDragDrop(bool);

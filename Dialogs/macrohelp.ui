@@ -25,25 +25,36 @@
     <widget class="QListWidget" name="macrolist"/>
    </item>
    <item row="2" column="0">
-    <widget class="QPlainTextEdit" name="plainTextEdit">
+    <widget class="PlainTextEdit" name="plainTextEdit">
      <property name="font">
       <font>
        <pointsize>14</pointsize>
       </font>
      </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
      <property name="plainText">
-      <string>How to use macros
------------------------
+      <string># How to use macros
 
-To use macros, you need to write {macroname}.
-eg. {title} {datetime}
+To use macros, you need to write `{macroname}`.
+eg. `{title}` `{datetime}`
 
-After you write your macros, you need to save the document for them to take effect.</string>
+After you write your macros, you need to save the document for them to take effect.
+
+A list of all usable macros are shown on the left.</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlainTextEdit</class>
+   <extends>QPlainTextEdit</extends>
+   <header location="global">plaintextedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

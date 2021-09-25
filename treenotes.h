@@ -1,6 +1,7 @@
 #ifndef TREENOTES_H
 #define TREENOTES_H
 
+
 #include <QMainWindow>
 #include <QDebug>
 #include <QVBoxLayout>
@@ -61,6 +62,8 @@ public:
     ~TreeNotes();
 
 private slots:
+    void updateWindowTitle();
+    bool hasUnsavedChanges();
     QString dateTimeNoSpace();
     void AttemptSaveBackup();
     void Save(TreeWidgetItem *target);
@@ -123,6 +126,8 @@ private slots:
     void on_actionHide_Show_Title_2_triggered();
     void on_actionClone_triggered();
 
+    void on_actionChange_Layout_triggered();
+
 private:
     Ui::TreeNotes *ui;
 
@@ -147,5 +152,7 @@ private:
 #define SHORTCUT_JUMP_MSG "Ctrl+H"
 #define SHORTCUT_JUMP_TITLE "Ctrl+J"
 #define SHORTCUT_JUMP_TREE "Ctrl+K"
+
+#define WINDOW_TITLE_DEFAULT "TreeNotes"
 
 #endif // TREENOTES_H

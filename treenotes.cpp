@@ -5,9 +5,9 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     : QMainWindow(parent)
     , ui(new Ui::TreeNotes)
 {
-    qDebug() << "{";
-        qDebug() << "--------------------";
+    qDebug() << "--------------------";
     qDebug() << "Initializing window";
+    this->setWindowTitle(WINDOW_TITLE_DEFAULT);
     this->saveFileName = saveFileName;
     ui->setupUi(this);
 
@@ -75,7 +75,6 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     ReadAppConfig(appConfig);
     InitMacroVector();
 
-    ui->messageEdit->setCursorWidth(2);
     ui->messageEdit->setZoomingEnabled(true);
     connect(ui->messageEdit, &PlainTextEdit::zoomChanged, this, [&](){
         ui->titleEdit->setFont(ui->messageEdit->font());
@@ -93,6 +92,24 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
 TreeNotes::~TreeNotes()
 {
     delete ui;
+}
+
+void TreeNotes::updateWindowTitle()
+{
+    if(hasUnsavedChanges()) {
+        this->setWindowTitle("* " WINDOW_TITLE_DEFAULT);
+    }
+    else this->setWindowTitle(WINDOW_TITLE_DEFAULT);
+}
+
+bool TreeNotes::hasUnsavedChanges()
+{
+    if(!noteTree->currentItem()) return false;
+    if((noteTree->currentItem())->message == ui->messageEdit->toPlainText()) {
+        return false;
+    }
+
+    return true;
 }
 
 void TreeNotes::ShowContextMenu(const QPoint &pos){
@@ -172,6 +189,7 @@ void TreeNotes::ReadQSettings(){
     appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
     appConfig.use_native_theme = settings.value("use_native_theme", appConfig.use_native_theme).toBool();
     appConfig.dark_mode = settings.value("dark_mode", appConfig.dark_mode).toBool();
+    appConfig.tab_width = settings.value("tab_width", appConfig.tab_width).toInt();
 
     settings.endGroup();
     ReadAppConfig(appConfig);
@@ -212,6 +230,7 @@ void TreeNotes::saveQSettings(){
     settings.setValue("maximum_backups", appConfig.maximum_backups);
     settings.setValue("use_native_theme", appConfig.use_native_theme);
     settings.setValue("dark_mode", appConfig.dark_mode);
+    settings.setValue("tab_width", appConfig.tab_width);
 
     settings.endGroup();
 
@@ -259,6 +278,10 @@ void TreeNotes::AttemptSaveBackup(){
 
 void TreeNotes::ReadAppConfig(app_config appConfig){
     noteTree->setIconSize(QSize(appConfig.notetree_icon_size, appConfig.notetree_icon_size));
+    //Fix icon size
+    noteTree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
+    noteTree->resizeColumnToContents(1);
+
     noteTree->setIndentation(appConfig.notetree_indentation_size);
     noteTree->setAlternatingRowColors(appConfig.notetree_alternating_row_colors);
     this->setWindowOpacity(qreal(appConfig.opacity)/100);
@@ -294,8 +317,12 @@ void TreeNotes::ReadAppConfig(app_config appConfig){
         qApp->setStyleSheet(stream.readAll());
     }
 
+    qDebug() << appConfig.tab_width;
+    ui->messageEdit->setTabStopWidth(appConfig.tab_width);
 
     nativeTheme:
+
+
 
     qDebug() << "App config read finished";
 }
@@ -304,7 +331,7 @@ void TreeNotes::closeEvent(QCloseEvent *e){
     qDebug().noquote() << "\n\n--------------------\nClose Event" << e;
     //Save the selected item
     if(noteTree->currentItem()){
-        Save((TreeWidgetItem*)noteTree->currentItem());
+        Save(noteTree->currentItem());
     }
 
     AttemptSaveBackup();
@@ -312,7 +339,6 @@ void TreeNotes::closeEvent(QCloseEvent *e){
     saveQSettings();
     qDebug() << "Closed window";
     qDebug() << "--------------------";
-    qDebug() << "}";
 }
 
 void TreeNotes::ReadFromFile(){
@@ -372,10 +398,6 @@ void TreeNotes::Save(TreeWidgetItem *target){
     target->message = ui->messageEdit->toPlainText();
     target->setText(0, ui->titleEdit->text());
 
-    target->hScrollbarPos = ui->messageEdit->horizontalScrollBar()->value();
-    target->vScrollbarPos = ui->messageEdit->verticalScrollBar()->value();
-    target->cursorpos = savedPos;
-
     on_treeWidget_currentItemChanged(noteTree->currentItem(), NULL);
 
     if(savedPos > target->message.length()){
@@ -385,6 +407,8 @@ void TreeNotes::Save(TreeWidgetItem *target){
     QTextCursor a = ui->messageEdit->textCursor();
     a.setPosition(savedPos);
     ui->messageEdit->setTextCursor(a);
+
+    updateWindowTitle();
 }
 
 void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
@@ -407,10 +431,6 @@ part2:
     ui->messageEdit->fastSetPlainText(currentItem->message);
     ui->titleEdit->setText(currentItem->text(0));
 
-    ui->messageEdit->verticalScrollBar()->setValue(currentItem->vScrollbarPos);
-    ui->messageEdit->horizontalScrollBar()->setValue(currentItem->hScrollbarPos);
-    ui->messageEdit->setPosition(currentItem->cursorpos);
-
     if(currentItem->readOnly != ui->messageEdit->isReadOnly()){
         ui->messageEdit->setReadOnly(currentItem->readOnly);
         ui->titleEdit->setReadOnly(currentItem->readOnly);
@@ -421,14 +441,14 @@ part2:
 
 void TreeNotes::on_actionAdd_triggered()
 {
-    AddNote((TreeWidgetItem*)noteTree->currentItem(), "New Note", "");
+    AddNote(noteTree->currentItem(), "New Note", "");
 }
 
 
 void TreeNotes::on_actionSave_triggered()
 {
     if(!noteTree->currentItem()) return;
-    Save((TreeWidgetItem*)noteTree->currentItem());
+    Save(noteTree->currentItem());
 }
 
 void TreeNotes::Delete(QTreeWidgetItem *target){
@@ -470,26 +490,26 @@ void TreeNotes::on_actionDelete_triggered()
     if(appConfig.confirm_delete) reply = QMessageBox::question(this, "Delete Item", "Are you sure you want to delete the current item?\nAll the children will be removed as well.", QMessageBox::Yes | QMessageBox::No);
 
     if(reply == QMessageBox::Yes || !appConfig.confirm_delete){
-        Delete((TreeWidgetItem*)noteTree->currentItem());
+        Delete(noteTree->currentItem());
     }
 }
 
 void TreeNotes::MoveUp(TreeWidgetItem *item){
     if(!noteTree->currentItem()) return;
 
-    TreeWidgetItem *i = (TreeWidgetItem*)noteTree->currentItem();
+    TreeWidgetItem *i = noteTree->currentItem();
     bool expanded = i->isExpanded();
     int row = noteTree->currentIndex().row();
     if(item && item->parent() && row > 0){
-        TreeWidgetItem *parent = (TreeWidgetItem*)i->parent();
+        TreeWidgetItem *parent = i->parent();
         int index = parent->indexOfChild(i);
-        TreeWidgetItem *child = (TreeWidgetItem*)parent->takeChild(index);
+        TreeWidgetItem *child = parent->takeChild(index);
         parent->insertChild(index-1, child);
 
     }
     else if(item && row > 0){
         int index = noteTree->indexOfTopLevelItem(i);
-        TreeWidgetItem *child = (TreeWidgetItem*)noteTree->takeTopLevelItem(index);
+        TreeWidgetItem *child = noteTree->takeTopLevelItem(index);
         noteTree->insertTopLevelItem(index -1, child);
 
     }
@@ -501,19 +521,19 @@ void TreeNotes::MoveUp(TreeWidgetItem *item){
 void TreeNotes::MoveDown(TreeWidgetItem *item){
     if(!noteTree->currentItem()) return;
 
-    TreeWidgetItem *i = (TreeWidgetItem*)noteTree->currentItem();
+    TreeWidgetItem *i = noteTree->currentItem();
     bool expanded = i->isExpanded();
     int row = noteTree->currentIndex().row();
     if(item && item->parent() && row < i->parent()->childCount()-1){
-        TreeWidgetItem *parent = (TreeWidgetItem*)i->parent();
+        TreeWidgetItem *parent = i->parent();
         int index = parent->indexOfChild(i);
-        TreeWidgetItem *child = (TreeWidgetItem*)parent->takeChild(index);
+        TreeWidgetItem *child = parent->takeChild(index);
         parent->insertChild(index+1, child);
 
     }
     else if(item && row < noteTree->topLevelItemCount()-1){
         int index = noteTree->indexOfTopLevelItem(i);
-        TreeWidgetItem *child = (TreeWidgetItem*)noteTree->takeTopLevelItem(index);
+        TreeWidgetItem *child = noteTree->takeTopLevelItem(index);
         noteTree->insertTopLevelItem(index+1, child);
 
     }
@@ -524,26 +544,26 @@ void TreeNotes::MoveDown(TreeWidgetItem *item){
 
 void TreeNotes::on_actionMove_Up_triggered()
 {
-    MoveUp((TreeWidgetItem*)noteTree->currentItem());
+    MoveUp(noteTree->currentItem());
 }
 
 
 void TreeNotes::on_actionMove_Down_triggered()
 {
-    MoveDown((TreeWidgetItem*)noteTree->currentItem());
+    MoveDown(noteTree->currentItem());
 }
 
 
 void TreeNotes::on_actionSet_Icon_triggered()
 {
     if(!noteTree->currentItem()) return;
-    IconSelectorDialog *isd = new IconSelectorDialog(this, iconVector, ((TreeWidgetItem*)noteTree->currentItem())->iconVectorIndex);
+    IconSelectorDialog *isd = new IconSelectorDialog(this, iconVector, noteTree->currentItem()->iconVectorIndex);
 
     isd->setFont(this->font());
     isd->copyFrom(noteTree);
     if(isd->exec()){
         noteTree->currentItem()->setIcon(0, isd->selectedIcon);
-        ((TreeWidgetItem*)noteTree->currentItem())->iconVectorIndex = isd->index;
+        noteTree->currentItem()->iconVectorIndex = isd->index;
         qDebug() << QString::number(isd->index);
     }
 }
@@ -650,7 +670,7 @@ void TreeNotes::RefreshLabels(){
     noteCntLabel->setText(tr("Notes : %1").arg(QString::number(noteTree->noteCount())));
     if(noteTree->currentItem()){
         childrenCntLabel->setText(tr("Children: %1").arg(QString::number(noteTree->currentItem()->childCount())));
-        dateTimeLabel->setText(tr("Last edited: %1").arg(((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString()));
+        dateTimeLabel->setText(tr("Last edited: %1").arg(noteTree->currentItem()->lastEdited.toString()));
     }
     else{
         childrenCntLabel->setText(tr("Children: %1").arg("0"));
@@ -743,7 +763,7 @@ void TreeNotes::on_actionImport_Text_File_triggered()
             continue;
         }
 
-        AddNote((TreeWidgetItem*)noteTree->currentItem(), fi.fileName(), future.result() );
+        AddNote(noteTree->currentItem(), fi.fileName(), future.result());
 
         file.close();
     }
@@ -758,7 +778,7 @@ void TreeNotes::on_actionExport_Text_File_triggered()
     file.open(QIODevice::WriteOnly);
     QTextStream stream(&file);
     stream.setCodec("UTF-8");
-    stream << ((TreeWidgetItem*)noteTree->currentItem())->message;
+    stream << noteTree->currentItem()->message;
 
     file.close();
 }
@@ -766,31 +786,30 @@ void TreeNotes::on_actionExport_Text_File_triggered()
 
 void TreeNotes::on_messageEdit_textChanged()
 {
-
+    updateWindowTitle();
 }
 
 void TreeNotes::InitMacroVector(){
-    macroVec.append(QPair<QString, std::function<QString()>>("{title}", [&]() ->QString {return ui->titleEdit->text();}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.second}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("ss");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.minute}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("mm");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.hour}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("hh");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.day}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("dd");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.month}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("MM");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited.year}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString("yyyy");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lastedited}", [&]() ->QString {return ((TreeWidgetItem*)noteTree->currentItem())->lastEdited.toString();}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.second}", [&]() ->QString {return QDateTime::currentDateTime().toString("ss");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.minute}", [&]() ->QString {return QDateTime::currentDateTime().toString("mm");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.hour}", [&]() ->QString {return QDateTime::currentDateTime().toString("hh");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.day}", [&]() ->QString {return QDateTime::currentDateTime().toString("dd");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.month}", [&]() ->QString {return QDateTime::currentDateTime().toString("MM");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{datetime.year}", [&]() ->QString {return QDateTime::currentDateTime().toString("yyyy");}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{datetime}", [&]() ->QString {return QDateTime::currentDateTime().toString();}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{parent.message}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->message;}return "";}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{parent.title}", [&]() ->QString {if(noteTree->currentItem()->parent()){return ((TreeWidgetItem*)noteTree->currentItem()->parent())->text(0);}return "";}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{yes}", []() ->QString {return "✔";}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{no}", []() ->QString {return "✖";}));
-    macroVec.append(QPair<QString, std::function<QString()>>("{lambda}", []() ->QString {return "λ";}));
-    //macroVec.append(QPair<QString, std::function<QString()>>("{title}", [&]() ->QString {return ui->titleEdit->text();}));
+    macroVec.append({"{title}", [&]() ->QString {return ui->titleEdit->text();}});
+    macroVec.append({"{lastedited.second}", [&]() ->QString {return noteTree->currentItem()->lastEdited.toString("ss");}});
+    macroVec.append({"{lastedited.minute}", [&]() ->QString {return noteTree->currentItem()->lastEdited.toString("mm");}});
+    macroVec.append({"{lastedited.hour}", [&]() ->QString {return noteTree->currentItem()->lastEdited.toString("hh");}});
+    macroVec.append({"{lastedited.day}", [&]() ->QString {return noteTree->currentItem()->lastEdited.toString("dd");}});
+    macroVec.append({"{lastedited.month}", [&]() ->QString {return noteTree->currentItem()->lastEdited.toString("MM");}});
+    macroVec.append({"{lastedited.year}", [&]() ->QString {return noteTree->currentItem()->lastEdited.toString("yyyy");}});
+    macroVec.append({"{lastedited}", [&]() ->QString {return noteTree->currentItem()->lastEdited.toString();}});
+    macroVec.append({"{datetime.second}", [&]() ->QString {return QDateTime::currentDateTime().toString("ss");}});
+    macroVec.append({"{datetime.minute}", [&]() ->QString {return QDateTime::currentDateTime().toString("mm");}});
+    macroVec.append({"{datetime.hour}", [&]() ->QString {return QDateTime::currentDateTime().toString("hh");}});
+    macroVec.append({"{datetime.day}", [&]() ->QString {return QDateTime::currentDateTime().toString("dd");}});
+    macroVec.append({"{datetime.month}", [&]() ->QString {return QDateTime::currentDateTime().toString("MM");}});
+    macroVec.append({"{datetime.year}", [&]() ->QString {return QDateTime::currentDateTime().toString("yyyy");}});
+    macroVec.append({"{datetime}", [&]() ->QString {return QDateTime::currentDateTime().toString();}});
+    macroVec.append({"{parent.message}", [&]() ->QString {if(noteTree->currentItem()->parent()){return (noteTree->currentItem()->parent())->message;}return "";}});
+    macroVec.append({"{parent.title}", [&]() ->QString {if(noteTree->currentItem()->parent()){return (noteTree->currentItem()->parent())->text(0);}return "";}});
+    macroVec.append({"{yes}", []() ->QString {return "✔";}});
+    macroVec.append({"{no}", []() ->QString {return "✖";}});
+    macroVec.append({"{lambda}", []() ->QString {return "λ";}});
 }
 
 void TreeNotes::on_actionMacros_triggered()
@@ -873,10 +892,7 @@ void TreeNotes::CleanBackups(int max, QString backupsDir){
     }
 
     qDebug() << removeList;
-
-    qDebug() << entries;
-    qDebug() << "entrieslength" << entries.length();
-    qDebug() << "removelistlength" << removeList.length();
+    qDebug() << "Total backups to remove:" << removeList.length();
 
     foreach (QString fileToRemove, removeList) {
         backups.remove(backups.absolutePath() + "/" + fileToRemove);
@@ -886,25 +902,25 @@ void TreeNotes::CleanBackups(int max, QString backupsDir){
 void TreeNotes::on_actionStar_Unstar_triggered()
 {
     if(!noteTree->currentItem()) return;
-    noteTree->setStar((TreeWidgetItem*)noteTree->currentItem(), !((TreeWidgetItem*)noteTree->currentItem())->starred);
+    noteTree->setStar(noteTree->currentItem(), !noteTree->currentItem()->starred);
     noteTree->setCurrentItem(noteTree->currentItem());
 }
 
 void TreeNotes::on_actionExpand_All_triggered()
 {
-    noteTree->expandChildren((TreeWidgetItem*)noteTree->currentItem());
+    noteTree->expandChildren(noteTree->currentItem());
 }
 
 void TreeNotes::on_actionCollapse_All_triggered()
 {
-    noteTree->collapseChildren((TreeWidgetItem*)noteTree->currentItem());
+    noteTree->collapseChildren(noteTree->currentItem());
 }
 
 void TreeNotes::on_actionRead_Only_toggled(bool arg1)
 {
     ui->titleEdit->setReadOnly(arg1);
     ui->messageEdit->setReadOnly(arg1);
-    if(noteTree->currentItem()) ((TreeWidgetItem*)noteTree->currentItem())->readOnly = arg1;
+    if(noteTree->currentItem()) noteTree->currentItem()->readOnly = arg1;
 }
 
 
@@ -919,7 +935,6 @@ void TreeNotes::ApplyMacroVector(){
         ui->messageEdit->setPlainText(ui->messageEdit->toPlainText().replace(macroVec.at(i).first, macroVec.at(i).second()));
     }
 }
-
 
 void TreeNotes::on_actionExport_PDF_triggered()
 {
@@ -937,19 +952,16 @@ void TreeNotes::on_actionSearch_In_Current_Note_triggered()
     ui->messageEdit->search();
 }
 
-
 void TreeNotes::on_actionReplace_All_In_Current_Note_triggered()
 {
     ui->messageEdit->replaceAll();
 }
-
 
 void TreeNotes::on_actionSearch_In_All_Notes_triggered()
 {
     SearchInAllNotesDialog *siand = new SearchInAllNotesDialog(this, ui->treeWidget);
     siand->show();
 }
-
 
 void TreeNotes::on_actionHide_Show_Toolbar_triggered()
 {
@@ -966,21 +978,38 @@ void TreeNotes::on_actionFullscreen_On_Off_triggered()
     }
 }
 
-
 void TreeNotes::on_actionHide_Show_Title_2_triggered()
 {
     ui->titleEdit->setHidden(!ui->titleEdit->isHidden());
 }
 
-
 void TreeNotes::on_actionClone_triggered()
 {
     if(!noteTree->currentItem()) return;
-    TreeWidgetItem *item = (TreeWidgetItem*)noteTree->currentItem();
+    TreeWidgetItem *item = noteTree->currentItem();
     if(item->parent()){
         item->parent()->addChild(item->clone());
         return;
     }
-    noteTree->addTopLevelItem(((TreeWidgetItem*)item)->clone());
+    noteTree->addTopLevelItem(item->clone());
 }
 
+void TreeNotes::on_actionChange_Layout_triggered()
+{
+    //Swap sizes
+    QList<int> sizes = splitter->sizes();
+    int item1 = sizes[0];
+    int item2 = sizes[1];
+    sizes[1] = item1;
+    sizes[0] = item2;
+
+    //Swap items in place in splitter
+    QWidget *layoutItem1 = splitter->widget(0);
+    QWidget *layoutItem2 = splitter->widget(1);
+    layoutItem1->setParent(NULL);
+    layoutItem2->setParent(NULL);
+    splitter->addWidget(layoutItem2);
+    splitter->addWidget(layoutItem1);
+
+    splitter->setSizes(sizes);
+}
