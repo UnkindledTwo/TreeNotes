@@ -69,6 +69,9 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
             if(highlightItem.isItalic) fmt.setFontItalic(true);
             if(highlightItem.isStrikeThrough) fmt.setFontStrikeOut(true);
             if(highlightItem.isMonospace) {
+                fmt.setAnchor(true);
+                fmt.setAnchorHref("aspıodjapısdj");
+                fmt.setAnchorName("apsdofjaspıdjp");
                 fmt.setFontFamily(monospaceFontFamily);
                 fmt.setBackground(highlightColor);
             }
@@ -87,7 +90,8 @@ void SyntaxHighlighter::initRegexVector()
     regexVector.append(regexVectorItem("\"(.*?)\"", QColor::fromRgb(152,166,74), Qt::white));
 
     //Blockquote
-    regexVector.append(regexVectorItem("^>.*", QColor::fromRgb(68,131,93), Qt::white));
+    //regexVector.append(regexVectorItem("^[[:space:]]*>.*$", QColor::fromRgb(68,131,93), Qt::white));
+    regexVector.append(regexVectorItem("^\\s*>.*$", QColor::fromRgb(68,131,93), Qt::white));
 
     //Links
     regexVector.append(regexVectorItem("(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?",  Qt::blue, Qt::white,  false, false, true));

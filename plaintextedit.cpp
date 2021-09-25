@@ -191,6 +191,11 @@ int PlainTextEdit::currentColumn(){
     return textCursor().columnNumber() + 1;
 }
 
+void PlainTextEdit::mousePressEvent(QMouseEvent *e)
+{
+    QPlainTextEdit::mousePressEvent(e);
+}
+
 void PlainTextEdit::select(int start, int end){
     QTextCursor c = this->textCursor();
     c.setPosition(start);

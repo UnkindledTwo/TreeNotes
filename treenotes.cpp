@@ -96,10 +96,22 @@ TreeNotes::~TreeNotes()
 
 void TreeNotes::updateWindowTitle()
 {
+    QString title = "";
     if(hasUnsavedChanges()) {
-        this->setWindowTitle("* " WINDOW_TITLE_DEFAULT);
+        title += "* ";
     }
-    else this->setWindowTitle(WINDOW_TITLE_DEFAULT);
+    if(noteTree->currentItem() && !noteTree->currentItem()->text(0).isEmpty()) {
+        QString text = noteTree->currentItem()->text(0);
+        if(text.length() > 30) {
+            title += text.left(30) + "...";
+        }
+        else
+            title += noteTree->currentItem()->text(0);
+        title += " - ";
+    }
+    title += WINDOW_TITLE_DEFAULT;
+
+    this->setWindowTitle(title);
 }
 
 bool TreeNotes::hasUnsavedChanges()
@@ -928,6 +940,8 @@ void TreeNotes::on_titleEdit_textChanged(const QString &arg1)
 {
     if(!noteTree->currentItem()) return;
     noteTree->currentItem()->setText(0, arg1);
+
+    updateWindowTitle();
 }
 
 void TreeNotes::ApplyMacroVector(){

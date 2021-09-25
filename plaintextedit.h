@@ -59,6 +59,7 @@ public:
     int currentColumn();
 
 protected:
+    void mousePressEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
     void changeEvent(QEvent *e);
 signals:
