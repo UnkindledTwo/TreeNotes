@@ -9,7 +9,7 @@ QT += winextras
 RC_ICONS = Resources/Icon.ico
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-greaterThan(QT_MAJOR_VERSION, 5): error("Must be compiled with Qt 5")
+#greaterThan(QT_MAJOR_VERSION, 5): error("Must be compiled with Qt 5")
 
 CONFIG += c++11
 

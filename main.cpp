@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setApplicationVersion("8.1");
+    a.setApplicationVersion("8.2");
 
     QTranslator t;
     qDebug() << "Locale:" << QLocale().name().left(2);
@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
             return -1;
         }
     }
+
     TreeNotes w(NULL, saveFileName);
 
     //Splash screen

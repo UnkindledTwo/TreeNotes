@@ -59,6 +59,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
 
     ReadQSettings();
     ReadAppConfig(appConfig);
+
     //Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::saveToFile);
     connect(ui->actionLoad_From_Disk, &QAction::triggered, this, &TreeNotes::ReadFromFile);
@@ -80,7 +81,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
         ui->titleEdit->setFont(ui->messageEdit->font());
     });
 
-    //Make sure the noteTree's column sizes are accurate, kinda hacky
+    //Make sure the noteTree's column sizes are accurate
     noteTree->expandAll();
     noteTree->header()->setSectionResizeMode(0, QHeaderView::Stretch);
     noteTree->resizeColumnToContents(1);
@@ -97,7 +98,6 @@ TreeNotes::~TreeNotes()
 
 QString TreeNotes::latestVersion()
 {
-    QString string;
     QUrl url = QUrl("https://api.github.com/repos/UnkindledTwo/TreeNotes/releases/latest");
     QNetworkAccessManager *mgr = new QNetworkAccessManager(this);
     QEventLoop loop;
