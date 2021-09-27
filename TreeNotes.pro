@@ -25,6 +25,9 @@ SOURCES += \
     Dialogs/searchinallnotesresultdialog.cpp \
     Dialogs/searchresultdialog.cpp \
     Dialogs/settingsdialog.cpp \
+    Dialogs/tageditordialog.cpp \
+    Dialogs/taginfodialog.cpp \
+    Dialogs/tagresultsdialog.cpp \
     main.cpp \
     plaintextedit.cpp \
     saver.cpp \
@@ -42,6 +45,9 @@ HEADERS += \
     Dialogs/searchinallnotesresultdialog.h \
     Dialogs/searchresultdialog.h \
     Dialogs/settingsdialog.h \
+    Dialogs/tageditordialog.h \
+    Dialogs/taginfodialog.h \
+    Dialogs/tagresultsdialog.h \
     appconfig.h \
     highlightitem.h \
     plaintextedit.h \
@@ -60,6 +66,9 @@ FORMS += \
     Dialogs/searchinallnotesresultdialog.ui \
     Dialogs/searchresultdialog.ui \
     Dialogs/settingsdialog.ui \
+    Dialogs/tageditordialog.ui \
+    Dialogs/taginfodialog.ui \
+    Dialogs/tagresultsdialog.ui \
     plaintextedit.ui \
     treenotes.ui \
     treewidget.ui

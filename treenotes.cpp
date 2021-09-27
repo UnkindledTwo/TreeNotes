@@ -11,6 +11,9 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     this->saveFileName = saveFileName;
     ui->setupUi(this);
 
+    tagsList = new QListWidget(this);
+    connect(tagsList, &QListWidget::itemDoubleClicked, this, &TreeNotes::on_tag_doubleClicked);
+
     noteTree = ui->treeWidget;
     noteTree->clear();
 
@@ -20,12 +23,17 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     //Initialize the splitter
     splitter = new QSplitter();
     splitter->addWidget(noteTree);
+    splitter->setCollapsible(0, false);
+    splitter->setCollapsible(1, false);
 
     QWidget* wrapper = new QWidget();
     ui->verticalLayout->setMargin(0);
     ui->verticalLayout->setParent(NULL);
     wrapper->setLayout(ui->verticalLayout);
     splitter->addWidget(wrapper);
+
+    splitter->addWidget(tagsList);
+
     QGridLayout *grid = new QGridLayout();
     grid->addWidget(splitter);
     QWidget *central = new QWidget();
@@ -48,6 +56,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     styleSheet += "selection-background-color:" + QtWin::colorizationColor().name() + ";";
     ui->titleEdit->setStyleSheet("QLineEdit{" + styleSheet + "}");
     ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
+    tagsList->setStyleSheet("QListWidget{" + styleSheet + "}");
 #else
     QString styleSheet = "border: 1.50px solid black;";
     styleSheet += "border-radius: 2px;";
@@ -171,6 +180,7 @@ void TreeNotes::ReadQSettings(){
     //QSettings settings("Unkindled", "NoteTree", this);
     QSettings settings("settings.ini", QSettings::IniFormat);
 
+
     //Read the saved font
     QFont loadedFont = qvariant_cast<QFont>(settings.value("Text_Editor_Font", this->font()));
     ui->messageEdit->setFont(loadedFont);
@@ -196,8 +206,15 @@ void TreeNotes::ReadQSettings(){
         ui->actionHide_Show_Note_Tree->setChecked(true);
     }
     else{
-        ((QSplitter*)noteTree->parent())->setSizes({settings.value("s1", this->width() / 2).toInt(), settings.value("s2", this->width() / 2).toInt()});
+        ((QSplitter*)noteTree->parent())->setSizes(
+                    {
+                        settings.value("s1", this->width() / 3).toInt(),
+                        settings.value("s2", this->width() / 3).toInt(),
+                        settings.value("s3", this->width() / 3).toInt()
+                    }
+                    );
     }
+    tagsList->setHidden(settings.value("tags_hidden", false).toBool());
 
     //Appconfig section, these can be editable from settings.ini or from the application
     settings.beginGroup("AppConfig");
@@ -236,8 +253,10 @@ void TreeNotes::saveQSettings(){
     settings.setValue("noteTreeHidden", noteTree->isHidden());
     settings.setValue("s1", ((QSplitter*)noteTree->parent())->sizes().at(0));
     settings.setValue("s2", ((QSplitter*)noteTree->parent())->sizes().at(1));
+    settings.setValue("s3", ((QSplitter*)noteTree->parent())->sizes().at(2));
     settings.setValue("toolbar_hidden", ui->ToolBar->isHidden());
     settings.setValue("title_hidden", ui->titleEdit->isHidden());
+    settings.setValue("tags_hidden", tagsList->isHidden());
     settings.setValue("fullscreen", this->isFullScreen());
 
 
@@ -444,6 +463,7 @@ void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTree
 {
     qDebug() << "Item changed";
     if(!current){
+        tagsList->clear();
         ui->messageEdit->clear();
         ui->titleEdit->clear();
         return;
@@ -459,6 +479,11 @@ part2:
 
     ui->messageEdit->fastSetPlainText(currentItem->message);
     ui->titleEdit->setText(currentItem->text(0));
+
+    tagsList->clear();
+    foreach (QString tag, currentItem->tags) {
+        tagsList->addItem(tag);
+    }
 
     if(currentItem->readOnly != ui->messageEdit->isReadOnly()){
         ui->messageEdit->setReadOnly(currentItem->readOnly);
@@ -769,6 +794,13 @@ bool TreeNotes::stringToBool(QString a){
     return a == "true";
 }
 
+void TreeNotes::on_tag_doubleClicked(QListWidgetItem *item)
+{
+    qDebug() << "Tag double clicked";
+    TagResultsDialog *trd = new TagResultsDialog(item->text(), noteTree, this);
+    trd->show();
+}
+
 void TreeNotes::on_actionImport_Text_File_triggered()
 {
     QStringList paths = QFileDialog::getOpenFileNames(this, tr("Import Text Files"));
@@ -1056,5 +1088,38 @@ void TreeNotes::on_actionCheck_For_The_Latest_Version_triggered()
     else {
         QMessageBox::warning(this, "Check For Updates", "TreeNotes is not up to date");
     }
+}
+
+void TreeNotes::on_actionChange_Tag_triggered()
+{
+    if(!noteTree->currentItem()) return;
+    qDebug() << noteTree->currentItem()->tags;
+    TagEditorDialog *ted = new TagEditorDialog(noteTree->currentItem(), this);
+    ted->show();
+    connect(ted, &TagEditorDialog::accepted, this, [&](){
+        tagsList->clear();
+        foreach (QString tag, noteTree->currentItem()->tags) {
+            tagsList->addItem(tag);
+        }
+    });
+}
+
+void TreeNotes::on_actionHide_Show_Tags_triggered()
+{
+    tagsList->setHidden(!tagsList->isHidden());
+    if(!tagsList->isHidden()) {
+        QList<int> sizes = splitter->sizes();
+        if(sizes[2] < splitter->width() / 5) {
+            sizes[2] = splitter->width() / 5;
+            splitter->setSizes(sizes);
+        }
+    }
+}
+
+
+void TreeNotes::on_actionTag_Info_triggered()
+{
+    TagInfoDialog *tid = new TagInfoDialog(noteTree, this);
+    tid->show();
 }
 

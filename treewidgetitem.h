@@ -12,22 +12,16 @@ class TreeWidgetItem : public QTreeWidgetItem
 public:
     TreeWidgetItem* parent() const;
     TreeWidgetItem* takeChild(int index);
-
     TreeWidgetItem();
-
-    QString message = "";
-
-    int iconVectorIndex = 6;
-
-    QDateTime lastEdited = QDateTime::currentDateTime();
-
     TreeWidgetItem *clone();
 
+    QString message = "";
+    int iconVectorIndex = 6;
+    QDateTime lastEdited = QDateTime::currentDateTime();
     bool starred = false;
-
     bool readOnly = false;
-
     QString toString();
+    QStringList tags;
 };
 
 #endif // TREEWIDGETITEM_H

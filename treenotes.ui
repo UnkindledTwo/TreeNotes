@@ -193,6 +193,8 @@
     <addaction name="actionStar_Unstar"/>
     <addaction name="actionRead_Only"/>
     <addaction name="actionClone"/>
+    <addaction name="actionChange_Tag"/>
+    <addaction name="actionTag_Info"/>
    </widget>
    <widget class="QMenu" name="menuOther">
     <property name="title">
@@ -229,6 +231,7 @@
     <addaction name="actionHide_Show_Note_Tree"/>
     <addaction name="actionHide_Show_Toolbar"/>
     <addaction name="actionHide_Show_Title_2"/>
+    <addaction name="actionHide_Show_Tags"/>
     <addaction name="separator"/>
     <addaction name="actionFullscreen_On_Off"/>
     <addaction name="separator"/>
@@ -511,6 +514,27 @@
   <action name="actionCheck_For_The_Latest_Version">
    <property name="text">
     <string>Check For The Latest Version</string>
+   </property>
+  </action>
+  <action name="actionChange_Tag">
+   <property name="text">
+    <string>Edit Tags</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit Tags</string>
+   </property>
+  </action>
+  <action name="actionHide_Show_Tags">
+   <property name="text">
+    <string>Hide/Show Tags</string>
+   </property>
+   <property name="shortcut">
+    <string>F12</string>
+   </property>
+  </action>
+  <action name="actionTag_Info">
+   <property name="text">
+    <string>Tag Info</string>
    </property>
   </action>
  </widget>

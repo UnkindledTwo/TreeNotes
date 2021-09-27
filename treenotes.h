@@ -40,6 +40,9 @@
 #include "Dialogs/iconselectordialog.h"
 #include "Dialogs/macrohelp.h"
 #include "Dialogs/searchinallnotesdialog.h"
+#include "Dialogs/tageditordialog.h"
+#include "Dialogs/tagresultsdialog.h"
+#include "Dialogs/taginfodialog.h"
 
 #include "plaintextedit.h"
 #include "treewidgetitem.h"
@@ -100,6 +103,7 @@ private slots:
     bool stringToBool(QString a);
 
     //UI events
+    void on_tag_doubleClicked(QListWidgetItem* item);
     void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void on_actionAdd_triggered();
     void on_actionSave_triggered();
@@ -136,6 +140,12 @@ private slots:
 
     void on_actionCheck_For_The_Latest_Version_triggered();
 
+    void on_actionChange_Tag_triggered();
+
+    void on_actionHide_Show_Tags_triggered();
+
+    void on_actionTag_Info_triggered();
+
 private:
     Ui::TreeNotes *ui;
 
@@ -143,6 +153,7 @@ private:
 
     TreeWidget *noteTree;
     QSplitter *splitter;
+    QListWidget *tagsList;
 
     QLabel *noteCntLabel;
     QLabel *childrenCntLabel;

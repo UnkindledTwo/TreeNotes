@@ -16,7 +16,9 @@ void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *paren
 
     QDomNodeList itemList = node.toElement().elementsByTagName("NoteItem");
     for(int i = 0; i < node.toElement().childNodes().count(); i++){
+    //for(int i = 0; i < itemList.count(); i++){
         QDomElement currentElement = node.toElement().childNodes().at(i).toElement();
+        if(currentElement.tagName() != "NoteItem") continue;
         TreeWidgetItem *newItem = new TreeWidgetItem();
 
         newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
@@ -24,6 +26,13 @@ void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *paren
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
         newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
         newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
+
+        QDomNode domTags = currentElement.childNodes().at(0);
+        for(int i = 0; i < domTags.childNodes().count(); i++) {
+            QDomElement domTag = domTags.childNodes().at(i).toElement();
+            newItem->tags.append(domTag.attribute("name"));
+        }
+
         parent->addChild(newItem);
         noteTree->setStar(newItem, newItem->starred);
         ReadChildren(doc, node.toElement().childNodes().at(i), newItem);
@@ -41,6 +50,16 @@ void Saver::AddChildren(QDomDocument *doc, QDomElement *elem, QTreeWidgetItem *p
             newElem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
             newElem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
             newElem.setAttribute("readOnly", ((TreeWidgetItem*)(*it))->readOnly);
+
+            QDomElement domTags = doc->createElement("Tags");
+            foreach (QString tag, ((TreeWidgetItem*)(*it))->tags) {
+                QDomElement domTag = doc->createElement("Tag");
+                domTag.setAttribute("name", tag);
+                domTags.appendChild(domTag);
+            }
+            newElem.appendChild(domTags);
+
+
             elem->appendChild(newElem);
             AddChildren(doc, &newElem, *it);
         }
@@ -67,34 +86,43 @@ void Saver::SaveToFile(){
             elem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
             elem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
             elem.setAttribute("readOnly", ((TreeWidgetItem*)(*it))->readOnly);
+
+            QDomElement domTags = document.createElement("Tags");
+            foreach (QString tag, ((TreeWidgetItem*)(*it))->tags) {
+                QDomElement domTag = document.createElement("Tag");
+                domTag.setAttribute("name", tag);
+                domTags.appendChild(domTag);
+            }
+            elem.appendChild(domTags);
+
             AddChildren(&document, &elem, (*it));
             root.appendChild(elem);
         }
         it++;
     }
 
-        QString savePath = qApp->applicationDirPath()+ "/" + saveFileName;
-        QFileInfo saveFileInfo(savePath);
-        QDir savePathDir(saveFileInfo.absoluteDir());
-        if(!savePathDir.exists()) {
-            savePathDir.mkdir(savePathDir.absolutePath());
-        }
-        QFile file(savePath);
-        file.open(QIODevice::WriteOnly);
-        QTextStream stream(&file);
-        stream.setCodec("UTF-8");
-        stream << document.toString(4);
+    QString savePath = qApp->applicationDirPath()+ "/" + saveFileName;
+    QFileInfo saveFileInfo(savePath);
+    QDir savePathDir(saveFileInfo.absoluteDir());
+    if(!savePathDir.exists()) {
+        savePathDir.mkdir(savePathDir.absolutePath());
+    }
+    QFile file(savePath);
+    file.open(QIODevice::WriteOnly);
+    QTextStream stream(&file);
+    stream.setCodec("UTF-8");
+    stream << document.toString(4);
 
-        QFile fileB64(qApp->applicationDirPath() + "/" + saveFileName + ".b64");
-        fileB64.open(QIODevice::WriteOnly);
-        QTextStream streamB64(&fileB64);
-        streamB64.setCodec("UTF-8");
-        streamB64 << document.toString(4).toUtf8().toBase64();
-        fileB64.close();
-        streamB64.flush();
+    QFile fileB64(qApp->applicationDirPath() + "/" + saveFileName + ".b64");
+    fileB64.open(QIODevice::WriteOnly);
+    QTextStream streamB64(&fileB64);
+    streamB64.setCodec("UTF-8");
+    streamB64 << document.toString(4).toUtf8().toBase64();
+    fileB64.close();
+    streamB64.flush();
 
-        file.close();
-        stream.flush();
+    file.close();
+    stream.flush();
 
     noteTree->setEnabled(false);
 
@@ -133,12 +161,20 @@ void Saver::ReadFromFile(){
             if(itemList.at(i).toElement().attribute("title") == "") continue;
 
             QDomElement currentElement = root.toElement().childNodes().at(i).toElement();
+            if(currentElement.tagName() != "NoteItem") continue;
             TreeWidgetItem *newItem = new TreeWidgetItem();
             newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
             newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
             newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
             newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
+
+            QDomNode domTags = currentElement.childNodes().at(0);
+            for(int i = 0; i < domTags.childNodes().count(); i++) {
+                QDomElement domTag = domTags.childNodes().at(i).toElement();
+                newItem->tags.append(domTag.attribute("name"));
+            }
+
             noteTree->addTopLevelItem(newItem);
             noteTree->setStar(newItem, newItem->starred);
             ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
