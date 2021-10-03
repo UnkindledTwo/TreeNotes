@@ -16,6 +16,9 @@
     <pointsize>10</pointsize>
    </font>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>TreeNotes</string>
   </property>
@@ -190,6 +193,7 @@
     <addaction name="actionSet_Font_Text_Editors"/>
     <addaction name="separator"/>
     <addaction name="menuText"/>
+    <addaction name="separator"/>
     <addaction name="actionStar_Unstar"/>
     <addaction name="actionRead_Only"/>
     <addaction name="actionClone"/>

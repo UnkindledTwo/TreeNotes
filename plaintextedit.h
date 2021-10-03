@@ -32,6 +32,8 @@ class PlainTextEdit : public QPlainTextEdit
 
     Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
 public:
+    void setHighlighting(bool);
+
     void setTabStopWidth(int width);
 
     void setZoomingEnabled(bool);

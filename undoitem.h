@@ -7,7 +7,7 @@
 class UndoItem
 {
 public:
-    UndoItem(QTreeWidgetItem *item = 0, QTreeWidgetItem *parent= 0, bool isTopLevelItem = true, unsigned position = 0);
+    UndoItem(QTreeWidgetItem *item = 0, QTreeWidgetItem *parent = 0, bool isTopLevelItem = true, unsigned position = 0);
 
     QTreeWidgetItem* item;
     QTreeWidgetItem* parent;

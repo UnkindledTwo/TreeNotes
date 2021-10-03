@@ -70,6 +70,7 @@ public:
     ~TreeNotes();
 
 private slots:
+    void showNoSelectedItemDialog();
     QString latestVersion();
     void updateWindowTitle();
     bool hasUnsavedChanges();
@@ -161,6 +162,7 @@ private:
     QLabel *lineCountLabel;
     QLabel *lengthLabel;
     QLabel *currentPositionLabel;
+    QLabel *readOnlyLabel;
 
     bool doubleClickToEditMessage;
     QVector<QPair<QString, std::function<QString()>>> macroVec;

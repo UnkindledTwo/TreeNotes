@@ -223,6 +223,16 @@ void PlainTextEdit::fastClear(){
     this->document()->setPlainText("");
 }
 
+void PlainTextEdit::setHighlighting(bool a)
+{
+    if(a) {
+        high->setDocument(this->document());
+        high->rehighlight();
+        return;
+    }
+    high->setDocument(NULL);
+}
+
 void PlainTextEdit::setTabStopWidth(int width)
 {
     tabWidth = width;

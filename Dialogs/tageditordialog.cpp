@@ -9,6 +9,7 @@ TagEditorDialog::TagEditorDialog(TreeWidgetItem *item, QWidget *parent) :
     ui->setupUi(this);
     ui->plainTextEdit->setZoomingEnabled(true);
     ui->plainTextEdit->zoomIn(2);
+    ui->plainTextEdit->setHighlighting(false);
 
     readTags();
 
