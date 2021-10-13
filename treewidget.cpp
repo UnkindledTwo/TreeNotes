@@ -13,6 +13,15 @@ TreeWidget::~TreeWidget()
     delete ui;
 }
 
+void TreeWidget::mousePressEvent(QMouseEvent *e)
+{
+    QTreeWidget::mousePressEvent(e);
+
+    if(e->button() == Qt::MiddleButton) {
+        emit middleClicked();
+    }
+}
+
 void TreeWidget::addAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items){
     for(int i = 0; i < item->childCount(); i++){
         items->append(item->child(i));

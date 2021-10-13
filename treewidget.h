@@ -25,9 +25,15 @@ public:
     void addAllChildren(QTreeWidgetItem *item ,QVector<QTreeWidgetItem*>* items);
     void setStar(TreeWidgetItem*, bool);
     int noteCount();
+
     explicit TreeWidget(QWidget *parent = nullptr);
     ~TreeWidget();
 
+protected:
+    void mousePressEvent(QMouseEvent *e);
+
+signals:
+    void middleClicked();
 private:
     Ui::TreeWidget *ui;
 };

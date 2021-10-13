@@ -18,6 +18,8 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     noteTree = ui->treeWidget;
     noteTree->clear();
 
+    connect(noteTree, &TreeWidget::middleClicked, this, &TreeNotes::on_actionChange_Tag_triggered);
+
     /*
     this->setFocusPolicy(Qt::StrongFocus);
     this->setFocus();
@@ -65,8 +67,8 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
 
     //Set borders of noteTree, messageEdit and titleEdit to the accent color of Windows
 #ifdef Q_OS_WIN
-    QString styleSheet = "border: 1.50px solid " + QtWin::colorizationColor().light().name() + ";";
-    styleSheet += "border-radius: 2px;";
+    QString styleSheet = "border: 1.40px solid " + QtWin::colorizationColor().light().name() + ";";
+    styleSheet += "border-radius: 1px;";
     styleSheet += "padding: 3px;";
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     styleSheet += "selection-color: white;";
@@ -75,8 +77,8 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
     tagsList->setStyleSheet("QListWidget{" + styleSheet + "}");
 #else
-    QString styleSheet = "border: 1.50px solid black;";
-    styleSheet += "border-radius: 2px;";
+    QString styleSheet = "border: 1.40px solid black;";
+    styleSheet += "border-radius: 1px;";
     styleSheet += "padding: 3px;";
     //ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
     //ui->titleEdit->setStyleSheet("QLineEdit{" + styleSheet + "}");
@@ -180,14 +182,18 @@ void TreeNotes::ShowContextMenu(const QPoint &pos){
     contextMenu.addAction(ui->actionSave);
     contextMenu.addAction(ui->actionDelete);
     contextMenu.addAction(ui->actionUndo_Delete);
-    contextMenu.addAction(ui->actionSet_Icon);
+    contextMenu.addSeparator();
     contextMenu.addAction(ui->actionMove_Up);
     contextMenu.addAction(ui->actionMove_Down);
     contextMenu.addAction(ui->actionFocus_Parent);
+    contextMenu.addSeparator();
+    contextMenu.addAction(ui->actionSet_Icon);
     contextMenu.addAction(ui->actionStar_Unstar);
     contextMenu.addAction(ui->actionRead_Only);
+    contextMenu.addSeparator();
     contextMenu.addAction(ui->actionCollapse_All);
     contextMenu.addAction(ui->actionExpand_All);
+    contextMenu.addSeparator();
     contextMenu.addAction(ui->actionChange_Tag);
     contextMenu.addAction(ui->actionTag_Info);
 
@@ -590,10 +596,6 @@ void TreeNotes::on_actionDelete_triggered()
 }
 
 void TreeNotes::MoveUp(TreeWidgetItem *item){
-    if(!noteTree->currentItem()) {
-        showNoSelectedItemDialog();
-        return;
-    }
 
     TreeWidgetItem *i = noteTree->currentItem();
     bool expanded = i->isExpanded();
@@ -617,11 +619,6 @@ void TreeNotes::MoveUp(TreeWidgetItem *item){
 }
 
 void TreeNotes::MoveDown(TreeWidgetItem *item){
-    if(!noteTree->currentItem()) {
-        showNoSelectedItemDialog();
-        return;
-    }
-
     TreeWidgetItem *i = noteTree->currentItem();
     bool expanded = i->isExpanded();
     int row = noteTree->currentIndex().row();
@@ -645,12 +642,20 @@ void TreeNotes::MoveDown(TreeWidgetItem *item){
 
 void TreeNotes::on_actionMove_Up_triggered()
 {
+    if(!noteTree->currentItem()) {
+        showNoSelectedItemDialog();
+        return;
+    }
     MoveUp(noteTree->currentItem());
 }
 
 
 void TreeNotes::on_actionMove_Down_triggered()
 {
+    if(!noteTree->currentItem()) {
+        showNoSelectedItemDialog();
+        return;
+    }
     MoveDown(noteTree->currentItem());
 }
 
