@@ -20,11 +20,6 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
 
     connect(noteTree, &TreeWidget::middleClicked, this, &TreeNotes::on_actionChange_Tag_triggered);
 
-    /*
-    this->setFocusPolicy(Qt::StrongFocus);
-    this->setFocus();
-    */
-
     //Third portion of the UI. Tags label and tags list
     QVBoxLayout *vbox = new QVBoxLayout();
     vbox->setMargin(0);
@@ -67,7 +62,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
 
     //Set borders of noteTree, messageEdit and titleEdit to the accent color of Windows
 #ifdef Q_OS_WIN
-    QString styleSheet = "border: 1.40px solid " + QtWin::colorizationColor().light().name() + ";";
+    QString styleSheet = "border: 1.750px solid " + QtWin::colorizationColor().light().name() + ";";
     styleSheet += "border-radius: 1px;";
     styleSheet += "padding: 3px;";
     ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
@@ -77,7 +72,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName)
     ui->messageEdit->setStyleSheet("QPlainTextEdit{" + styleSheet + "}");
     tagsList->setStyleSheet("QListWidget{" + styleSheet + "}");
 #else
-    QString styleSheet = "border: 1.40px solid black;";
+    QString styleSheet = "border: 1.750px solid black;";
     styleSheet += "border-radius: 1px;";
     styleSheet += "padding: 3px;";
     //ui->treeWidget->setStyleSheet("QTreeWidget{" + styleSheet + "}");
@@ -141,13 +136,19 @@ QString TreeNotes::latestVersion()
     return obj["tag_name"].toString();
 }
 
-void TreeNotes::updateWindowTitle()
+void TreeNotes::updateWindowTitleAndIcon()
 {
-    QString title = "";
-    if(hasUnsavedChanges()) {
-        title += "* ";
-    }
+    const int smallIconSize = 20;
+    QPixmap icon(":/Resources/Icon.png");
+
+    QString title =  (hasUnsavedChanges()) ? "* " : "";
     if(noteTree->currentItem() && !noteTree->currentItem()->text(0).isEmpty()) {
+        //Update window icon
+        {
+            QPainter painter(&icon);
+            painter.drawPixmap(QPoint(32 - smallIconSize, 32 - smallIconSize), noteTree->currentItem()->icon(0).pixmap(smallIconSize, smallIconSize));
+        }
+
         QString text = noteTree->currentItem()->text(0);
         if(text.length() > 30) {
             title += text.left(30) + "...";
@@ -159,6 +160,8 @@ void TreeNotes::updateWindowTitle()
     title += WINDOW_TITLE_DEFAULT;
 
     this->setWindowTitle(title);
+    this->setWindowIcon(icon);
+
 }
 
 bool TreeNotes::hasUnsavedChanges()
@@ -489,7 +492,7 @@ void TreeNotes::Save(TreeWidgetItem *target){
     a.setPosition(savedPos);
     ui->messageEdit->setTextCursor(a);
 
-    updateWindowTitle();
+    updateWindowTitleAndIcon();
 }
 
 void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
@@ -675,6 +678,7 @@ void TreeNotes::on_actionSet_Icon_triggered()
         noteTree->currentItem()->iconVectorIndex = isd->index;
         qDebug() << QString::number(isd->index);
     }
+    updateWindowTitleAndIcon();
 }
 
 void TreeNotes::on_actionFocus_Parent_triggered()
@@ -918,7 +922,7 @@ void TreeNotes::on_actionExport_Text_File_triggered()
 
 void TreeNotes::on_messageEdit_textChanged()
 {
-    updateWindowTitle();
+    updateWindowTitleAndIcon();
 }
 
 void TreeNotes::InitMacroVector(){
@@ -1070,7 +1074,7 @@ void TreeNotes::on_titleEdit_textChanged(const QString &arg1)
     if(!noteTree->currentItem()) return;
     noteTree->currentItem()->setText(0, arg1);
 
-    updateWindowTitle();
+    updateWindowTitleAndIcon();
 }
 
 void TreeNotes::ApplyMacroVector(){

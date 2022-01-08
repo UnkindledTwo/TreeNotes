@@ -72,7 +72,7 @@ public:
 private slots:
     void showNoSelectedItemDialog();
     QString latestVersion();
-    void updateWindowTitle();
+    void updateWindowTitleAndIcon();
     bool hasUnsavedChanges();
     QString dateTimeNoSpace();
     void AttemptSaveBackup();
