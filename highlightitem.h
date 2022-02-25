@@ -1,17 +1,19 @@
 #ifndef HIGHLIGHTITEM_H
 #define HIGHLIGHTITEM_H
 
-#include <QString>
 #include <QColor>
 #include <QFont>
+#include <QString>
 
-enum class HighlightFontSize{
+enum class HighlightFontSize
+{
     Same,
     Double,
     Half
 };
 
-enum class HighlightFontFamily{
+enum class HighlightFontFamily
+{
     Regular,
     Monospace
 };
@@ -19,7 +21,7 @@ enum class HighlightFontFamily{
 class HighlightItem
 {
 public:
-    //HighlightItem();
+    // HighlightItem()
 
     bool isBold = false;
     bool isItalic = false;
@@ -32,4 +34,4 @@ public:
     HighlightFontSize fontSize;
 };
 
-#endif // HIGHLIGHTITEM_H
+#endif  // HIGHLIGHTITEM_H

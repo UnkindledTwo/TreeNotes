@@ -1,19 +1,18 @@
 #ifndef TREEWIDGETITEM_H
 #define TREEWIDGETITEM_H
 
-#include <QObject>
-#include <QWidget>
-#include <QTreeWidget>
 #include <QDateTime>
 #include <QDebug>
+#include <QObject>
+#include <QTreeWidget>
+#include <QWidget>
 
-class TreeWidgetItem : public QTreeWidgetItem
-{
+class TreeWidgetItem : public QTreeWidgetItem {
 public:
     TreeWidgetItem* parent() const;
     TreeWidgetItem* takeChild(int index);
     TreeWidgetItem();
-    TreeWidgetItem *clone();
+    TreeWidgetItem* clone();
 
     QString message = "";
     int iconVectorIndex = 6;
@@ -24,4 +23,4 @@ public:
     QStringList tags;
 };
 
-#endif // TREEWIDGETITEM_H
+#endif  // TREEWIDGETITEM_H

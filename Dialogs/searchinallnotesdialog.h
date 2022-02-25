@@ -11,8 +11,7 @@ namespace Ui {
 class SearchInAllNotesDialog;
 }
 
-class SearchInAllNotesDialog : public QDialog
-{
+class SearchInAllNotesDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -28,4 +27,4 @@ private:
     TreeWidget *m_treeWidget;
 };
 
-#endif // SEARCHINALLNOTESDIALOG_H
+#endif  // SEARCHINALLNOTESDIALOG_H

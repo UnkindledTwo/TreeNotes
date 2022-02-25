@@ -11,8 +11,7 @@ namespace Ui {
 class TagResultsDialog;
 }
 
-class TagResultsDialog : public QDialog
-{
+class TagResultsDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -29,10 +28,10 @@ private:
 
     void search();
 
-    QVector<TreeWidgetItem*> found;
+    QVector<TreeWidgetItem *> found;
 
     QString tag;
     TreeWidget *tree;
 };
 
-#endif // TAGRESULTSDIALOG_H
+#endif  // TAGRESULTSDIALOG_H

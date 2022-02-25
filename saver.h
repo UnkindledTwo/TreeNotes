@@ -4,23 +4,24 @@
 #include <QMainWindow>
 #include <QObject>
 #include <QWidget>
-#include <QtXml>
 #include <QtConcurrent>
+#include <QtXml>
+
 #include "treewidget.h"
 
-class Saver
-{
+class Saver {
 public:
     QString saveFileName;
     Saver(TreeWidget *noteTree, QVector<QIcon> iconVector);
     void SaveToFile();
     void ReadFromFile();
+
 private:
-    void AddChildren(QDomDocument *doc ,QDomElement *elem, QTreeWidgetItem *parent);
+    void AddChildren(QDomDocument *doc, QDomElement *elem, QTreeWidgetItem *parent);
     void ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *parent);
 
     QVector<QIcon> iconVector;
     TreeWidget *noteTree;
 };
 
-#endif // SAVER_H
+#endif  // SAVER_H

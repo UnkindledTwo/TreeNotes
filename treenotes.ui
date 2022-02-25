@@ -185,7 +185,6 @@
     <addaction name="actionAdd"/>
     <addaction name="actionSave"/>
     <addaction name="actionDelete"/>
-    <addaction name="actionSet_Icon"/>
     <addaction name="separator"/>
     <addaction name="actionLoad_From_Disk"/>
     <addaction name="actionSave_To_Disk"/>
@@ -194,22 +193,27 @@
     <addaction name="separator"/>
     <addaction name="menuText"/>
     <addaction name="separator"/>
-    <addaction name="actionStar_Unstar"/>
-    <addaction name="actionRead_Only"/>
-    <addaction name="actionClone"/>
-    <addaction name="actionChange_Tag"/>
-    <addaction name="actionTag_Info"/>
    </widget>
    <widget class="QMenu" name="menuOther">
     <property name="title">
      <string>Other</string>
     </property>
-    <addaction name="actionMove_Up"/>
-    <addaction name="actionMove_Down"/>
-    <addaction name="actionFocus_Parent"/>
-    <addaction name="actionHide_Show_Note_Tree"/>
+    <widget class="QMenu" name="menuScratch_Pad">
+     <property name="title">
+      <string>Scratch Pad</string>
+     </property>
+     <addaction name="actionNew_Scratch_Pad"/>
+    </widget>
+    <addaction name="actionSet_Icon"/>
+    <addaction name="actionStar_Unstar"/>
+    <addaction name="actionClone"/>
+    <addaction name="actionRead_Only"/>
+    <addaction name="separator"/>
     <addaction name="actionExpand_All"/>
     <addaction name="actionCollapse_All"/>
+    <addaction name="separator"/>
+    <addaction name="menuScratch_Pad"/>
+    <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -241,7 +245,15 @@
     <addaction name="separator"/>
     <addaction name="actionChange_Layout"/>
    </widget>
+   <widget class="QMenu" name="menuTags">
+    <property name="title">
+     <string>Tags</string>
+    </property>
+    <addaction name="actionChange_Tag"/>
+    <addaction name="actionTag_Info"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuTags"/>
    <addaction name="menuSearch"/>
    <addaction name="menuAppearance"/>
    <addaction name="menuOther"/>
@@ -255,7 +267,7 @@
     </font>
    </property>
    <property name="sizeGripEnabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QToolBar" name="ToolBar">
@@ -275,17 +287,18 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionAdd"/>
-   <addaction name="actionSave"/>
    <addaction name="actionDelete"/>
    <addaction name="actionUndo_Delete"/>
    <addaction name="actionStar_Unstar"/>
    <addaction name="actionSet_Icon"/>
    <addaction name="separator"/>
+   <addaction name="actionFocus_Parent"/>
    <addaction name="actionMove_Up"/>
    <addaction name="actionMove_Down"/>
    <addaction name="separator"/>
+   <addaction name="actionChange_Tag"/>
+   <addaction name="separator"/>
    <addaction name="actionSearch_In_Current_Note"/>
-   <addaction name="actionFullscreen_On_Off"/>
   </widget>
   <action name="actionAdd">
    <property name="text">
@@ -348,9 +361,6 @@
    </property>
   </action>
   <action name="actionHide_Show_Note_Tree">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
    <property name="text">
     <string>Hide/Show Note Tree</string>
    </property>
@@ -491,7 +501,7 @@
     <string>Fullscreen On/Off</string>
    </property>
    <property name="shortcut">
-    <string>F11</string>
+    <string>Alt+Return</string>
    </property>
   </action>
   <action name="actionHide_Show_Title_2">
@@ -539,6 +549,11 @@
   <action name="actionTag_Info">
    <property name="text">
     <string>Tag Info</string>
+   </property>
+  </action>
+  <action name="actionNew_Scratch_Pad">
+   <property name="text">
+    <string>New Scratch Pad</string>
    </property>
   </action>
  </widget>

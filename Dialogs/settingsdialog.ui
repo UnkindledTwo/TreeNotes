@@ -132,6 +132,13 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="colorful_highlighting">
+         <property name="text">
+          <string>Colorful Highlighting</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>

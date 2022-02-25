@@ -1,16 +1,15 @@
 #include "macrohelp.h"
+
 #include "ui_macrohelp.h"
 
-MacroHelp::MacroHelp(QWidget *parent, QVector<QPair<QString, std::function<QString()>>> macroVec) :
-    QDialog(parent),
-    ui(new Ui::MacroHelp)
-{
+MacroHelp::MacroHelp(QWidget *parent, QVector<QPair<QString, std::function<QString()>>> macroVec)
+    : QDialog(parent), ui(new Ui::MacroHelp) {
     ui->setupUi(this);
-    for(int i = 0; i < macroVec.count(); i++){
+    for (int i = 0; i < macroVec.count(); i++) {
         ui->macrolist->addItem(macroVec.at(i).first);
     }
 
-    //Put the list widget and text into a QSplitter
+    // Put the list widget and text into a QSplitter
     QSplitter *splitter = new QSplitter();
     QVBoxLayout *vbox = new QVBoxLayout();
     vbox->setSpacing(0);
@@ -21,21 +20,14 @@ MacroHelp::MacroHelp(QWidget *parent, QVector<QPair<QString, std::function<QStri
     wrapper->setLayout(vbox);
     splitter->addWidget(wrapper);
     splitter->addWidget(ui->plainTextEdit);
-    ((QGridLayout*)this->layout())->addWidget(splitter);
+    ((QGridLayout *)this->layout())->addWidget(splitter);
 
     this->layout()->setMargin(parent->layout()->margin());
     this->setFont(parent->font());
 }
 
-MacroHelp::~MacroHelp()
-{
-    delete ui;
-}
+MacroHelp::~MacroHelp() { delete ui; }
 
-QListWidget* MacroHelp::listWidget(){
-    return ui->macrolist;
-}
+QListWidget *MacroHelp::listWidget() { return ui->macrolist; }
 
-QPlainTextEdit* MacroHelp::plainTextEdit(){
-    return ui->plainTextEdit;
-}
+QPlainTextEdit *MacroHelp::plainTextEdit() { return ui->plainTextEdit; }

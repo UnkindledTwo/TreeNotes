@@ -1,15 +1,13 @@
 #include "plaintextedit.h"
+
 #include "ui_plaintextedit.h"
 
-PlainTextEdit::PlainTextEdit(QWidget *parent) :
-    QPlainTextEdit(parent),
-    ui(new Ui::PlainTextEdit)
-{
+PlainTextEdit::PlainTextEdit(QWidget *parent) : QPlainTextEdit(parent), ui(new Ui::PlainTextEdit) {
     ui->setupUi(this);
     connect(this, &PlainTextEdit::textChanged, this, &PlainTextEdit::TextChanged);
 
     QShortcut *moveToStart = new QShortcut(QKeySequence("Ctrl+Shift+G"), this);
-    connect(moveToStart, &QShortcut::activated,this, [&](){
+    connect(moveToStart, &QShortcut::activated, this, [&]() {
         qDebug() << "Shortcut";
         QTextCursor textCursor = this->textCursor();
         textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor, 1);
@@ -17,7 +15,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
 
     QShortcut *moveToEnd = new QShortcut(QKeySequence("Ctrl+G"), this);
-    connect(moveToEnd, &QShortcut::activated,this, [&](){
+    connect(moveToEnd, &QShortcut::activated, this, [&]() {
         qDebug() << "Shortcut";
         QTextCursor textCursor = this->textCursor();
         textCursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor, 1);
@@ -25,7 +23,7 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
 
     QShortcut *selectLine = new QShortcut(QKeySequence("Ctrl+L"), this);
-    connect(selectLine, &QShortcut::activated, this, [&](){
+    connect(selectLine, &QShortcut::activated, this, [&]() {
         qDebug() << "Shortcut";
         QTextCursor textCursor = this->textCursor();
         textCursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor, 1);
@@ -37,8 +35,8 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
 
     QShortcut *makeHeading = new QShortcut(QKeySequence("Alt+H"), this);
-    connect(makeHeading, &QShortcut::activated, this, [&](){
-        if(this->isReadOnly()) return;
+    connect(makeHeading, &QShortcut::activated, this, [&]() {
+        if (this->isReadOnly()) return;
         QTextCursor c = this->textCursor();
         int pos = c.position();
         c.movePosition(QTextCursor::StartOfBlock);
@@ -48,29 +46,28 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
     });
 
     QShortcut *makeBold = new QShortcut(QKeySequence("Alt+B"), this);
-    connect(makeBold, &QShortcut::activated, this, [&](){
-        if(this->isReadOnly()) return;
+    connect(makeBold, &QShortcut::activated, this, [&]() {
+        if (this->isReadOnly()) return;
         QTextCursor c = this->textCursor();
         int selStart = c.selectionStart();
         int selEnd = c.selectionEnd();
 
-        if(selStart == selEnd) return;
+        if (selStart == selEnd) return;
 
         c.setPosition(selStart);
         c.insertText("**");
-        c.setPosition(selEnd+2);
+        c.setPosition(selEnd + 2);
         c.insertText("**");
         this->setTextCursor(c);
     });
 
     QShortcut *showTabsAndSpaces = new QShortcut(QKeySequence("Alt+T"), this);
-    connect(showTabsAndSpaces, &QShortcut::activated, this, [&](){
+    connect(showTabsAndSpaces, &QShortcut::activated, this, [&]() {
         QTextOption op;
         op.setFlags(QTextOption::ShowTabsAndSpaces);
-        if(this->document()->defaultTextOption().flags() == QTextOption::ShowTabsAndSpaces) {
+        if (this->document()->defaultTextOption().flags() == QTextOption::ShowTabsAndSpaces) {
             this->document()->setDefaultTextOption(QTextOption());
-        }
-        else {
+        } else {
             this->document()->setDefaultTextOption(op);
         }
         this->setTabStopWidth(tabWidth);
@@ -78,70 +75,66 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) :
 
     initPairCompletionMap();
 
-    //Create the syntax highlighter
-    high = new SyntaxHighlighter(this->document(), this /*Text Editor (QPlainTextEdit)*/);
+    // Create the syntax highlighter
+    syntaxHighlighter =
+        new SyntaxHighlighter(this->document(), this /*Text Editor (QPlainTextEdit)*/);
+    syntaxHighlighter->setColorfulHighlighting(true);
 
-    //Resize headings when zoom changes
-    connect(this, &PlainTextEdit::zoomChanged, high, &SyntaxHighlighter::rehighlight);
+    // Resize headings when zoom changes
+    connect(this, &PlainTextEdit::zoomChanged, syntaxHighlighter, &SyntaxHighlighter::rehighlight);
 
     this->setTabStopWidth(tabWidth);
 }
 
-void PlainTextEdit::paintEvent(QPaintEvent *e){
-    //You NEED to call painter on viewport or it doesn't work
-    //QPainter painter(this->viewport());
+void PlainTextEdit::paintEvent(QPaintEvent *e) {
+    // You NEED to call painter on viewport or it doesn't work
+    // QPainter painter(this->viewport());
 
     QPlainTextEdit::paintEvent(e);
 }
 
-void PlainTextEdit::changeEvent(QEvent *e)
-{
-    //Handle style and font change
-    switch(e->type()) {
-    case QEvent::StyleChange:
-    case QEvent::FontChange:
-        this->setTabStopWidth(tabWidth);
-        high->rehighlight();
-        break;
+void PlainTextEdit::changeEvent(QEvent *e) {
+    // Handle style and font change
+    switch (e->type()) {
+        case QEvent::StyleChange:
+        case QEvent::FontChange:
+            this->setTabStopWidth(tabWidth);
+            syntaxHighlighter->rehighlight();
+            break;
     }
 
     QPlainTextEdit::changeEvent(e);
 }
 
-PlainTextEdit::~PlainTextEdit()
-{
-    delete ui;
-}
+PlainTextEdit::~PlainTextEdit() { delete ui; }
 
-void PlainTextEdit::keyPressEvent(QKeyEvent *e){
+void PlainTextEdit::keyPressEvent(QKeyEvent *e) {
+    if (!pairCompletion()) goto noPairCompletion;
 
-    if(!pairCompletion()) goto noPairCompletion;
-
-    if(e->key() == Qt::Key_Backspace){
-        //Check if cursor is inside a pair
-        if(pairCompletionMap["" + toPlainText()[textCursor().position()-1]] == ("" + toPlainText()[textCursor().position()])){ // Yuck!
+    if (e->key() == Qt::Key_Backspace) {
+        // Check if cursor is inside a pair
+        if (pairCompletionMap["" + toPlainText()[textCursor().position() - 1]] ==
+            ("" + toPlainText()[textCursor().position()])) {  // Yuck!
             QTextCursor c = this->textCursor();
             c.deleteChar();
             this->setTextCursor(c);
         }
     }
-    if(pairCompletionMap[e->text()] != ""){
-
-        //Check if pair already exists
+    if (pairCompletionMap[e->text()] != "") {
+        // Check if pair already exists
         /*
         if(pairCompletionMap[e->text()].at(0) == toPlainText()[textCursor().position()]){
             goto noPairCompletion;
         }
         */
 
-        //Check if there is text selected
-        if(textCursor().selectedText().length() == 0){
+        // Check if there is text selected
+        if (textCursor().selectedText().length() == 0) {
             insertPlainText(pairCompletionMap[e->text()]);
             moveCursor(QTextCursor::Left, QTextCursor::MoveAnchor);
-        }
-        else{
+        } else {
             QTextCursor c = this->textCursor();
-            //Save the end and start indices of selection
+            // Save the end and start indices of selection
             int selStart = c.selectionStart();
             QString selectedText = c.selectedText();
             c.removeSelectedText();
@@ -156,150 +149,107 @@ void PlainTextEdit::keyPressEvent(QKeyEvent *e){
 
 noPairCompletion:
     QPlainTextEdit::keyPressEvent(e);
-cancelKeyPress:
-    ;
+cancelKeyPress:;
 }
 
-void PlainTextEdit::TextChanged(){
-}
+void PlainTextEdit::TextChanged() {}
 
-bool PlainTextEdit::pairCompletion(){
-    return m_pairCompletion;
-}
+bool PlainTextEdit::pairCompletion() { return m_pairCompletion; }
 
-void PlainTextEdit::setPairCompletion(bool completion){
+void PlainTextEdit::setPairCompletion(bool completion) {
     m_pairCompletion = completion;
     emit pairCompletionChanged();
 }
 
-void PlainTextEdit::initPairCompletionMap(){
+void PlainTextEdit::initPairCompletionMap() {
     pairCompletionMap["{"] = "}";
     pairCompletionMap["("] = ")";
     pairCompletionMap["["] = "]";
     pairCompletionMap["\""] = "\"";
 }
 
-QString PlainTextEdit::lineAt(int line){
-    return this->document()->findBlockByNumber(line).text();
-}
+QString PlainTextEdit::lineAt(int line) { return this->document()->findBlockByNumber(line).text(); }
 
-int PlainTextEdit::currentLine(){
-    return textCursor().blockNumber() + 1;
-}
+int PlainTextEdit::currentLine() { return textCursor().blockNumber() + 1; }
 
-int PlainTextEdit::currentColumn(){
-    return textCursor().columnNumber() + 1;
-}
+int PlainTextEdit::currentColumn() { return textCursor().columnNumber() + 1; }
 
-void PlainTextEdit::mousePressEvent(QMouseEvent *e)
-{
-    QPlainTextEdit::mousePressEvent(e);
-}
+void PlainTextEdit::mousePressEvent(QMouseEvent *e) { QPlainTextEdit::mousePressEvent(e); }
 
-void PlainTextEdit::select(int start, int end){
+void PlainTextEdit::select(int start, int end) {
     QTextCursor c = this->textCursor();
     c.setPosition(start);
     c.setPosition(end, QTextCursor::KeepAnchor);
     this->setTextCursor(c);
 }
 
-void PlainTextEdit::setPosition(int pos){
+void PlainTextEdit::setPosition(int pos) {
     QTextCursor c = this->textCursor();
-    if(pos > toPlainText().length() -1){
-        pos = toPlainText().length() -1;
+    if (pos > toPlainText().length() - 1) {
+        pos = toPlainText().length() - 1;
     }
     c.setPosition(pos);
     this->setTextCursor(c);
 }
 
-void PlainTextEdit::fastAppend(QString m){
+void PlainTextEdit::fastAppend(QString m) {
     QTextDocument *doc = this->document();
     QTextCursor c(doc);
     c.movePosition(QTextCursor::End);
     c.insertText(m);
 }
 
-void PlainTextEdit::fastClear(){
-    this->document()->setPlainText("");
-}
+void PlainTextEdit::fastClear() { this->document()->setPlainText(""); }
 
-void PlainTextEdit::setHighlighting(bool a)
-{
-    if(a) {
-        high->setDocument(this->document());
-        high->rehighlight();
+void PlainTextEdit::setHighlighting(bool a) {
+    if (a) {
+        syntaxHighlighter->setDocument(this->document());
+        syntaxHighlighter->rehighlight();
         return;
     }
-    high->setDocument(NULL);
+    syntaxHighlighter->setDocument(NULL);
 }
 
-void PlainTextEdit::setTabStopWidth(int width)
-{
+void PlainTextEdit::setTabStopWidth(int width) {
     tabWidth = width;
     QFontMetrics fontMetrics(font());
     QPlainTextEdit::setTabStopWidth(fontMetrics.width(' ') * width);
 }
 
-void PlainTextEdit::setZoomingEnabled(bool)
-{
-    this->m_zooming_enabled = this;
-}
+void PlainTextEdit::setZoomingEnabled(bool) { this->m_zooming_enabled = this; }
 
-bool PlainTextEdit::zoomingEnabled()
-{
-    return this->m_zooming_enabled;
-}
+bool PlainTextEdit::zoomingEnabled() { return this->m_zooming_enabled; }
 
-void PlainTextEdit::wheelEvent(QWheelEvent *e)
-{
-    if(e->modifiers() == Qt::ControlModifier && this->zoomingEnabled()) {
-        if(e->delta() > 0) {
+void PlainTextEdit::wheelEvent(QWheelEvent *e) {
+    if (e->modifiers() == Qt::ControlModifier && this->zoomingEnabled()) {
+        if (e->delta() > 0) {
             this->zoomIn();
             emit this->zoomChanged();
-        }
-        else if(e->delta() < 0) {
+        } else if (e->delta() < 0) {
             this->zoomOut();
             emit this->zoomChanged();
         }
-    }
-    else
+    } else
         QPlainTextEdit::wheelEvent(e);
 }
 
-void PlainTextEdit::search()
-{
+void PlainTextEdit::search() {
     SearchDialog *d = new SearchDialog(this);
     d->show();
 }
 
-void PlainTextEdit::replaceAll()
-{
+void PlainTextEdit::replaceAll() {
     bool lookForOk;
-    QString lookFor = QInputDialog::getText(
-                this,
-                "Replace All",
-                "Look For:",
-                QLineEdit::Normal,
-                this->textCursor().selectedText(),
-                &lookForOk
-                );
-    if(!lookForOk) return;
+    QString lookFor = QInputDialog::getText(this, "Replace All", "Look For:", QLineEdit::Normal,
+                                            this->textCursor().selectedText(), &lookForOk);
+    if (!lookForOk) return;
 
     bool replaceWithOk;
     QString replaceWith = QInputDialog::getText(
-                this,
-                "Replace All",
-                "Replace With:",
-                QLineEdit::Normal,
-                "",
-                &replaceWithOk
-                );
-    if(lookFor.isEmpty() || !replaceWithOk) return;
+        this, "Replace All", "Replace With:", QLineEdit::Normal, "", &replaceWithOk);
+    if (lookFor.isEmpty() || !replaceWithOk) return;
 
     setPlainText(toPlainText().replace(lookFor, replaceWith));
-
 }
 
-void PlainTextEdit::fastSetPlainText(QString m){
-    this->document()->setPlainText(m);
-}
+void PlainTextEdit::fastSetPlainText(QString m) { this->document()->setPlainText(m); }

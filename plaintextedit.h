@@ -1,37 +1,39 @@
 #ifndef PLAINTEXTEDIT_H
 #define PLAINTEXTEDIT_H
 
-#include <QWidget>
 #include <QDebug>
+#include <QPaintEvent>
+#include <QPainter>
 #include <QPlainTextEdit>
+#include <QRegularExpression>
+#include <QScrollBar>
 #include <QShortcut>
-#include <iostream>
+#include <QStack>
 #include <QTextList>
 #include <QTimer>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QRegularExpression>
-#include <tuple>
-#include <cmath>
-#include <QScrollBar>
-#include <QtConcurrent>
 #include <QTreeWidget>
-#include <QStack>
+#include <QWidget>
+#include <QtConcurrent>
+#include <cmath>
+#include <iostream>
+#include <tuple>
 
-#include "highlightitem.h"
 #include "Dialogs/searchdialog.h"
+#include "highlightitem.h"
 #include "syntaxhighlighter.h"
 
 namespace Ui {
 class PlainTextEdit;
 }
 
-class PlainTextEdit : public QPlainTextEdit
-{
+class PlainTextEdit : public QPlainTextEdit {
     Q_OBJECT
 
-    Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY pairCompletionChanged)
+    Q_PROPERTY(bool pairCompletion READ pairCompletion WRITE setPairCompletion NOTIFY
+               pairCompletionChanged)
 public:
+    SyntaxHighlighter *syntaxHighlighter;
+
     void setHighlighting(bool);
 
     void setTabStopWidth(int width);
@@ -73,13 +75,11 @@ private slots:
     void TextChanged();
 
     void initPairCompletionMap();
-protected:
 
+protected:
 private:
     int tabWidth = 4;
     Ui::PlainTextEdit *ui;
-
-    SyntaxHighlighter *high;
 
     bool m_pairCompletion = true;
     bool m_zooming_enabled = false;
@@ -87,4 +87,4 @@ private:
     QMap<QString, QString> pairCompletionMap;
 };
 
-#endif // PLAINTEXTEDIT_H
+#endif  // PLAINTEXTEDIT_H

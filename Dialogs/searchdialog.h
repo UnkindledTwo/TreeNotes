@@ -1,11 +1,11 @@
 #ifndef SEARCHDIALOG_H
 #define SEARCHDIALOG_H
 
-#include <QDialog>
-#include <QPlainTextEdit>
 #include <QDebug>
+#include <QDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QPlainTextEdit>
 
 #include "plaintextedit.h"
 #include "searchresultdialog.h"
@@ -14,8 +14,7 @@ namespace Ui {
 class SearchDialog;
 }
 
-class SearchDialog : public QDialog
-{
+class SearchDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -32,4 +31,4 @@ private:
     Ui::SearchDialog *ui;
 };
 
-#endif // SEARCHDIALOG_H
+#endif  // SEARCHDIALOG_H

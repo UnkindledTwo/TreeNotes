@@ -2,22 +2,23 @@
 #define SEARCHRESULTDIALOG_H
 
 #include <QDialog>
-#include <QtCore>
-#include <QTableWidget>
 #include <QInputDialog>
+#include <QTableWidget>
+#include <QtCore>
+
 #include "plaintextedit.h"
 
 namespace Ui {
 class SearchResultDialog;
 }
 
-class SearchResultDialog : public QDialog
-{
+class SearchResultDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SearchResultDialog(QPlainTextEdit *pte, QString searchText = "", bool caseSensitive = true, QWidget *parent = nullptr);
-    //SearchResultDialog(QPlainTextEdit *pte, QWidget *parent);
+    explicit SearchResultDialog(QPlainTextEdit *pte, QString searchText = "",
+                                bool caseSensitive = true, QWidget *parent = nullptr);
+    // SearchResultDialog(QPlainTextEdit *pte, QWidget *parent);
     ~SearchResultDialog();
 
     QTableWidget *table();
@@ -36,4 +37,4 @@ private:
     void search();
 };
 
-#endif // SEARCHRESULTDIALOG_H
+#endif  // SEARCHRESULTDIALOG_H

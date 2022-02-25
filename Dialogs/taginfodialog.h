@@ -4,15 +4,14 @@
 #include <QDialog>
 #include <QMap>
 
-#include "treewidget.h"
 #include "Dialogs/tagresultsdialog.h"
+#include "treewidget.h"
 
 namespace Ui {
 class TagInfoDialog;
 }
 
-class TagInfoDialog : public QDialog
-{
+class TagInfoDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -33,4 +32,4 @@ private:
     TreeWidget *tree;
 };
 
-#endif // TAGINFODIALOG_H
+#endif  // TAGINFODIALOG_H

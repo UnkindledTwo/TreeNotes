@@ -9,8 +9,7 @@ namespace Ui {
 class TagEditorDialog;
 }
 
-class TagEditorDialog : public QDialog
-{
+class TagEditorDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -19,10 +18,11 @@ public:
 private slots:
     void readTags();
     void saveTags();
+
 private:
     TreeWidgetItem *item;
 
     Ui::TagEditorDialog *ui;
 };
 
-#endif // TAGEDITORDIALOG_H
+#endif  // TAGEDITORDIALOG_H

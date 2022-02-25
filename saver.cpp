@@ -1,34 +1,33 @@
 #include "saver.h"
 
-Saver::Saver(TreeWidget *noteTree, QVector<QIcon> iconVector)
-{
+Saver::Saver(TreeWidget *noteTree, QVector<QIcon> iconVector) {
     this->noteTree = noteTree;
     this->iconVector = iconVector;
 }
 
-void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *parent){
-    if(!node.isElement()) return;
-    if(!node.toElement().hasAttribute("message")) return;
-    if(node.toElement().tagName() == "") return;
+void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *parent) {
+    if (!node.isElement()) return;
+    if (!node.toElement().hasAttribute("message")) return;
+    if (node.toElement().tagName() == "") return;
 
     parent->message = node.toElement().attribute("message");
-    parent->setText(0,node.toElement().attribute("title"));
+    parent->setText(0, node.toElement().attribute("title"));
 
     QDomNodeList itemList = node.toElement().elementsByTagName("NoteItem");
-    for(int i = 0; i < node.toElement().childNodes().count(); i++){
-    //for(int i = 0; i < itemList.count(); i++){
+    for (int i = 0; i < node.toElement().childNodes().count(); i++) {
+        // for(int i = 0; i < itemList.count(); i++){
         QDomElement currentElement = node.toElement().childNodes().at(i).toElement();
-        if(currentElement.tagName() != "NoteItem") continue;
+        if (currentElement.tagName() != "NoteItem") continue;
         TreeWidgetItem *newItem = new TreeWidgetItem();
 
-        newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
+        newItem->setIcon(0, iconVector.at(currentElement.attribute("icon").toInt()));
         newItem->iconVectorIndex = currentElement.attribute("icon").toInt();
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
         newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
         newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
 
         QDomNode domTags = currentElement.childNodes().at(0);
-        for(int i = 0; i < domTags.childNodes().count(); i++) {
+        for (int i = 0; i < domTags.childNodes().count(); i++) {
             QDomElement domTag = domTags.childNodes().at(i).toElement();
             newItem->tags.append(domTag.attribute("name"));
         }
@@ -39,26 +38,25 @@ void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *paren
     }
 }
 
-void Saver::AddChildren(QDomDocument *doc, QDomElement *elem, QTreeWidgetItem *parent){
+void Saver::AddChildren(QDomDocument *doc, QDomElement *elem, QTreeWidgetItem *parent) {
     QTreeWidgetItemIterator it(noteTree);
-    while(*it){
-        if((*it)->parent() == parent){
+    while (*it) {
+        if ((*it)->parent() == parent) {
             QDomElement newElem = doc->createElement("NoteItem");
-            newElem.setAttribute("message", ((TreeWidgetItem*)(*it))->message);
-            newElem.setAttribute("title", ((TreeWidgetItem*)(*it))->text(0));
-            newElem.setAttribute("icon", ((TreeWidgetItem*)(*it))->iconVectorIndex);
-            newElem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
-            newElem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
-            newElem.setAttribute("readOnly", ((TreeWidgetItem*)(*it))->readOnly);
+            newElem.setAttribute("message", ((TreeWidgetItem *)(*it))->message);
+            newElem.setAttribute("title", ((TreeWidgetItem *)(*it))->text(0));
+            newElem.setAttribute("icon", ((TreeWidgetItem *)(*it))->iconVectorIndex);
+            newElem.setAttribute("lastEdited", ((TreeWidgetItem *)(*it))->lastEdited.toString());
+            newElem.setAttribute("starred", (((TreeWidgetItem *)(*it))->starred));
+            newElem.setAttribute("readOnly", ((TreeWidgetItem *)(*it))->readOnly);
 
             QDomElement domTags = doc->createElement("Tags");
-            foreach (QString tag, ((TreeWidgetItem*)(*it))->tags) {
+            foreach (QString tag, ((TreeWidgetItem *)(*it))->tags) {
                 QDomElement domTag = doc->createElement("Tag");
                 domTag.setAttribute("name", tag);
                 domTags.appendChild(domTag);
             }
             newElem.appendChild(domTags);
-
 
             elem->appendChild(newElem);
             AddChildren(doc, &newElem, *it);
@@ -67,7 +65,7 @@ void Saver::AddChildren(QDomDocument *doc, QDomElement *elem, QTreeWidgetItem *p
     }
 }
 
-void Saver::SaveToFile(){
+void Saver::SaveToFile() {
     qDebug() << "Saving to file";
     QDomDocument document;
 
@@ -76,19 +74,18 @@ void Saver::SaveToFile(){
     document.appendChild(root);
 
     QTreeWidgetItemIterator it(noteTree);
-    while(*it){
-        if((*it)->parent() == 0x0){
-
+    while (*it) {
+        if ((*it)->parent() == 0x0) {
             QDomElement elem = document.createElement("NoteItem");
-            elem.setAttribute("message", ((TreeWidgetItem*)(*it))->message);
+            elem.setAttribute("message", ((TreeWidgetItem *)(*it))->message);
             elem.setAttribute("title", (*it)->text(0));
-            elem.setAttribute("icon", ((TreeWidgetItem*)(*it))->iconVectorIndex);
-            elem.setAttribute("lastEdited", ((TreeWidgetItem*)(*it))->lastEdited.toString());
-            elem.setAttribute("starred", (((TreeWidgetItem*)(*it))->starred));
-            elem.setAttribute("readOnly", ((TreeWidgetItem*)(*it))->readOnly);
+            elem.setAttribute("icon", ((TreeWidgetItem *)(*it))->iconVectorIndex);
+            elem.setAttribute("lastEdited", ((TreeWidgetItem *)(*it))->lastEdited.toString());
+            elem.setAttribute("starred", (((TreeWidgetItem *)(*it))->starred));
+            elem.setAttribute("readOnly", ((TreeWidgetItem *)(*it))->readOnly);
 
             QDomElement domTags = document.createElement("Tags");
-            foreach (QString tag, ((TreeWidgetItem*)(*it))->tags) {
+            foreach (QString tag, ((TreeWidgetItem *)(*it))->tags) {
                 QDomElement domTag = document.createElement("Tag");
                 domTag.setAttribute("name", tag);
                 domTags.appendChild(domTag);
@@ -101,10 +98,10 @@ void Saver::SaveToFile(){
         it++;
     }
 
-    QString savePath = qApp->applicationDirPath()+ "/" + saveFileName;
+    QString savePath = qApp->applicationDirPath() + "/" + saveFileName;
     QFileInfo saveFileInfo(savePath);
     QDir savePathDir(saveFileInfo.absoluteDir());
-    if(!savePathDir.exists()) {
+    if (!savePathDir.exists()) {
         savePathDir.mkdir(savePathDir.absolutePath());
     }
     QFile file(savePath);
@@ -127,10 +124,10 @@ void Saver::SaveToFile(){
     noteTree->setEnabled(false);
 
     noteTree->setEnabled(true);
-    qDebug() << "Saving to file finished" << qApp->applicationDirPath()+ "/" + saveFileName;
+    qDebug() << "Saving to file finished" << qApp->applicationDirPath() + "/" + saveFileName;
 }
 
-void Saver::ReadFromFile(){
+void Saver::ReadFromFile() {
     qDebug() << "Reading from file";
     noteTree->clear();
 
@@ -140,37 +137,37 @@ void Saver::ReadFromFile(){
 
     QDomDocument document;
     QFile file(qApp->applicationDirPath() + "/" + saveFileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         // Error while loading file
         qDebug() << "Error while loading file";
         return;
     }
 
-    if(!document.setContent(file.readAll(), false, &errMsg, &errLine, &errColumn)){
-        qDebug() << "Error while setting xmldoc content: " << errMsg << QString::number(errLine) << QString::number(errColumn);
+    if (!document.setContent(file.readAll(), false, &errMsg, &errLine, &errColumn)) {
+        qDebug() << "Error while setting xmldoc content: " << errMsg << QString::number(errLine)
+                 << QString::number(errColumn);
     }
     file.close();
 
     QDomNodeList childElementList = document.childNodes();
-    for(int j = 0; j < childElementList.count(); j++){
+    for (int j = 0; j < childElementList.count(); j++) {
         QDomElement root = childElementList.at(j).toElement();
         QDomNodeList itemList = root.elementsByTagName("NoteItem");
-        for(int i = 0; i < root.toElement().childNodes().count(); i++){
-            if(!itemList.at(i).toElement().hasAttribute("message")) continue;
-            if(itemList.at(i).toElement().attribute("title") == "") continue;
+        for (int i = 0; i < root.toElement().childNodes().count(); i++) {
+            if (!itemList.at(i).toElement().hasAttribute("message")) continue;
+            if (itemList.at(i).toElement().attribute("title") == "") continue;
 
             QDomElement currentElement = root.toElement().childNodes().at(i).toElement();
-            if(currentElement.tagName() != "NoteItem") continue;
+            if (currentElement.tagName() != "NoteItem") continue;
             TreeWidgetItem *newItem = new TreeWidgetItem();
-            newItem->setIcon(0 , iconVector.at(currentElement.attribute("icon").toInt()));
+            newItem->setIcon(0, iconVector.at(currentElement.attribute("icon").toInt()));
             newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
             newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
             newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
 
             QDomNode domTags = currentElement.childNodes().at(0);
-            for(int i = 0; i < domTags.childNodes().count(); i++) {
+            for (int i = 0; i < domTags.childNodes().count(); i++) {
                 QDomElement domTag = domTags.childNodes().at(i).toElement();
                 newItem->tags.append(domTag.attribute("name"));
             }

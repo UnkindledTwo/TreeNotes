@@ -1,58 +1,59 @@
 #ifndef TREENOTES_H
 #define TREENOTES_H
 
-
-#include <QMainWindow>
 #include <QDebug>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QGridLayout>
-#include <QStyle>
-#include <QShortcut>
-#include <QMessageBox>
-#include <QKeyEvent>
-#include <QLabel>
-#include <QTimer>
-#include <QSplitter>
-#include <QFontDialog>
-#include <QSettings>
 #include <QDir>
 #include <QFileDialog>
+#include <QFontDialog>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QMainWindow>
 #include <QMessageBox>
-#include <QScrollBar>
-#include <QtConcurrent>
-#include <QPushButton>
-#include <QStyleFactory>
-#include <QPrinter>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QPrinter>
+#include <QPushButton>
+#include <QScrollBar>
+#include <QSettings>
+#include <QShortcut>
+#include <QSplitter>
+#include <QStyle>
+#include <QStyleFactory>
+#include <QTimer>
+#include <QVBoxLayout>
+#include <QtConcurrent>
 
-//Win only
+// Win only
 //#include <QtWinExtras>
 #ifdef Q_OS_WIN
 #include <QtWin>
 #endif
 
-#include "Dialogs/settingsdialog.h"
 #include "Dialogs/iconselectordialog.h"
 #include "Dialogs/macrohelp.h"
 #include "Dialogs/searchinallnotesdialog.h"
+#include "Dialogs/settingsdialog.h"
 #include "Dialogs/tageditordialog.h"
-#include "Dialogs/tagresultsdialog.h"
 #include "Dialogs/taginfodialog.h"
-
+#include "Dialogs/tagresultsdialog.h"
+#include "appconfig.h"
 #include "plaintextedit.h"
+#include "saver.h"
+#include "scratchpad.h"
+#include "treewidget.h"
 #include "treewidgetitem.h"
 #include "undoitem.h"
-#include "appconfig.h"
-#include "treewidget.h"
-#include "saver.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class TreeNotes; }
+namespace Ui
+{
+class TreeNotes;
+}
 QT_END_NAMESPACE
 
 class TreeNotes : public QMainWindow
@@ -61,10 +62,7 @@ class TreeNotes : public QMainWindow
 
 public:
     QString saveFileName = "save.xml";
-    QVector <QIcon> iconVector;
-
-    void closeEvent(QCloseEvent *e);
-    void keyPressEvent(QKeyEvent *e);
+    QVector<QIcon> iconVector;
 
     TreeNotes(QWidget *parent = nullptr, QString saveFileName = "save.xml");
     ~TreeNotes();
@@ -84,27 +82,25 @@ private slots:
     void InitStatusLabels();
     void InitShortcuts();
     void InitMacroVector();
-    void saveQSettings();
+    void SaveQSettings();
     void InitIconVector();
-    void saveToFile();
+    void SaveToFile();
     void ReadFromFile();
-    TreeWidgetItem* AddNote(
-            TreeWidgetItem *parent,
-            QString text,
-            QString message = "",
-            QIcon icon = QIcon(":/Resources/Icon.png")
-            );
+    TreeWidgetItem *AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon(":/Resources/Icon.png"));
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
     void ShowContextMenu(const QPoint &pos);
     void CleanBackups(int max, QString backupsDir);
     void ApplyMacroVector();
+    void openScratchPad(int index);
+    void createScratchPad(QString name);
 
     QString boolToString(bool a);
     bool stringToBool(QString a);
 
-    //UI events
-    void on_tag_doubleClicked(QListWidgetItem* item);
+    // UI events
+    void on_scratchpad_action_triggered();
+    void on_tag_doubleClicked(QListWidgetItem *item);
     void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void on_actionAdd_triggered();
     void on_actionSave_triggered();
@@ -136,16 +132,12 @@ private slots:
     void on_actionFullscreen_On_Off_triggered();
     void on_actionHide_Show_Title_2_triggered();
     void on_actionClone_triggered();
-
     void on_actionChange_Layout_triggered();
-
     void on_actionCheck_For_The_Latest_Version_triggered();
-
     void on_actionChange_Tag_triggered();
-
     void on_actionHide_Show_Tags_triggered();
-
     void on_actionTag_Info_triggered();
+    void on_actionNew_Scratch_Pad_triggered();
 
 private:
     Ui::TreeNotes *ui;
@@ -168,6 +160,11 @@ private:
     QVector<QPair<QString, std::function<QString()>>> macroVec;
 
     QVector<UndoItem> undoVector;
+    QVector<ScratchPad *> scratchPads;
+
+protected:
+    void closeEvent(QCloseEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 };
 
 #define SHORTCUT_JUMP_MSG "Ctrl+H"
@@ -176,4 +173,4 @@ private:
 
 #define WINDOW_TITLE_DEFAULT "TreeNotes"
 
-#endif // TREENOTES_H
+#endif  // TREENOTES_H

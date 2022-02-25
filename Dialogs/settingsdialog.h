@@ -1,17 +1,17 @@
 #ifndef SETTINGSDIALOG_H
 #define SETTINGSDIALOG_H
 
-#include <QDialog>
-#include <QDebug>
 #include <QColorDialog>
+#include <QDebug>
+#include <QDialog>
+
 #include "../appconfig.h"
 
 namespace Ui {
 class SettingsDialog;
 }
 
-class SettingsDialog : public QDialog
-{
+class SettingsDialog : public QDialog {
     Q_OBJECT
 
 public:
@@ -26,7 +26,6 @@ private slots:
 private:
     Ui::SettingsDialog *ui;
     struct app_config m_appConfig;
-
 };
 
-#endif // SETTINGSDIALOG_H
+#endif  // SETTINGSDIALOG_H

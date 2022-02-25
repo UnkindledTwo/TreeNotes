@@ -4,22 +4,22 @@
 #include <QDialog>
 #include <QTableWidget>
 
-#include "treewidget.h"
 #include "plaintextedit.h"
+#include "treewidget.h"
 
 namespace Ui {
 class SearchInAllNotesResultDialog;
 }
 
-class SearchInAllNotesResultDialog : public QDialog
-{
+class SearchInAllNotesResultDialog : public QDialog {
     Q_OBJECT
 
 public:
-    explicit SearchInAllNotesResultDialog(QString searchString = "", TreeWidget *widget = NULL, bool caseInsensitive = false, QWidget *parent = nullptr);
+    explicit SearchInAllNotesResultDialog(QString searchString = "", TreeWidget *widget = NULL,
+                                          bool caseInsensitive = false, QWidget *parent = nullptr);
     ~SearchInAllNotesResultDialog();
 
-    QTableWidget* table();
+    QTableWidget *table();
 
     void search();
 
@@ -35,7 +35,7 @@ private:
     QTreeWidget *treeWidget;
     bool caseInsensitive;
 
-    QVector<TreeWidgetItem*> treeItemVector;
+    QVector<TreeWidgetItem *> treeItemVector;
 };
 
-#endif // SEARCHINALLNOTESRESULTDIALOG_H
+#endif  // SEARCHINALLNOTESRESULTDIALOG_H

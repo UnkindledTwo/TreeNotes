@@ -31,6 +31,7 @@ SOURCES += \
     main.cpp \
     plaintextedit.cpp \
     saver.cpp \
+    scratchpad.cpp \
     syntaxhighlighter.cpp \
     treenotes.cpp \
     treewidget.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     highlightitem.h \
     plaintextedit.h \
     saver.h \
+    scratchpad.h \
     syntaxhighlighter.h \
     treenotes.h \
     treewidget.h \
@@ -70,6 +72,7 @@ FORMS += \
     Dialogs/taginfodialog.ui \
     Dialogs/tagresultsdialog.ui \
     plaintextedit.ui \
+    scratchpad.ui \
     treenotes.ui \
     treewidget.ui
 
