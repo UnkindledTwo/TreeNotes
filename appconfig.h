@@ -20,6 +20,7 @@ struct app_config {
     bool use_native_theme = false;
     bool dark_mode = true;
     bool colorful_highlight = true;
+    bool show_new_note_dialog = true;
 };
 
 #endif  // APPCONFIG_H

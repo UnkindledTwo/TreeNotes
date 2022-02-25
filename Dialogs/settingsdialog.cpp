@@ -31,6 +31,7 @@ void SettingsDialog::setAppConfig(app_config appConfig) {
     ui->use_native_theme->setChecked(appConfig.use_native_theme);
     ui->tab_width->setValue(appConfig.tab_width);
     ui->colorful_highlighting->setChecked(appConfig.colorful_highlight);
+    ui->show_new_note_dialog->setChecked(appConfig.show_new_note_dialog);
 }
 
 struct app_config SettingsDialog::appConfig() {
@@ -53,6 +54,7 @@ struct app_config SettingsDialog::appConfig() {
     m_appConfig.use_native_theme = ui->use_native_theme->isChecked();
     m_appConfig.tab_width = ui->tab_width->value();
     m_appConfig.colorful_highlight = ui->colorful_highlighting->isChecked();
+    m_appConfig.show_new_note_dialog = ui->show_new_note_dialog->isChecked();
 
     return m_appConfig;
 }

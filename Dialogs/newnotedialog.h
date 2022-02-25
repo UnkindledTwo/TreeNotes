@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDialog>
+#include <QMessageBox>
 
 #include "treewidget.h"
 #include "iconselectordialog.h"

@@ -69,6 +69,13 @@
      </property>
      <item>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="pair_completion">
+         <property name="text">
+          <string>Complete Bracket Pairs</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QCheckBox" name="double_click_to_edit">
          <property name="text">
@@ -83,13 +90,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="notetree_alternating_row_colors">
-         <property name="text">
-          <string>Alternating Row Colors</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="1">
         <widget class="QCheckBox" name="notetree_animated">
          <property name="text">
@@ -97,17 +97,10 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="pair_completion">
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="use_native_theme">
          <property name="text">
-          <string>Complete Bracket Pairs</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="line_wrapping">
-         <property name="text">
-          <string>Line Wrapping</string>
+          <string>Use Native Theme</string>
          </property>
         </widget>
        </item>
@@ -125,10 +118,17 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="use_native_theme">
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="line_wrapping">
          <property name="text">
-          <string>Use Native Theme</string>
+          <string>Line Wrapping</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="notetree_alternating_row_colors">
+         <property name="text">
+          <string>Alternating Row Colors</string>
          </property>
         </widget>
        </item>
@@ -136,6 +136,13 @@
         <widget class="QCheckBox" name="colorful_highlighting">
          <property name="text">
           <string>Colorful Highlighting</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QCheckBox" name="show_new_note_dialog">
+         <property name="text">
+          <string>Show New Note Dialog</string>
          </property>
         </widget>
        </item>

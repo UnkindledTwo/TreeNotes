@@ -246,7 +246,6 @@ void TreeNotes::ReadQSettings()
 
     // Appconfig section, these can be editable from settings.ini or from the application
     settings.beginGroup("AppConfig");
-
     Globals::appConfig.notetree_icon_size = settings.value("notetree_icon_size", Globals::appConfig.notetree_icon_size).toInt();
     Globals::appConfig.notetree_select_new_items = settings.value("notetree_select_new_items", Globals::appConfig.notetree_select_new_items).toBool();
     Globals::appConfig.notetree_alternating_row_colors =
@@ -266,7 +265,7 @@ void TreeNotes::ReadQSettings()
     Globals::appConfig.dark_mode = settings.value("dark_mode", Globals::appConfig.dark_mode).toBool();
     Globals::appConfig.tab_width = settings.value("tab_width", Globals::appConfig.tab_width).toInt();
     Globals::appConfig.colorful_highlight = settings.value("colorful_highlight", Globals::appConfig.colorful_highlight).toBool();
-
+    Globals::appConfig.show_new_note_dialog = settings.value("show_new_note_dialog", Globals::appConfig.show_new_note_dialog).toBool();
     settings.endGroup();
     ReadAppConfig(Globals::appConfig);
 
@@ -311,7 +310,7 @@ void TreeNotes::SaveQSettings()
     settings.setValue("dark_mode", Globals::appConfig.dark_mode);
     settings.setValue("tab_width", Globals::appConfig.tab_width);
     settings.setValue("colorful_highlight", Globals::appConfig.colorful_highlight);
-
+    settings.setValue("show_new_note_dialog", Globals::appConfig.show_new_note_dialog);
     settings.endGroup();
 
     qDebug() << "Saved QSettings, file: " << settings.fileName();
@@ -519,9 +518,13 @@ part2:
 }
 
 void TreeNotes::on_actionAdd_triggered() {
-    NewNoteDialog* nnd = new NewNoteDialog(ui->treeWidget, this);
-    nnd->show();
-    /*noteTree->AddNote(noteTree->currentItem(), "New Note", "");*/
+    if(Globals::appConfig.show_new_note_dialog) {
+        NewNoteDialog* nnd = new NewNoteDialog(ui->treeWidget, this);
+        nnd->show();
+    }
+    else {
+        noteTree->addNote(noteTree->currentItem(), "New Note", "");
+    }
 }
 
 void TreeNotes::on_actionSave_triggered()

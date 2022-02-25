@@ -26,6 +26,7 @@ public:
     void setStar(TreeWidgetItem *, bool);
     int noteCount();
     TreeWidgetItem *addNote(TreeWidgetItem *parent, QString text, QString message = "", int iconVectorIndex = 0);
+    TreeWidgetItem *addNote(TreeWidgetItem *parent, TreeWidgetItem *item);
     TreeWidgetItem *createNote(QString text, QString message = "", int iconVectorIndex = 0);
 
     explicit TreeWidget(QWidget *parent = nullptr);
