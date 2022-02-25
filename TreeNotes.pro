@@ -28,6 +28,7 @@ SOURCES += \
     Dialogs/tageditordialog.cpp \
     Dialogs/taginfodialog.cpp \
     Dialogs/tagresultsdialog.cpp \
+    globals.cpp \
     main.cpp \
     plaintextedit.cpp \
     saver.cpp \
@@ -50,6 +51,7 @@ HEADERS += \
     Dialogs/taginfodialog.h \
     Dialogs/tagresultsdialog.h \
     appconfig.h \
+    globals.h \
     highlightitem.h \
     plaintextedit.h \
     saver.h \

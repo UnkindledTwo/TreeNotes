@@ -21,6 +21,7 @@ public:
     bool readOnly = false;
     QString toString();
     QStringList tags;
+    bool highlighting = true;
 };
 
 #endif  // TREEWIDGETITEM_H

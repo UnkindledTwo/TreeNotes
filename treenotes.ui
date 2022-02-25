@@ -207,6 +207,7 @@
     <addaction name="actionSet_Icon"/>
     <addaction name="actionStar_Unstar"/>
     <addaction name="actionClone"/>
+    <addaction name="actionHighlighting"/>
     <addaction name="actionRead_Only"/>
     <addaction name="separator"/>
     <addaction name="actionExpand_All"/>
@@ -215,6 +216,7 @@
     <addaction name="menuScratch_Pad"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -554,6 +556,14 @@
   <action name="actionNew_Scratch_Pad">
    <property name="text">
     <string>New Scratch Pad</string>
+   </property>
+  </action>
+  <action name="actionHighlighting">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Highlighting</string>
    </property>
   </action>
  </widget>

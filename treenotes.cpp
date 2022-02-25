@@ -83,7 +83,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName) : QMainWindow(parent
 #endif
 
     ReadQSettings();
-    ReadAppConfig(appConfig);
+    ReadAppConfig(Globals::appConfig);
 
     // Connect save and load from disk actions to an existing slot
     connect(ui->actionSave_To_Disk, &QAction::triggered, this, &TreeNotes::SaveToFile);
@@ -98,7 +98,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName) : QMainWindow(parent
     InitStatusLabels();
     ReadFromFile();
     ReadQSettings();
-    ReadAppConfig(appConfig);
+    ReadAppConfig(Globals::appConfig);
     InitMacroVector();
 
     ui->messageEdit->setZoomingEnabled(true);
@@ -247,28 +247,28 @@ void TreeNotes::ReadQSettings()
     // Appconfig section, these can be editable from settings.ini or from the application
     settings.beginGroup("AppConfig");
 
-    appConfig.notetree_icon_size = settings.value("notetree_icon_size", appConfig.notetree_icon_size).toInt();
-    appConfig.notetree_select_new_items = settings.value("notetree_select_new_items", appConfig.notetree_select_new_items).toBool();
-    appConfig.notetree_alternating_row_colors =
-            settings.value("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors).toBool();
-    appConfig.notetree_indentation_size = settings.value("notetree_indentation_size", appConfig.notetree_indentation_size).toInt();
-    appConfig.opacity = settings.value("opacity", appConfig.opacity).toInt();
-    appConfig.notetree_animated = settings.value("notetree_animated", appConfig.notetree_animated).toBool();
-    appConfig.doubleClickToEditMessage = settings.value("doubleClickToEditMessage", appConfig.doubleClickToEditMessage).toBool();
-    appConfig.layoutMargin = settings.value("layoutMargin", appConfig.layoutMargin).toInt();
-    appConfig.splitter_handle_width = settings.value("splitter_handle_width", appConfig.splitter_handle_width).toInt();
-    appConfig.confirm_delete = settings.value("confirm_delete", appConfig.confirm_delete).toBool();
-    appConfig.line_wrapping = settings.value("line_wrapping", appConfig.line_wrapping).toBool();
-    appConfig.pair_completion = settings.value("pair_completion", appConfig.pair_completion).toBool();
-    appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", appConfig.notetree_drag_drop).toBool();
-    appConfig.maximum_backups = settings.value("maximum_backups", appConfig.maximum_backups).toInt();
-    appConfig.use_native_theme = settings.value("use_native_theme", appConfig.use_native_theme).toBool();
-    appConfig.dark_mode = settings.value("dark_mode", appConfig.dark_mode).toBool();
-    appConfig.tab_width = settings.value("tab_width", appConfig.tab_width).toInt();
-    appConfig.colorful_highlight = settings.value("colorful_highlight", appConfig.colorful_highlight).toBool();
+    Globals::appConfig.notetree_icon_size = settings.value("notetree_icon_size", Globals::appConfig.notetree_icon_size).toInt();
+    Globals::appConfig.notetree_select_new_items = settings.value("notetree_select_new_items", Globals::appConfig.notetree_select_new_items).toBool();
+    Globals::appConfig.notetree_alternating_row_colors =
+            settings.value("notetree_alternating_row_colors", Globals::appConfig.notetree_alternating_row_colors).toBool();
+    Globals::appConfig.notetree_indentation_size = settings.value("notetree_indentation_size", Globals::appConfig.notetree_indentation_size).toInt();
+    Globals::appConfig.opacity = settings.value("opacity", Globals::appConfig.opacity).toInt();
+    Globals::appConfig.notetree_animated = settings.value("notetree_animated", Globals::appConfig.notetree_animated).toBool();
+    Globals::appConfig.doubleClickToEditMessage = settings.value("doubleClickToEditMessage", Globals::appConfig.doubleClickToEditMessage).toBool();
+    Globals::appConfig.layoutMargin = settings.value("layoutMargin", Globals::appConfig.layoutMargin).toInt();
+    Globals::appConfig.splitter_handle_width = settings.value("splitter_handle_width", Globals::appConfig.splitter_handle_width).toInt();
+    Globals::appConfig.confirm_delete = settings.value("confirm_delete", Globals::appConfig.confirm_delete).toBool();
+    Globals::appConfig.line_wrapping = settings.value("line_wrapping", Globals::appConfig.line_wrapping).toBool();
+    Globals::appConfig.pair_completion = settings.value("pair_completion", Globals::appConfig.pair_completion).toBool();
+    Globals::appConfig.notetree_drag_drop = settings.value("notetree_drag_drop", Globals::appConfig.notetree_drag_drop).toBool();
+    Globals::appConfig.maximum_backups = settings.value("maximum_backups", Globals::appConfig.maximum_backups).toInt();
+    Globals::appConfig.use_native_theme = settings.value("use_native_theme", Globals::appConfig.use_native_theme).toBool();
+    Globals::appConfig.dark_mode = settings.value("dark_mode", Globals::appConfig.dark_mode).toBool();
+    Globals::appConfig.tab_width = settings.value("tab_width", Globals::appConfig.tab_width).toInt();
+    Globals::appConfig.colorful_highlight = settings.value("colorful_highlight", Globals::appConfig.colorful_highlight).toBool();
 
     settings.endGroup();
-    ReadAppConfig(appConfig);
+    ReadAppConfig(Globals::appConfig);
 
     qDebug() << "Reading QSettings is finished, file: " << settings.fileName();
 }
@@ -293,24 +293,24 @@ void TreeNotes::SaveQSettings()
 
     settings.beginGroup("AppConfig");
 
-    settings.setValue("notetree_icon_size", appConfig.notetree_icon_size);
-    settings.setValue("notetree_select_new_items", appConfig.notetree_select_new_items);
-    settings.setValue("notetree_alternating_row_colors", appConfig.notetree_alternating_row_colors);
-    settings.setValue("notetree_indentation_size", appConfig.notetree_indentation_size);
-    settings.setValue("opacity", appConfig.opacity);
-    settings.setValue("notetree_animated", appConfig.notetree_animated);
-    settings.setValue("doubleClickToEditMessage", appConfig.doubleClickToEditMessage);
-    settings.setValue("layoutMargin", appConfig.layoutMargin);
-    settings.setValue("splitter_handle_width", appConfig.splitter_handle_width);
-    settings.setValue("confirm_delete", appConfig.confirm_delete);
-    settings.setValue("line_wrapping", appConfig.line_wrapping);
-    settings.setValue("pair_completion", appConfig.pair_completion);
-    settings.setValue("notetree_drag_drop", appConfig.notetree_drag_drop);
-    settings.setValue("maximum_backups", appConfig.maximum_backups);
-    settings.setValue("use_native_theme", appConfig.use_native_theme);
-    settings.setValue("dark_mode", appConfig.dark_mode);
-    settings.setValue("tab_width", appConfig.tab_width);
-    settings.setValue("colorful_highlight", appConfig.colorful_highlight);
+    settings.setValue("notetree_icon_size", Globals::appConfig.notetree_icon_size);
+    settings.setValue("notetree_select_new_items", Globals::appConfig.notetree_select_new_items);
+    settings.setValue("notetree_alternating_row_colors", Globals::appConfig.notetree_alternating_row_colors);
+    settings.setValue("notetree_indentation_size", Globals::appConfig.notetree_indentation_size);
+    settings.setValue("opacity", Globals::appConfig.opacity);
+    settings.setValue("notetree_animated", Globals::appConfig.notetree_animated);
+    settings.setValue("doubleClickToEditMessage", Globals::appConfig.doubleClickToEditMessage);
+    settings.setValue("layoutMargin", Globals::appConfig.layoutMargin);
+    settings.setValue("splitter_handle_width", Globals::appConfig.splitter_handle_width);
+    settings.setValue("confirm_delete", Globals::appConfig.confirm_delete);
+    settings.setValue("line_wrapping", Globals::appConfig.line_wrapping);
+    settings.setValue("pair_completion", Globals::appConfig.pair_completion);
+    settings.setValue("notetree_drag_drop", Globals::appConfig.notetree_drag_drop);
+    settings.setValue("maximum_backups", Globals::appConfig.maximum_backups);
+    settings.setValue("use_native_theme", Globals::appConfig.use_native_theme);
+    settings.setValue("dark_mode", Globals::appConfig.dark_mode);
+    settings.setValue("tab_width", Globals::appConfig.tab_width);
+    settings.setValue("colorful_highlight", Globals::appConfig.colorful_highlight);
 
     settings.endGroup();
 
@@ -353,7 +353,7 @@ void TreeNotes::AttemptSaveBackup()
     // If the save can't be moved
     if (QFile(qApp->applicationDirPath() + "/save.xml").exists()) qCritical().noquote() << "\n!!!Backup Failed!!!\n";
 
-    CleanBackups(appConfig.maximum_backups, backupDir.absolutePath());
+    CleanBackups(Globals::appConfig.maximum_backups, backupDir.absolutePath());
     qDebug() << "AttempSaveBackup() finished";
 }
 
@@ -425,14 +425,14 @@ void TreeNotes::closeEvent(QCloseEvent *e)
 
 void TreeNotes::ReadFromFile()
 {
-    Saver s(this->noteTree, this->iconVector);
+    Saver s(this->noteTree, Globals::iconVector);
     s.saveFileName = this->saveFileName;
     s.ReadFromFile();
 }
 
 void TreeNotes::SaveToFile()
 {
-    Saver s(this->noteTree, this->iconVector);
+    Saver s(this->noteTree, Globals::iconVector);
     s.saveFileName = this->saveFileName;
     s.SaveToFile();
 }
@@ -464,7 +464,7 @@ TreeWidgetItem *TreeNotes::AddNote(TreeWidgetItem *parent, QString text, QString
     parent->setExpanded(true);
 
 topLevel:
-    if (appConfig.notetree_select_new_items) noteTree->setCurrentItem(itemToAdd);
+    if (Globals::appConfig.notetree_select_new_items) noteTree->setCurrentItem(itemToAdd);
 
     return itemToAdd;
 }
@@ -507,6 +507,7 @@ void TreeNotes::on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTree
         ui->messageEdit->setEnabled(false);
         ui->titleEdit->setEnabled(false);
         tagsList->setEnabled(false);
+        ui->actionHighlighting->setChecked(false);
         return;
     }
     ui->messageEdit->setEnabled(true);
@@ -525,6 +526,8 @@ part2:
 
     ui->messageEdit->fastSetPlainText(currentItem->message);
     ui->titleEdit->setText(currentItem->text(0));
+    ui->messageEdit->setHighlighting(currentItem->highlighting);
+    ui->actionHighlighting->setChecked(currentItem->highlighting);
 
     tagsList->clear();
     foreach (QString tag, currentItem->tags) {
@@ -591,13 +594,13 @@ void TreeNotes::on_actionDelete_triggered()
 
     QMessageBox::StandardButton reply;
 
-    if (appConfig.confirm_delete)
+    if (Globals::appConfig.confirm_delete)
         reply = QMessageBox::question(this, "Delete Item",
                                       "Are you sure you want to delete the current item?\nAll the "
                                       "children will be removed as well.",
                                       QMessageBox::Yes | QMessageBox::No);
 
-    if (reply == QMessageBox::Yes || !appConfig.confirm_delete) {
+    if (reply == QMessageBox::Yes || !Globals::appConfig.confirm_delete) {
         Delete(noteTree->currentItem());
     }
 }
@@ -668,7 +671,7 @@ void TreeNotes::on_actionSet_Icon_triggered()
         showNoSelectedItemDialog();
         return;
     }
-    IconSelectorDialog *isd = new IconSelectorDialog(this, iconVector, noteTree->currentItem()->iconVectorIndex);
+    IconSelectorDialog *isd = new IconSelectorDialog(this, noteTree->currentItem()->iconVectorIndex);
 
     isd->setFont(this->font());
     isd->copyFrom(noteTree);
@@ -697,7 +700,7 @@ void TreeNotes::on_actionFocus_Parent_triggered()
 
 void TreeNotes::InitIconVector()
 {
-    iconVector = QVector<QIcon>{QIcon(":/Resources/Icon.ico"),
+    Globals::iconVector = QVector<QIcon>{QIcon(":/Resources/Icon.ico"),
             style()->standardIcon(QStyle::SP_FileIcon),
             style()->standardIcon(QStyle::SP_DirIcon),
             style()->standardIcon(QStyle::SP_MessageBoxWarning),
@@ -991,14 +994,14 @@ start:
 void TreeNotes::on_actionSettings_triggered()
 {
     SettingsDialog *sd = new SettingsDialog(this);
-    sd->setAppConfig(appConfig);
+    sd->setAppConfig(Globals::appConfig);
     sd->setFont(this->font());
 
     sd->show();
 
     if (sd->exec()) {
-        this->appConfig = sd->appConfig();
-        ReadAppConfig(this->appConfig);
+        Globals::appConfig = sd->appConfig();
+        ReadAppConfig(Globals::appConfig);
         SaveQSettings();
     }
 }
@@ -1242,3 +1245,11 @@ void TreeNotes::createScratchPad(QString name)
 void TreeNotes::openScratchPad(int index) { scratchPads[index]->show(); }
 
 void TreeNotes::on_scratchpad_action_triggered() { openScratchPad(ui->menuScratch_Pad->actions().indexOf((QAction *)sender())); }
+
+void TreeNotes::on_actionHighlighting_triggered(bool checked)
+{
+    if(!noteTree->currentItem()) return;
+    noteTree->currentItem()->highlighting = checked;
+    ui->messageEdit->setHighlighting(checked);
+}
+

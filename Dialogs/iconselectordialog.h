@@ -11,6 +11,7 @@
 #include <QVector>
 
 #include "treewidget.h"
+#include "globals.h"
 
 namespace Ui {
 class IconSelectorDialog;
@@ -22,7 +23,6 @@ class IconSelectorDialog : public QDialog {
 public:
     void copyFrom(TreeWidget *w);
     explicit IconSelectorDialog(QWidget *parent = nullptr,
-                                QVector<QIcon> iconVector = QVector<QIcon>(),
                                 int initialPosition = 0);
     ~IconSelectorDialog();
 

@@ -2,13 +2,13 @@
 
 #include "ui_iconselectordialog.h"
 
-IconSelectorDialog::IconSelectorDialog(QWidget *parent, QVector<QIcon> iconVector,
+IconSelectorDialog::IconSelectorDialog(QWidget *parent,
                                        int initialPosition)
     : QDialog(parent), ui(new Ui::IconSelectorDialog) {
     ui->setupUi(this);
 
-    for (int i = 0; i < iconVector.count(); i++) {
-        icons.append(iconVector[i]);
+    for (int i = 0; i < Globals::iconVector.count(); i++) {
+        icons.append(Globals::iconVector[i]);
     }
 
     for (int i = 0; i < icons.count(); i++) {

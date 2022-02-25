@@ -25,6 +25,7 @@ void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *paren
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
         newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
         newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
+        newItem->highlighting = qvariant_cast<bool>(currentElement.attribute("highlighting", "1"));
 
         QDomNode domTags = currentElement.childNodes().at(0);
         for (int i = 0; i < domTags.childNodes().count(); i++) {
@@ -49,6 +50,7 @@ void Saver::AddChildren(QDomDocument *doc, QDomElement *elem, QTreeWidgetItem *p
             newElem.setAttribute("lastEdited", ((TreeWidgetItem *)(*it))->lastEdited.toString());
             newElem.setAttribute("starred", (((TreeWidgetItem *)(*it))->starred));
             newElem.setAttribute("readOnly", ((TreeWidgetItem *)(*it))->readOnly);
+            newElem.setAttribute("highlighting", ((TreeWidgetItem *)(*it))->highlighting);
 
             QDomElement domTags = doc->createElement("Tags");
             foreach (QString tag, ((TreeWidgetItem *)(*it))->tags) {
@@ -83,6 +85,7 @@ void Saver::SaveToFile() {
             elem.setAttribute("lastEdited", ((TreeWidgetItem *)(*it))->lastEdited.toString());
             elem.setAttribute("starred", (((TreeWidgetItem *)(*it))->starred));
             elem.setAttribute("readOnly", ((TreeWidgetItem *)(*it))->readOnly);
+            elem.setAttribute("highlighting", ((TreeWidgetItem *)(*it))->highlighting);
 
             QDomElement domTags = document.createElement("Tags");
             foreach (QString tag, ((TreeWidgetItem *)(*it))->tags) {
@@ -165,6 +168,7 @@ void Saver::ReadFromFile() {
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
             newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
             newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
+            newItem->highlighting = qvariant_cast<bool>(currentElement.attribute("highlighting", "1"));
 
             QDomNode domTags = currentElement.childNodes().at(0);
             for (int i = 0; i < domTags.childNodes().count(); i++) {

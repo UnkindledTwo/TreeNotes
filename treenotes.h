@@ -48,6 +48,7 @@
 #include "treewidget.h"
 #include "treewidgetitem.h"
 #include "undoitem.h"
+#include "globals.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -62,7 +63,6 @@ class TreeNotes : public QMainWindow
 
 public:
     QString saveFileName = "save.xml";
-    QVector<QIcon> iconVector;
 
     TreeNotes(QWidget *parent = nullptr, QString saveFileName = "save.xml");
     ~TreeNotes();
@@ -139,10 +139,10 @@ private slots:
     void on_actionTag_Info_triggered();
     void on_actionNew_Scratch_Pad_triggered();
 
+    void on_actionHighlighting_triggered(bool checked);
+
 private:
     Ui::TreeNotes *ui;
-
-    app_config appConfig;
 
     TreeWidget *noteTree;
     QSplitter *splitter;
