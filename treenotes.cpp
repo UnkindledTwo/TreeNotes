@@ -523,7 +523,7 @@ void TreeNotes::on_actionAdd_triggered() {
         nnd->show();
     }
     else {
-        noteTree->addNote(noteTree->currentItem(), "New Note", "");
+        noteTree->addNote(noteTree->currentItem(), tr("New Note"), "");
     }
 }
 
