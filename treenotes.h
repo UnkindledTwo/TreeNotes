@@ -41,6 +41,7 @@
 #include "Dialogs/tageditordialog.h"
 #include "Dialogs/taginfodialog.h"
 #include "Dialogs/tagresultsdialog.h"
+#include "Dialogs/newnotedialog.h"
 #include "appconfig.h"
 #include "plaintextedit.h"
 #include "saver.h"
@@ -86,7 +87,6 @@ private slots:
     void InitIconVector();
     void SaveToFile();
     void ReadFromFile();
-    TreeWidgetItem *AddNote(TreeWidgetItem *parent, QString text, QString message = "", QIcon icon = QIcon(":/Resources/Icon.png"));
     void MoveUp(TreeWidgetItem *item);
     void MoveDown(TreeWidgetItem *item);
     void ShowContextMenu(const QPoint &pos);

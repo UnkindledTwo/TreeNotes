@@ -446,29 +446,6 @@ void TreeNotes::keyPressEvent(QKeyEvent *e)
     }
 }
 
-TreeWidgetItem *TreeNotes::AddNote(TreeWidgetItem *parent, QString text, QString message, QIcon icon)
-{
-    TreeWidgetItem *itemToAdd = new TreeWidgetItem();
-    itemToAdd->setIcon(0, icon);
-    itemToAdd->setText(0, text);
-    itemToAdd->iconVectorIndex = 0;
-    itemToAdd->message = message;
-
-    if (parent == NULL) {
-        // New Item has no parent
-        noteTree->addTopLevelItem(itemToAdd);
-        goto topLevel;
-    }
-
-    parent->addChild(itemToAdd);
-    parent->setExpanded(true);
-
-topLevel:
-    if (Globals::appConfig.notetree_select_new_items) noteTree->setCurrentItem(itemToAdd);
-
-    return itemToAdd;
-}
-
 void TreeNotes::Save(TreeWidgetItem *target)
 {
     if (ui->messageEdit->toPlainText() == target->message && ui->titleEdit->text() == target->text(0)) {
@@ -541,7 +518,11 @@ part2:
     }
 }
 
-void TreeNotes::on_actionAdd_triggered() { AddNote(noteTree->currentItem(), "New Note", ""); }
+void TreeNotes::on_actionAdd_triggered() {
+    NewNoteDialog* nnd = new NewNoteDialog(ui->treeWidget, this);
+    nnd->show();
+    /*noteTree->AddNote(noteTree->currentItem(), "New Note", "");*/
+}
 
 void TreeNotes::on_actionSave_triggered()
 {
@@ -896,7 +877,7 @@ void TreeNotes::on_actionImport_Text_File_triggered()
             continue;
         }
 
-        AddNote(noteTree->currentItem(), fi.fileName(), future.result());
+        noteTree->addNote(noteTree->currentItem(), fi.fileName(), future.result());
 
         file.close();
     }

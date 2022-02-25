@@ -90,3 +90,36 @@ void TreeWidget::setStar(TreeWidgetItem *i, bool s) {
 
     this->resizeColumnToContents(1);
 }
+
+TreeWidgetItem *TreeWidget::addNote(TreeWidgetItem *parent, QString text, QString message, int iconVectorIndex)
+{
+    TreeWidgetItem *itemToAdd = createNote(text, message, iconVectorIndex);
+  /*  itemToAdd->setIcon(0, Globals::iconVector[iconVectorIndex]);
+    itemToAdd->setText(0, text);
+    itemToAdd->iconVectorIndex = iconVectorIndex;
+    itemToAdd->message = message;
+*/
+    if (parent == NULL) {
+        // New Item has no parent
+        addTopLevelItem(itemToAdd);
+        goto topLevel;
+    }
+
+    parent->addChild(itemToAdd);
+    parent->setExpanded(true);
+
+topLevel:
+    if (Globals::appConfig.notetree_select_new_items) this->setCurrentItem(itemToAdd);
+
+    return itemToAdd;
+}
+
+TreeWidgetItem *TreeWidget::createNote(QString text, QString message, int iconVectorIndex)
+{
+    TreeWidgetItem *newItem = new TreeWidgetItem();
+    newItem->setIcon(0, Globals::iconVector[iconVectorIndex]);
+    newItem->setText(0, text);
+    newItem->iconVectorIndex = iconVectorIndex;
+    newItem->message = message;
+    return newItem;
+}

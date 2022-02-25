@@ -20,6 +20,7 @@ CONFIG += c++11
 SOURCES += \
     Dialogs/iconselectordialog.cpp \
     Dialogs/macrohelp.cpp \
+    Dialogs/newnotedialog.cpp \
     Dialogs/searchdialog.cpp \
     Dialogs/searchinallnotesdialog.cpp \
     Dialogs/searchinallnotesresultdialog.cpp \
@@ -42,6 +43,7 @@ SOURCES += \
 HEADERS += \
     Dialogs/iconselectordialog.h \
     Dialogs/macrohelp.h \
+    Dialogs/newnotedialog.h \
     Dialogs/searchdialog.h \
     Dialogs/searchinallnotesdialog.h \
     Dialogs/searchinallnotesresultdialog.h \
@@ -65,6 +67,7 @@ HEADERS += \
 FORMS += \
     Dialogs/iconselectordialog.ui \
     Dialogs/macrohelp.ui \
+    Dialogs/newnotedialog.ui \
     Dialogs/searchdialog.ui \
     Dialogs/searchinallnotesdialog.ui \
     Dialogs/searchinallnotesresultdialog.ui \

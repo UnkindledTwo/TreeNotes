@@ -6,6 +6,7 @@
 #include <QWidget>
 
 #include "treewidgetitem.h"
+#include "globals.h"
 
 namespace Ui {
 class TreeWidget;
@@ -24,6 +25,8 @@ public:
     void addAllChildren(QTreeWidgetItem *item, QVector<QTreeWidgetItem *> *items);
     void setStar(TreeWidgetItem *, bool);
     int noteCount();
+    TreeWidgetItem *addNote(TreeWidgetItem *parent, QString text, QString message = "", int iconVectorIndex = 0);
+    TreeWidgetItem *createNote(QString text, QString message = "", int iconVectorIndex = 0);
 
     explicit TreeWidget(QWidget *parent = nullptr);
     ~TreeWidget();
