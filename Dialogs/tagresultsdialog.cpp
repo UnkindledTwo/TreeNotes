@@ -41,7 +41,7 @@ void TagResultsDialog::search() {
         ui->tableWidget->setItem(row, 0, title);
 
         QTableWidgetItem* starred = new QTableWidgetItem();
-        if (item->starred) {
+        if (item->isStarred()) {
             starred->setIcon(item->icon(1));
         } else {
             starred->setText("No");

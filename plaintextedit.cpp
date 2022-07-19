@@ -40,7 +40,13 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) : QPlainTextEdit(parent), ui(new U
         QTextCursor c = this->textCursor();
         int pos = c.position();
         c.movePosition(QTextCursor::StartOfBlock);
-        c.insertText("# ");
+
+        //Check if the line is already a heading. If the line is a heading don't create a new heading
+        if(c.block().text().startsWith("#"))
+            c.insertText("#");
+        else
+            c.insertText("# ");
+
         c.setPosition(pos);
         this->setTextCursor(c);
     });
@@ -84,6 +90,13 @@ PlainTextEdit::PlainTextEdit(QWidget *parent) : QPlainTextEdit(parent), ui(new U
     connect(this, &PlainTextEdit::zoomChanged, syntaxHighlighter, &SyntaxHighlighter::rehighlight);
 
     this->setTabStopWidth(tabWidth);
+
+    //Init macro menu
+    macroMenu = new MacroMenu(this);
+    connect(macroMenu, &MacroMenu::itemSelected, this, [&](int index) {
+       this->insertPlainText(Globals::macroVector.at(index).second());
+    });
+
 }
 
 void PlainTextEdit::paintEvent(QPaintEvent *e) {
@@ -173,6 +186,11 @@ QString PlainTextEdit::lineAt(int line) { return this->document()->findBlockByNu
 int PlainTextEdit::currentLine() { return textCursor().blockNumber() + 1; }
 
 int PlainTextEdit::currentColumn() { return textCursor().columnNumber() + 1; }
+
+void PlainTextEdit::showMacroMenu()
+{
+    macroMenu->show();
+}
 
 void PlainTextEdit::mousePressEvent(QMouseEvent *e) { QPlainTextEdit::mousePressEvent(e); }
 

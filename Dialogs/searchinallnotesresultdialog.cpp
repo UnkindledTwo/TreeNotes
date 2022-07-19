@@ -70,7 +70,7 @@ void SearchInAllNotesResultDialog::search()
 
             //Starred
             QTableWidgetItem *starred_ti = new QTableWidgetItem();
-            if(item->starred) starred_ti->setIcon(item->icon(1));
+            if(item->isStarred()) starred_ti->setIcon(item->icon(1));
             else starred_ti->setText("No");
             table()->setItem(row, 3, starred_ti);
 

@@ -9,6 +9,8 @@
 #include <QVector>
 #include <functional>
 
+#include "globals.h"
+
 namespace Ui {
 class MacroHelp;
 }
@@ -20,9 +22,7 @@ public:
     QPlainTextEdit* plainTextEdit();
     QListWidget* listWidget();
 
-    explicit MacroHelp(QWidget* parent = nullptr,
-                       QVector<QPair<QString, std::function<QString()>>> macroVec =
-            QVector<QPair<QString, std::function<QString()>>>());
+    explicit MacroHelp(QWidget* parent = nullptr);
     ~MacroHelp();
 
 private:

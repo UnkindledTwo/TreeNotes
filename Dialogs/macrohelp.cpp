@@ -2,11 +2,11 @@
 
 #include "ui_macrohelp.h"
 
-MacroHelp::MacroHelp(QWidget *parent, QVector<QPair<QString, std::function<QString()>>> macroVec)
+MacroHelp::MacroHelp(QWidget *parent)
     : QDialog(parent), ui(new Ui::MacroHelp) {
     ui->setupUi(this);
-    for (int i = 0; i < macroVec.count(); i++) {
-        ui->macrolist->addItem(macroVec.at(i).first);
+    for (int i = 0; i < Globals::macroVector.count(); i++) {
+        ui->macrolist->addItem(Globals::macroVector.at(i).first);
     }
 
     // Put the list widget and text into a QSplitter

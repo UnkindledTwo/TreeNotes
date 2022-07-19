@@ -131,7 +131,7 @@ void SyntaxHighlighter::initRegexVector() {
     // Headings through 1 to 6
     for (int i = 1; i < 7; i++) {
         HighlightItem heading =
-            regexVectorItem(QString("(?m)^#{%1} (?!#)(.*)").arg(QString::number(i)), Qt::darkBlue,
+            regexVectorItem(QString("(?m)^#{%1} (?!#)(.*)").arg(QString::number(i)), qRgb(43, 82, 130),
                             Qt::white, false);
         regexVector.append(heading);
     }

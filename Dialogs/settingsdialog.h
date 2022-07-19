@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QDialog>
 
+#include "globals.h"
 #include "../appconfig.h"
 
 namespace Ui {
@@ -22,6 +23,8 @@ public:
     struct app_config appConfig();
 
 private slots:
+
+    void on_bResetSettings_clicked();
 
 private:
     Ui::SettingsDialog *ui;

@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    a.setApplicationVersion("8.2");
+    a.setApplicationVersion("8.3");
 
     // Load another save file if specified
     // The default save name is save.xml
@@ -95,6 +95,11 @@ int main(int argc, char *argv[]) {
     ss.show();
     w.show();
     ss.finish(&w);
+
+    QFont font;
+    font.setFamily(QFont().defaultFamily());
+    font.setPointSize(9);
+    a.setFont(font);
 
     return a.exec();
 }

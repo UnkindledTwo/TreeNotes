@@ -10,8 +10,8 @@ TreeWidget::~TreeWidget() { delete ui; }
 
 void TreeWidget::mousePressEvent(QMouseEvent *e) {
     QTreeWidget::mousePressEvent(e);
-
     if (e->button() == Qt::MiddleButton) {
+        e->ignore();
         emit middleClicked();
     }
 }
@@ -78,6 +78,8 @@ int TreeWidget::noteCount() {
 }
 
 void TreeWidget::setStar(TreeWidgetItem *i, bool s) {
+    i->setStarred(s);
+    /*
     if (s) {
         // i->setText(1, "★");
         i->setIcon(1, QIcon(":/Resources/Icons/star.png"));
@@ -87,7 +89,7 @@ void TreeWidget::setStar(TreeWidgetItem *i, bool s) {
     }
 
     i->starred = s;
-
+*/
     this->resizeColumnToContents(1);
 }
 

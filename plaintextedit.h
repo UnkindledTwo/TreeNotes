@@ -19,6 +19,7 @@
 #include <tuple>
 
 #include "Dialogs/searchdialog.h"
+#include "Dialogs/macromenu.h"
 #include "highlightitem.h"
 #include "syntaxhighlighter.h"
 
@@ -62,6 +63,8 @@ public:
     int currentLine();
     int currentColumn();
 
+    void showMacroMenu();
+
 protected:
     void mousePressEvent(QMouseEvent *e);
     void paintEvent(QPaintEvent *e);
@@ -85,6 +88,8 @@ private:
     bool m_zooming_enabled = false;
 
     QMap<QString, QString> pairCompletionMap;
+
+    MacroMenu* macroMenu;
 };
 
 #endif  // PLAINTEXTEDIT_H

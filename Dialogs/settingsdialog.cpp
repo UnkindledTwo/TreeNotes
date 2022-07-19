@@ -58,3 +58,9 @@ struct app_config SettingsDialog::appConfig() {
 
     return m_appConfig;
 }
+
+void SettingsDialog::on_bResetSettings_clicked()
+{
+    setAppConfig(Globals::appConfig_default);
+}
+

@@ -23,7 +23,7 @@ void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *paren
         newItem->setIcon(0, iconVector.at(currentElement.attribute("icon").toInt()));
         newItem->iconVectorIndex = currentElement.attribute("icon").toInt();
         newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
-        newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
+        newItem->setStarred(qvariant_cast<bool>(currentElement.attribute("starred", "0")));
         newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
         newItem->highlighting = qvariant_cast<bool>(currentElement.attribute("highlighting", "1"));
 
@@ -34,7 +34,7 @@ void Saver::ReadChildren(QDomDocument *doc, QDomNode node, TreeWidgetItem *paren
         }
 
         parent->addChild(newItem);
-        noteTree->setStar(newItem, newItem->starred);
+        noteTree->setStar(newItem, newItem->isStarred());
         ReadChildren(doc, node.toElement().childNodes().at(i), newItem);
     }
 }
@@ -48,7 +48,7 @@ void Saver::AddChildren(QDomDocument *doc, QDomElement *elem, QTreeWidgetItem *p
             newElem.setAttribute("title", ((TreeWidgetItem *)(*it))->text(0));
             newElem.setAttribute("icon", ((TreeWidgetItem *)(*it))->iconVectorIndex);
             newElem.setAttribute("lastEdited", ((TreeWidgetItem *)(*it))->lastEdited.toString());
-            newElem.setAttribute("starred", (((TreeWidgetItem *)(*it))->starred));
+            newElem.setAttribute("starred", (((TreeWidgetItem *)(*it))->isStarred()));
             newElem.setAttribute("readOnly", ((TreeWidgetItem *)(*it))->readOnly);
             newElem.setAttribute("highlighting", ((TreeWidgetItem *)(*it))->highlighting);
 
@@ -83,7 +83,7 @@ void Saver::SaveToFile() {
             elem.setAttribute("title", (*it)->text(0));
             elem.setAttribute("icon", ((TreeWidgetItem *)(*it))->iconVectorIndex);
             elem.setAttribute("lastEdited", ((TreeWidgetItem *)(*it))->lastEdited.toString());
-            elem.setAttribute("starred", (((TreeWidgetItem *)(*it))->starred));
+            elem.setAttribute("starred", (((TreeWidgetItem *)(*it))->isStarred()));
             elem.setAttribute("readOnly", ((TreeWidgetItem *)(*it))->readOnly);
             elem.setAttribute("highlighting", ((TreeWidgetItem *)(*it))->highlighting);
 
@@ -166,7 +166,7 @@ void Saver::ReadFromFile() {
             newItem->setIcon(0, iconVector.at(currentElement.attribute("icon").toInt()));
             newItem->iconVectorIndex = (currentElement.attribute("icon").toInt());
             newItem->lastEdited = QDateTime::fromString(currentElement.attribute("lastEdited"));
-            newItem->starred = qvariant_cast<bool>(currentElement.attribute("starred", "0"));
+            newItem->setStarred(qvariant_cast<bool>(currentElement.attribute("starred", "0")));
             newItem->readOnly = qvariant_cast<bool>(currentElement.attribute("readOnly", "0"));
             newItem->highlighting = qvariant_cast<bool>(currentElement.attribute("highlighting", "1"));
 
@@ -177,7 +177,7 @@ void Saver::ReadFromFile() {
             }
 
             noteTree->addTopLevelItem(newItem);
-            noteTree->setStar(newItem, newItem->starred);
+            noteTree->setStar(newItem, newItem->isStarred());
             ReadChildren(&document, root.toElement().childNodes().at(i), newItem);
         }
     }

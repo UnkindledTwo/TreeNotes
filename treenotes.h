@@ -141,6 +141,9 @@ private slots:
 
     void on_actionHighlighting_triggered(bool checked);
 
+
+    void on_actionMacro_Menu_triggered();
+
 private:
     Ui::TreeNotes *ui;
 
@@ -157,7 +160,6 @@ private:
     QLabel *readOnlyLabel;
 
     bool doubleClickToEditMessage;
-    QVector<QPair<QString, std::function<QString()>>> macroVec;
 
     QVector<UndoItem> undoVector;
     QVector<ScratchPad *> scratchPads;

@@ -8,16 +8,41 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName) : QMainWindow(parent
     qDebug() << "Initializing window";
     this->setWindowTitle(WINDOW_TITLE_DEFAULT);
     this->saveFileName = saveFileName;
+
+    InitIconVector();
+    InitMacroVector();
+
     ui->setupUi(this);
 
     tagsList = new QListWidget(this);
-    tagsList->setFont(this->font());
     connect(tagsList, &QListWidget::itemDoubleClicked, this, &TreeNotes::on_tag_doubleClicked);
 
     noteTree = ui->treeWidget;
     noteTree->clear();
 
-    connect(noteTree, &TreeWidget::middleClicked, this, &TreeNotes::on_actionChange_Tag_triggered);
+    //0 = Select, 1 = Remove, 2 = Expand/Collapse, 3 = Edit Tags, 4 = Star/Unstar
+    //connect(noteTree, &TreeWidget::middleClicked, this, &TreeNotes::on_actionChange_Tag_triggered);
+    connect(noteTree, &TreeWidget::middleClicked, this, [&](){
+        switch (Globals::appConfig.middle_click_tree_item_action) {
+        case 0:
+            //Do nothing
+            break;
+        case 1:
+            on_actionDelete_triggered();
+            break;
+        case 2:
+            noteTree->currentItem()->setExpanded(!noteTree->currentItem()->isExpanded());
+            break;
+        case 3:
+            on_actionChange_Tag_triggered();
+            break;
+        case 4:
+            on_actionStar_Unstar_triggered();
+            break;
+        default:
+            break;
+        }
+    });
 
     // Construct UI
     {
@@ -25,8 +50,8 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName) : QMainWindow(parent
         QVBoxLayout *vbox = new QVBoxLayout();
         vbox->setMargin(0);
         vbox->setSpacing(2);
-        QLabel *l1 = new QLabel("Tags");
-        l1->setFont(this->font());
+        QLabel *l1 = new QLabel(this);
+        l1->setText(tr("Tags"));
         vbox->addWidget(l1);
         vbox->addWidget(tagsList);
         QWidget *wrap = new QWidget();
@@ -48,6 +73,8 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName) : QMainWindow(parent
         splitter->setCollapsible(0, false);
         splitter->setCollapsible(1, false);
         splitter->setCollapsible(2, false);
+
+        splitter->setSizes({2, 3, 1});
 
         QGridLayout *grid = new QGridLayout();
         grid->addWidget(splitter);
@@ -93,13 +120,11 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName) : QMainWindow(parent
     noteTree->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(noteTree, &QTreeWidget::customContextMenuRequested, this, &TreeNotes::ShowContextMenu);
 
-    InitIconVector();
     InitShortcuts();
     InitStatusLabels();
     ReadFromFile();
     ReadQSettings();
     ReadAppConfig(Globals::appConfig);
-    InitMacroVector();
 
     ui->messageEdit->setZoomingEnabled(true);
     connect(ui->messageEdit, &PlainTextEdit::zoomChanged, this, [&]() { ui->titleEdit->setFont(ui->messageEdit->font()); });
@@ -111,6 +136,7 @@ TreeNotes::TreeNotes(QWidget *parent, QString saveFileName) : QMainWindow(parent
     noteTree->collapseAll();
 
     on_treeWidget_currentItemChanged(NULL, NULL);
+
 
     latestVersion();
     qDebug() << "Initilization of the main window is finished";
@@ -191,6 +217,7 @@ void TreeNotes::ShowContextMenu(const QPoint &pos)
     contextMenu.addAction(ui->actionSet_Icon);
     contextMenu.addAction(ui->actionStar_Unstar);
     contextMenu.addAction(ui->actionRead_Only);
+    contextMenu.addAction(ui->actionHighlighting);
     contextMenu.addSeparator();
     contextMenu.addAction(ui->actionCollapse_All);
     contextMenu.addAction(ui->actionExpand_All);
@@ -198,7 +225,6 @@ void TreeNotes::ShowContextMenu(const QPoint &pos)
     contextMenu.addAction(ui->actionChange_Tag);
     contextMenu.addAction(ui->actionTag_Info);
 
-    // contextMenu.exec(mapToGlobal(pos));
     contextMenu.exec(QCursor().pos());
 }
 
@@ -210,7 +236,12 @@ void TreeNotes::ReadQSettings()
     QSettings settings("settings.ini", QSettings::IniFormat);
 
     // Read the saved font
-    QFont loadedFont = qvariant_cast<QFont>(settings.value("Text_Editor_Font", this->font()));
+    QFont loadedFont;
+    if(!settings.value("Text_Editor_Font").isNull()) {
+        loadedFont = qvariant_cast<QFont>(settings.value("Text_Editor_Font", this->font()));
+    }
+    else
+        loadedFont = ui->messageEdit->font();
     ui->messageEdit->setFont(loadedFont);
     ui->titleEdit->setFont(loadedFont);
 
@@ -451,11 +482,11 @@ void TreeNotes::Save(TreeWidgetItem *target)
         return;
     }
 
+    ApplyMacroVector();
+
     target->lastEdited = QDateTime::currentDateTime();
 
     int savedPos = ui->messageEdit->textCursor().position();
-
-    ApplyMacroVector();
 
     target->message = ui->messageEdit->toPlainText();
     target->setText(0, ui->titleEdit->text());
@@ -579,9 +610,9 @@ void TreeNotes::on_actionDelete_triggered()
     QMessageBox::StandardButton reply;
 
     if (Globals::appConfig.confirm_delete)
-        reply = QMessageBox::question(this, "Delete Item",
-                                      "Are you sure you want to delete the current item?\nAll the "
-                                      "children will be removed as well.",
+        reply = QMessageBox::question(this, tr("Delete Item"),
+                                      tr("Are you sure you want to delete the current item?\nAll the "
+                                      "children will be removed as well."),
                                       QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes || !Globals::appConfig.confirm_delete) {
@@ -657,7 +688,6 @@ void TreeNotes::on_actionSet_Icon_triggered()
     }
     IconSelectorDialog *isd = new IconSelectorDialog(this, noteTree->currentItem()->iconVectorIndex);
 
-    isd->setFont(this->font());
     isd->copyFrom(noteTree);
     if (isd->exec()) {
         noteTree->currentItem()->setIcon(0, isd->selectedIcon);
@@ -698,7 +728,6 @@ void TreeNotes::InitIconVector()
             style()->standardIcon(QStyle::SP_FileDialogStart),
             style()->standardIcon(QStyle::SP_DialogApplyButton),
             style()->standardIcon(QStyle::SP_DesktopIcon),
-            style()->standardIcon(QStyle::SP_VistaShield),
             style()->standardIcon(QStyle::SP_ArrowBack),
             QIcon(":/Resources/Icons/star.png"),
             QIcon(":/Resources/Icons/tux.png"),
@@ -708,12 +737,12 @@ void TreeNotes::InitIconVector()
 void TreeNotes::InitShortcuts()
 {
 #define JUMPMESSAGE ui->messageEdit->setFocus();
-#define JUMPTREE                                                 \
-    if (!noteTree->currentItem()) {                              \
-    if (noteTree->topLevelItem(0)) {                         \
-    noteTree->setCurrentItem(noteTree->topLevelItem(0)); \
-}                                                        \
-}                                                            \
+#define JUMPTREE                                                \
+    if (!noteTree->currentItem()) {                             \
+    if (noteTree->topLevelItem(0)) {                         	\
+    noteTree->setCurrentItem(noteTree->topLevelItem(0)); 		\
+}                                                        		\
+}                                                            	\
     noteTree->setFocus();
 #define JUMPTITLE ui->titleEdit->setFocus();
 
@@ -906,44 +935,42 @@ void TreeNotes::on_messageEdit_textChanged() { updateWindowTitleAndIcon(); }
 
 void TreeNotes::InitMacroVector()
 {
-    macroVec.append({"{title}", [&]() -> QString { return ui->titleEdit->text(); }});
-    macroVec.append({"{lastedited.second}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString("ss"); }});
-    macroVec.append({"{lastedited.minute}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString("mm"); }});
-    macroVec.append({"{lastedited.hour}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString("hh"); }});
-    macroVec.append({"{lastedited.day}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString("dd"); }});
-    macroVec.append({"{lastedited.month}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString("MM"); }});
-    macroVec.append({"{lastedited.year}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString("yyyy"); }});
-    macroVec.append({"{lastedited}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString(); }});
-    macroVec.append({"{datetime.second}", [&]() -> QString { return QDateTime::currentDateTime().toString("ss"); }});
-    macroVec.append({"{datetime.minute}", [&]() -> QString { return QDateTime::currentDateTime().toString("mm"); }});
-    macroVec.append({"{datetime.hour}", [&]() -> QString { return QDateTime::currentDateTime().toString("hh"); }});
-    macroVec.append({"{datetime.day}", [&]() -> QString { return QDateTime::currentDateTime().toString("dd"); }});
-    macroVec.append({"{datetime.month}", [&]() -> QString { return QDateTime::currentDateTime().toString("MM"); }});
-    macroVec.append({"{datetime.year}", [&]() -> QString { return QDateTime::currentDateTime().toString("yyyy"); }});
-    macroVec.append({"{datetime}", [&]() -> QString { return QDateTime::currentDateTime().toString(); }});
-    macroVec.append({"{parent.message}", [&]() -> QString {
+    Globals::macroVector = {
+        {"{title}", [&]() -> QString { return ui->titleEdit->text(); }},
+        {"{lastedited}", [&]() -> QString { return noteTree->currentItem()->lastEdited.toString(); }},
+        {"{lastedited.time}", [&]() -> QString { return noteTree->currentItem()->lastEdited.time().toString(); }},
+        {"{lastedited.date}", [&]() -> QString { return noteTree->currentItem()->lastEdited.date().toString(); }},
+        {"{datetime}", [&]() -> QString { return QDateTime::currentDateTime().toString(); }},
+        {"{date}", [&]() -> QString { return QDate::currentDate().toString(); }},
+        {"{time}", [&]() -> QString { return QTime::currentTime().toString(); }},
+        {"{parent.message}", [&]() -> QString {
                          if (noteTree->currentItem()->parent()) {
                              return (noteTree->currentItem()->parent())->message;
                          }
                          return "";
-                     }});
-    macroVec.append({"{parent.title}", [&]() -> QString {
+                     }},
+        {"{parent.title}", [&]() -> QString {
                          if (noteTree->currentItem()->parent()) {
                              return (noteTree->currentItem()->parent())->text(0);
                          }
                          return "";
-                     }});
-    macroVec.append({"{yes}", []() -> QString { return "✔"; }});
-    macroVec.append({"{no}", []() -> QString { return "✖"; }});
-    macroVec.append({"{lambda}", []() -> QString { return "λ"; }});
+                     }},
+        {"{yes}", []() -> QString { return "✔"; }},
+        {"{no}", []() -> QString { return "✖"; }},
+        {"{lambda}", []() -> QString { return "λ"; }},
+        {"{cb_empty}", []() -> QString { return "☐"; }},
+        {"{cb_yes}", []() -> QString { return "☑"; }},
+        {"{cb_no}", []() -> QString { return "☒"; }},
+        {"{star}", []() -> QString { return "★"; }},
+        {"{star_hollow}", []() -> QString { return "☆"; }}
+    };
 }
 
 void TreeNotes::on_actionMacros_triggered()
 {
-    MacroHelp *mh = new MacroHelp(this, macroVec);
+    MacroHelp *mh = new MacroHelp(this);
     mh->show();
     mh->setStyleSheet(this->styleSheet());
-    mh->setFont(this->font());
     mh->listWidget()->setStyleSheet(mh->listWidget()->styleSheet() + ui->messageEdit->styleSheet());
     mh->plainTextEdit()->setStyleSheet(mh->plainTextEdit()->styleSheet() + ui->messageEdit->styleSheet());
 }
@@ -952,7 +979,8 @@ void TreeNotes::on_actionUndo_Delete_triggered()
 {
 start:
     if (undoVector.isEmpty()) {
-        qDebug() << "No undos to do";
+        qDebug() << "Nothing to undo";
+        QMessageBox::information(this, tr("Undo Delete"), tr("Nothing to undo"));
         return;
     }
     if (!undoVector.last().item) {
@@ -979,7 +1007,6 @@ void TreeNotes::on_actionSettings_triggered()
 {
     SettingsDialog *sd = new SettingsDialog(this);
     sd->setAppConfig(Globals::appConfig);
-    sd->setFont(this->font());
 
     sd->show();
 
@@ -1030,7 +1057,7 @@ void TreeNotes::on_actionStar_Unstar_triggered()
         showNoSelectedItemDialog();
         return;
     }
-    noteTree->setStar(noteTree->currentItem(), !noteTree->currentItem()->starred);
+    noteTree->setStar(noteTree->currentItem(), !noteTree->currentItem()->isStarred());
     noteTree->setCurrentItem(noteTree->currentItem());
 }
 
@@ -1067,8 +1094,8 @@ void TreeNotes::on_titleEdit_textChanged(const QString &arg1)
 
 void TreeNotes::ApplyMacroVector()
 {
-    for (int i = 0; i < macroVec.count(); i++) {
-        ui->messageEdit->setPlainText(ui->messageEdit->toPlainText().replace(macroVec.at(i).first, macroVec.at(i).second()));
+    for (int i = 0; i < Globals::macroVector.count(); i++) {
+        ui->messageEdit->setPlainText(ui->messageEdit->toPlainText().replace(Globals::macroVector.at(i).first, Globals::macroVector.at(i).second()));
     }
 }
 
@@ -1147,7 +1174,18 @@ void TreeNotes::on_actionCheck_For_The_Latest_Version_triggered()
     QString v = latestVersion();
     QString version = v.right(v.length() - 1);
     qDebug() << qApp->applicationVersion();
-    if (version == qApp->applicationVersion().left(3)) {
+    if(version == "") {
+        //Might be an issue with the network module not being able to connect.
+        QMessageBox msg(this);
+        msg.setWindowTitle(tr("Check For Updates"));
+        msg.setTextFormat(Qt::RichText);
+        msg.setText(tr("An error occured. Please check your connection. "
+                    "If you are sure you have internet connection please open an issue at "
+                    "<a href='https://github.com/UnkindledTwo/TreeNotes/'>my github</a>"));
+        msg.setIcon(QMessageBox::Warning);
+        msg.exec();
+    }
+    else if (version == qApp->applicationVersion().left(3)) {
         QMessageBox::information(this, tr("Check For Updates"), tr("TreeNotes is up to date"));
     }
     else {
@@ -1235,5 +1273,10 @@ void TreeNotes::on_actionHighlighting_triggered(bool checked)
     if(!noteTree->currentItem()) return;
     noteTree->currentItem()->highlighting = checked;
     ui->messageEdit->setHighlighting(checked);
+}
+
+void TreeNotes::on_actionMacro_Menu_triggered()
+{
+    ui->messageEdit->showMacroMenu();
 }
 

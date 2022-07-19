@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>435</width>
-    <height>536</height>
+    <height>551</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -51,7 +51,7 @@
     <number>0</number>
    </property>
    <item row="1" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
      <property name="spacing">
       <number>8</number>
      </property>
@@ -441,6 +441,13 @@
       <widget class="Line" name="line_8">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bResetSettings">
+       <property name="text">
+        <string>Reset Settings</string>
        </property>
       </widget>
      </item>

@@ -14,14 +14,30 @@ public:
     TreeWidgetItem();
     TreeWidgetItem* clone();
 
+    void setStarred(bool starred) {
+        this->starred = starred;
+        if (starred) {
+            // i->setText(1, "★");
+            setIcon(1, QIcon(":/Resources/Icons/star.png"));
+        } else {
+            // i->setText(1, "");
+            setIcon(1, QIcon());
+        }
+    }
+    bool isStarred() {
+        return this->starred;
+    }
+
     QString message = "";
     int iconVectorIndex = 6;
     QDateTime lastEdited = QDateTime::currentDateTime();
-    bool starred = false;
     bool readOnly = false;
     QString toString();
     QStringList tags;
     bool highlighting = true;
+
+private:
+    bool starred = false;
 };
 
 #endif  // TREEWIDGETITEM_H

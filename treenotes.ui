@@ -10,12 +10,6 @@
     <height>480</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <family>Segoe UI</family>
-    <pointsize>10</pointsize>
-   </font>
-  </property>
   <property name="focusPolicy">
    <enum>Qt::StrongFocus</enum>
   </property>
@@ -37,7 +31,7 @@
        <widget class="QLineEdit" name="titleEdit">
         <property name="font">
          <font>
-          <family>Segoe UI</family>
+          <family>Ubuntu Mono</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -56,7 +50,7 @@
        <widget class="PlainTextEdit" name="messageEdit">
         <property name="font">
          <font>
-          <family>Segoe UI</family>
+          <family>Ubuntu Mono</family>
           <pointsize>11</pointsize>
          </font>
         </property>
@@ -81,12 +75,6 @@
     </item>
     <item row="0" column="0" colspan="2">
      <widget class="TreeWidget" name="treeWidget">
-      <property name="font">
-       <font>
-        <family>Segoe UI</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
       <property name="focusPolicy">
        <enum>Qt::StrongFocus</enum>
       </property>
@@ -164,12 +152,6 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>9</pointsize>
-    </font>
-   </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
@@ -215,6 +197,7 @@
     <addaction name="separator"/>
     <addaction name="menuScratch_Pad"/>
     <addaction name="separator"/>
+    <addaction name="actionMacro_Menu"/>
     <addaction name="actionSettings"/>
     <addaction name="separator"/>
    </widget>
@@ -262,12 +245,6 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
-   <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
    <property name="sizeGripEnabled">
     <bool>false</bool>
    </property>
@@ -458,12 +435,6 @@
    <property name="text">
     <string>Export PDF</string>
    </property>
-   <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
   </action>
   <action name="actionSearch_In_Current_Note">
    <property name="text">
@@ -564,6 +535,14 @@
    </property>
    <property name="text">
     <string>Highlighting</string>
+   </property>
+  </action>
+  <action name="actionMacro_Menu">
+   <property name="text">
+    <string>Macro Menu</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+A</string>
    </property>
   </action>
  </widget>

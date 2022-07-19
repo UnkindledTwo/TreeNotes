@@ -15,12 +15,15 @@ struct app_config {
     bool confirm_delete = true;
     bool line_wrapping = true;
     bool pair_completion = true;
-    bool notetree_drag_drop = false;
+    bool notetree_drag_drop = true;
     int maximum_backups = 20;
-    bool use_native_theme = false;
+    bool use_native_theme = true;
     bool dark_mode = true;
     bool colorful_highlight = true;
     bool show_new_note_dialog = true;
+
+    //0 = Select, 1 = Remove, 2 = Expand/Collapse, 3 = Edit Tags, 4 = Star/Unstar
+    short middle_click_tree_item_action = 3;
 };
 
 #endif  // APPCONFIG_H
