@@ -101,7 +101,7 @@ void Saver::SaveToFile() {
         it++;
     }
 
-    QString savePath = qApp->applicationDirPath() + "/" + saveFileName;
+    QString savePath = /*qApp->applicationDirPath() + "/" + */saveFileName;
     QFileInfo saveFileInfo(savePath);
     QDir savePathDir(saveFileInfo.absoluteDir());
     if (!savePathDir.exists()) {
@@ -113,7 +113,7 @@ void Saver::SaveToFile() {
     stream.setCodec("UTF-8");
     stream << document.toString(4);
 
-    QFile fileB64(qApp->applicationDirPath() + "/" + saveFileName + ".b64");
+    QFile fileB64(/*qApp->applicationDirPath() + "/" + */saveFileName + ".b64");
     fileB64.open(QIODevice::WriteOnly);
     QTextStream streamB64(&fileB64);
     streamB64.setCodec("UTF-8");
@@ -127,7 +127,7 @@ void Saver::SaveToFile() {
     noteTree->setEnabled(false);
 
     noteTree->setEnabled(true);
-    qDebug() << "Saving to file finished" << qApp->applicationDirPath() + "/" + saveFileName;
+    qDebug() << "Saving to file finished" << /*qApp->applicationDirPath() + "/" + */saveFileName;
 }
 
 void Saver::ReadFromFile() {
@@ -139,7 +139,7 @@ void Saver::ReadFromFile() {
     int errColumn;
 
     QDomDocument document;
-    QFile file(qApp->applicationDirPath() + "/" + saveFileName);
+    QFile file(/*qApp->applicationDirPath() + "/" + */saveFileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         // Error while loading file
         qDebug() << "Error while loading file";

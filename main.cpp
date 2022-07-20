@@ -13,7 +13,12 @@ int main(int argc, char *argv[]) {
 
     // Load another save file if specified
     // The default save name is save.xml
-    QString saveFileName = "save.xml";
+    QString saveFileName;
+#ifdef Q_OS_WIH
+   saveFileName = "save.xml";
+#else
+    saveFileName = QDir().homePath() + "/TreeNotes/save.xml";
+#endif
     if (argc > 1) {
         qDebug() << "Save File Name Specified:" << QString(argv[1]);
         saveFileName = QString(argv[1]);

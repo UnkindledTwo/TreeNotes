@@ -233,8 +233,11 @@ void TreeNotes::ReadQSettings()
     qDebug() << "Reading QSettings";
 
     // QSettings settings("Unkindled", "NoteTree", this);
+#ifdef Q_OS_WIN
     QSettings settings("settings.ini", QSettings::IniFormat);
-
+#else
+    QSettings settings(QDir().homePath() + "/settings.ini", QSettings::IniFormat);
+#endif
     // Read the saved font
     QFont loadedFont;
     if(!settings.value("Text_Editor_Font").isNull()) {
@@ -307,7 +310,12 @@ void TreeNotes::SaveQSettings()
 {
     qDebug() << "Saving QSettings";
     // QSettings settings("Unkindled", "NoteTree", this);
+#ifdef Q_OS_WIN
     QSettings settings("settings.ini", QSettings::IniFormat);
+#else
+    QSettings settings(QDir().homePath() + "/settings.ini", QSettings::IniFormat);
+#endif
+
     settings.setValue("Text_Editor_Font", ui->messageEdit->font());
     settings.setValue("maximized", this->isMaximized());
     settings.setValue("geometry", this->geometry());
@@ -369,7 +377,13 @@ QString TreeNotes::dateTimeNoSpace()
 void TreeNotes::AttemptSaveBackup()
 {
     qDebug() << "AttempSaveBackup()";
+#ifdef Q_OS_WIN
     QFileInfo backupFileInfo(qApp->applicationDirPath() + "/backup/" + saveFileName + dateTimeNoSpace() + ".xml");
+#else
+    //QFileInfo backupFileInfo(QDir().homePath() + "/TreeNotes/backup/" + saveFileName + dateTimeNoSpace() + ".xml");
+    QFileInfo saveFileInfo(saveFileName);
+    QFileInfo backupFileInfo(QDir().homePath() + "/TreeNotes/backup/" + saveFileInfo.fileName() + dateTimeNoSpace() + ".xml");
+#endif
     QDir backupDir(backupFileInfo.absoluteDir().path());
     qDebug() << backupFileInfo.absoluteDir().path();
     if (!backupDir.exists()) {
@@ -378,7 +392,11 @@ void TreeNotes::AttemptSaveBackup()
     }
 
     // Move the current save file to the backups directory and rename it to save{date}.xml
+#ifdef Q_OS_WIN
     backupDir.rename(qApp->applicationDirPath() + "/" + saveFileName, backupFileInfo.absoluteFilePath());
+#else
+    backupDir.rename(saveFileName, backupFileInfo.absoluteFilePath());
+#endif
 
     // If the save can't be moved
     if (QFile(qApp->applicationDirPath() + "/save.xml").exists()) qCritical().noquote() << "\n!!!Backup Failed!!!\n";
