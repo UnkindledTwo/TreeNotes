@@ -1,4 +1,4 @@
-QT += core gui xml concurrent printsupport network
+QT += core gui xml concurrent printsupport network winextras
 
 RC_ICONS = Resources/Icon.ico
 

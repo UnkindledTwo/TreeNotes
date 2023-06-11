@@ -492,6 +492,12 @@ void TreeNotes::keyPressEvent(QKeyEvent *e)
             noteTree->currentItem()->setExpanded(!noteTree->currentItem()->isExpanded());
         }
     }
+
+    if (e->key() == Qt::Key_Delete) {
+        if (noteTree->currentItem() && noteTree->hasFocus()) {
+            on_actionDelete_triggered();
+        }
+    }
 }
 
 void TreeNotes::Save(TreeWidgetItem *target)
